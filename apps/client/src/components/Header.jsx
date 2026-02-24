@@ -1,5 +1,5 @@
-import { NavLink } from 'react-router-dom';
-import { Bell } from 'lucide-react';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { Bell, LogOut } from 'lucide-react';
 
 const navLinks = [
     { to: '/inventario', label: 'Inventario' },
@@ -10,6 +10,14 @@ const navLinks = [
 ];
 
 export const Header = () => {
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        localStorage.removeItem('mp_token');
+        localStorage.removeItem('mp_user');
+        navigate('/');
+    };
+
     return (
         <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200 px-4 md:px-8 py-3">
             <div className="max-w-6xl mx-auto flex items-center justify-between gap-4">
@@ -79,6 +87,16 @@ export const Header = () => {
                             backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuBWaqHB6_TK5ht3TPFr9YoN_FxLdAlu9BWq6RXcksRE4uBtiBOMlcPAK7KIGnaQHcFRGjGaIZcdo46zVMYNVXOfBgSBAeXxnlDJUTNmD6ShEszvo-JWpbNqJMbkvRO_RHbkx4hKrtY-jpdqRcgSHvOL4iVhYtb-ke2z4dCgPeYut8Bah5mdhaOQ7NI3coG0-imb_eYnXLnqKmbkExd8dGGkAAm54kSrHfijPL-wEHihiSzm-2aW1bx3zt7kIRZk0o-V9eHWhCHiuHg')"
                         }}
                     />
+
+                    {/* Botón Cerrar Sesión */}
+                    <button
+                        onClick={handleLogout}
+                        className="p-2 ml-1 rounded-full hover:bg-slate-100 transition-colors group"
+                        aria-label="Cerrar sesión"
+                        title="Cerrar sesión"
+                    >
+                        <LogOut size={18} strokeWidth={2} className="text-slate-400 group-hover:text-red-500 transition-colors" />
+                    </button>
                 </div>
             </div>
         </header>

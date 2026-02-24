@@ -36,7 +36,7 @@ export const register = async (req, res, next) => {
         apellido: true,
         email: true,
         id_rol: true,
-        rol: { select: { id_rol: true, nombre: true } }, // ajusta campos reales de RolUsuario
+        rol: { select: { id_rol: true, nombre_rol: true } }, // ajusta campos reales de RolUsuario
       },
     });
 
@@ -77,7 +77,7 @@ export const login = async (req, res, next) => {
         email: true,
         id_rol: true,
         password_hash: true,
-        rol: { select: { id_rol: true, nombre: true } }, // ajusta campos reales
+        rol: { select: { id_rol: true, nombre_rol: true } }, // ajusta campos reales
       },
     });
 

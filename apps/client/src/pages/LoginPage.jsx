@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
-// import { useNavigate } from "react-router-dom"; // si usas react-router
+import { useNavigate } from "react-router-dom"; // si usas react-router
 
 export const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -14,7 +14,7 @@ export const LoginPage = () => {
     password: "",
   });
 
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -64,8 +64,8 @@ export const LoginPage = () => {
       localStorage.setItem("mp_user", JSON.stringify(user));
 
       // Redirección (ajusta a tu app)
-      // navigate("/dashboard");
-      window.location.href = "/"; // opción sin router
+      navigate("/dashboard");
+      // window.location.href = "/"; // opción sin router
     } catch (err) {
       setErrorMsg("No se pudo conectar con el servidor.");
     } finally {
@@ -74,7 +74,7 @@ export const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#f6f6f8] font-[Manrope,sans-serif] relative">
+    <div className="flex flex-col bg-[#f6f6f8] font-[Manrope,sans-serif] relative">
       {/* Fondo mesh */}
       <div
         className="fixed inset-0 z-0"
@@ -88,7 +88,7 @@ export const LoginPage = () => {
       />
 
       {/* Contenido centrado */}
-      <div className="relative z-10 flex-1 flex items-center justify-center px-4 py-12">
+      <div className="relative z-10 flex-1 flex items-center justify-center px-4 py-8">
         <div className="w-full max-w-sm">
           {/* Logo */}
           <div className="flex items-center justify-center gap-2 mb-8">
@@ -108,7 +108,7 @@ export const LoginPage = () => {
                 Bienvenido
               </h1>
               <p className="text-slate-500 text-xs leading-relaxed">
-                Acceso exclusivo al inventario de ingeniería automotriz.
+                Acceso exclusivo al inventario.
               </p>
             </div>
 
@@ -153,13 +153,13 @@ export const LoginPage = () => {
                   >
                     Contraseña
                   </label>
-                  <a
+                  {/* <a
                     href="#"
                     onClick={(e) => e.preventDefault()}
                     className="text-[10px] font-semibold text-[#135bec] hover:text-[#135bec]/70 transition-colors"
                   >
                     ¿Olvidaste tu clave?
-                  </a>
+                  </a> */}
                 </div>
 
                 <div className="relative">
@@ -212,14 +212,11 @@ export const LoginPage = () => {
           {/* Footer mini */}
           <div className="mt-6 flex justify-between items-center">
             <span className="text-[10px] text-slate-400 uppercase tracking-widest">
-              © 2026 AutoElite Dynamics
+              © 2026
             </span>
             <div className="flex gap-4">
               <span className="text-[10px] text-slate-400 uppercase tracking-widest">
-                v4.0.2
-              </span>
-              <span className="text-[10px] text-slate-400 uppercase tracking-widest">
-                AES-256
+                v1.0.0
               </span>
             </div>
           </div>
