@@ -1,9 +1,6 @@
-// Prisma Schema - Sistema de Inventario y Mantenimiento
-// Basado en inventario.sql
-
 generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
 }
 
 datasource db {
