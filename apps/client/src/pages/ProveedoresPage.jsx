@@ -1,89 +1,23 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import {
     Search, Plus, MapPin, ArrowRight,
     Building2, Settings, ShieldCheck, Zap, Box, X, Upload
 } from 'lucide-react';
 
 // ── Datos ────────────────────────────────────────────────
-const proveedoresData = [
-    {
-        id: 1,
-        nombre: 'Robert Bosch GmbH',
-        pais: 'Alemania',
-        categoria: 'oem',
-        badgeLabel: 'Socio OEM',
-        badgeCls: 'bg-[#135bec]/10 text-[#135bec]',
-        icon: <Settings className="text-[#135bec]" size={14} />,
-        descripcion: 'Proveedor líder mundial de tecnología y servicios para sistemas automotrices, desde inyección de combustible hasta sensores de alto rendimiento.',
-        logo: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAyr249YMgKSSF3Mm-CQqt-WfAUvScmu0JntXZYhezxAEs0aJJwocpJV8p_TxOcVEkIZHoIEwLxIXjm-af_pk12lP6rFmXvV8g5r9JsLcHgVtoeJnABfxage-yvtdE2x6QCi5QV5DfjGerzJtyIXMvd84x68o1WRtbw3__7eMZMpxi4uTemjXW8FQv5NbEF1pfWhCvI5X76zv7X6bCMzg5qKNf_HIgosX9Iej2sw9PZFP6cIx4f-2LJGS0cQCx5L-pWJegQP3Ni_bU',
-        productos: 142,
-    },
-    {
-        id: 2,
-        nombre: 'Michelin Mobility',
-        pais: 'Francia',
-        categoria: 'premium',
-        badgeLabel: 'Premium Tier',
-        badgeCls: 'bg-emerald-50 text-emerald-600',
-        icon: <ShieldCheck className="text-emerald-600" size={14} />,
-        descripcion: 'Líder global en neumáticos de alto rendimiento y soluciones de movilidad sostenible para vehículos de lujo y deportivos.',
-        logo: 'https://lh3.googleusercontent.com/aida-public/AB6AXuD_O3cSuM4Y3_IQbHYfgBmSI4YzYQPka_RDvdzw23gnRG5SJ7ESqbJ-V2FT5nYb9dUUfLMp2DgYLxQDwWAgZYw2BNgsl8xlQT6JIbnl5qIgkUobg8gpiRwNQbvCS9xzZxjOb52zCNMdMXgHUFHn8KpVdHa1HRI0N1rsnPBsZ9FnfvCAU2naBLahhlW0x6naGurrW5TqMKyN7XOuDs0Ia9_4jOM4dQC-Ysawa_-_7-jmdhi7px5bcIFuMA4TdRVTTz2qRfA8-1atnPo',
-        productos: 85,
-    },
-    {
-        id: 3,
-        nombre: 'Brembo S.p.A.',
-        pais: 'Italia',
-        categoria: 'racing',
-        badgeLabel: 'Tecnología Racing',
-        badgeCls: 'bg-amber-50 text-amber-600',
-        icon: <Zap className="text-amber-600" size={14} />,
-        descripcion: 'Sistemas de frenos de última generación diseñados para supercars de alto rendimiento y divisiones de élite en competición.',
-        logo: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDFTr2ym_LeQ0-twvjZ5WalcNFsFCa6U9Q2qlkIrjvFl-2AxNASJ-IdGAGrGA2I41LTmHNnOUaHRdt3t758MDRNTSNt3-O8DSHKF4WJangvgFsdgB9vnlivy3g-wRN-WKXKV1fe7f93MUXSAwLHqfmLaMV-U47ivAVX-igzYmofmP2uSEa7PuDK53pJUl-VHSCae4CmQH7PqXTnLAetQOmRnBBVWY9UZnkx17n25pgajTcDpXE5klm92ZfJMBCtJ3Q37XLHXxDttLo',
-        productos: 210,
-    },
-    {
-        id: 4,
-        nombre: 'Akrapovič Exhaust',
-        pais: 'Eslovenia',
-        categoria: 'postventa',
-        badgeLabel: 'Postventa Performance',
-        badgeCls: 'bg-indigo-50 text-indigo-600',
-        icon: <Box className="text-indigo-600" size={14} />,
-        descripcion: 'Fabricante de sistemas de escape premium en fibra de carbono y titanio para un rendimiento acústico y mecánico sin rival.',
-        logo: 'https://lh3.googleusercontent.com/aida-public/AB6AXuA1AMg1xAItZk7iA1C0NvzDTJtbD3kESVX6fCqVfKDXkPDcqL2KNsfJB3RbwllRMexEDpU1Ae3NRq4dgfoQUFkUp_D1BUMVziM4zI3s_FhpgDsqiq1m27dNHYuaEuzJauHWxYlkznaZIAP9TQa1Otom0vtrWpr4HCG0M2moIMx180-sAK2Z3fLDzA-7bkkk5VX7z2_aNNbm_gtCddqFmdLNeRR98hgMSWLbdKsxM3L8CByf_r6RUuLcnBxOvdCGtMT1yCedM3uq98Q',
-        productos: 42,
-    },
-    {
-        id: 5,
-        nombre: 'Öhlins Racing AB',
-        pais: 'Suecia',
-        categoria: 'racing',
-        badgeLabel: 'Tecnología Racing',
-        badgeCls: 'bg-amber-50 text-amber-600',
-        icon: <Zap className="text-amber-600" size={14} />,
-        descripcion: 'Tecnología de suspensión avanzada para los equipos de competición más exigentes y vehículos de consumo de alta gama.',
-        logo: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCcrObJVetVyg-bOxTTF7bnBAiM1HFjPasm69ufnGFNphFnkklF-T5DOo8QCwIe88FPQ7dS_7VH_T_bodXETGhlcLLA9xGb8ZE1P2gjPwROshv3ymFuK3h4CoibFBC8xZNNqpPnfYVnMw3jNayOggDzlBUdfUYseL1Xluf5cBpU84sl0cZ3BW39rxOGDJRaA43hsQOm8w3OtrASCiH0Kgrkz2siQZ2nb6dF5qIcz_CVC7DmZbOKmlyCGf0rQnakaElkWD2eZQ-CXIE',
-        productos: 67,
-    },
-];
+// ── Datos eliminados (usando API) ─────────────────────────
 
 const FILTROS = [
     { key: 'todos', label: 'Todos' },
-    { key: 'oem', label: 'Socio OEM' },
-    { key: 'premium', label: 'Premium Tier' },
-    { key: 'postventa', label: 'Postventa' },
-    { key: 'racing', label: 'Tecnología Racing' },
+    //   { key: 'oem', label: 'Socio OEM' },
+    //   { key: 'premium', label: 'Premium Tier' },
+    //   { key: 'postventa', label: 'Postventa' },
+    //   { key: 'racing', label: 'Tecnología Racing' },
 ];
 
-const CATEGORIAS = [
-    { value: 'oem', label: 'Original (OEM)' },
-    { value: 'racing', label: 'Racing & Performance' },
-    { value: 'premium', label: 'Premium Tier' },
-    { value: 'postventa', label: 'Postventa Performance' },
-];
+const CATEGORIAS = []; // No usadas actualmente con el modelo simplificado
 
-const formInicial = { nombre: '', categoria: '', pais: '', logo: null, preview: null };
+const formInicial = { nombre_empresa: '', direccion: '', telefono: '' };
 
 // ── Modal Nuevo Proveedor ─────────────────────────────────
 const ModalNuevoProveedor = ({ onClose, onGuardar }) => {
@@ -98,22 +32,24 @@ const ModalNuevoProveedor = ({ onClose, onGuardar }) => {
         set('logo', file);
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!form.nombre.trim() || !form.categoria || !form.pais.trim()) return;
-        onGuardar({
-            id: Date.now(),
-            nombre: form.nombre,
-            pais: form.pais,
-            categoria: form.categoria,
-            badgeLabel: CATEGORIAS.find(c => c.value === form.categoria)?.label ?? '',
-            badgeCls: 'bg-slate-100 text-slate-600',
-            icon: <Box size={14} className="text-slate-500" />,
-            descripcion: 'Nuevo proveedor registrado en el sistema.',
-            logo: form.preview || null,
-            productos: 0,
-        });
-        onClose();
+        if (!form.nombre_empresa.trim()) return;
+
+        try {
+            const resp = await fetch('/api/providers', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(form)
+            });
+            const json = await resp.json();
+            if (json.success) {
+                onGuardar(json.data);
+                onClose();
+            }
+        } catch (error) {
+            console.error(error);
+        }
     };
 
     return (
@@ -164,52 +100,27 @@ const ModalNuevoProveedor = ({ onClose, onGuardar }) => {
                     <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-6">
 
                         {/* Grid de campos */}
-                        <div className="grid grid-cols-1 gap-4 sm:gap-5 md:grid-cols-2">
+                        <div className="grid grid-cols-1 gap-4 sm:gap-5">
 
                             {/* Nombre */}
                             <div className="flex flex-col gap-1.5">
                                 <label className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-slate-400">
-                                    Nombre del Proveedor
+                                    Nombre de la Empresa
                                 </label>
                                 <input
                                     required
                                     type="text"
-                                    value={form.nombre}
-                                    onChange={e => set('nombre', e.target.value)}
+                                    value={form.nombre_empresa}
+                                    onChange={e => set('nombre_empresa', e.target.value)}
                                     placeholder="Ej. Brembo S.p.A."
                                     className="w-full rounded-xl border-2 border-transparent bg-slate-50 p-3 sm:p-3.5 text-xs sm:text-sm font-medium text-slate-900 outline-none focus:border-[#135bec] focus:bg-white transition-all placeholder:text-slate-400"
                                 />
                             </div>
 
-                            {/* Categoría */}
+                            {/* Dirección */}
                             <div className="flex flex-col gap-1.5">
                                 <label className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-slate-400">
-                                    Categoría
-                                </label>
-                                <div className="relative">
-                                    <select
-                                        required
-                                        value={form.categoria}
-                                        onChange={e => set('categoria', e.target.value)}
-                                        className="w-full appearance-none rounded-xl border-2 border-transparent bg-slate-50 p-3 sm:p-3.5 text-xs sm:text-sm font-medium text-slate-900 outline-none focus:border-[#135bec] focus:bg-white transition-all"
-                                    >
-                                        <option value="" disabled>Seleccionar...</option>
-                                        {CATEGORIAS.map(c => (
-                                            <option key={c.value} value={c.value}>{c.label}</option>
-                                        ))}
-                                    </select>
-                                    <div className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-[#135bec]">
-                                        <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
-                                            <path d="m6 9 6 6 6-6" />
-                                        </svg>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* País — full width */}
-                            <div className="flex flex-col gap-1.5 md:col-span-2">
-                                <label className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-slate-400">
-                                    País de Origen
+                                    Dirección
                                 </label>
                                 <div className="relative">
                                     <MapPin
@@ -217,14 +128,27 @@ const ModalNuevoProveedor = ({ onClose, onGuardar }) => {
                                         className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#135bec]/50 sm:w-4 sm:h-4"
                                     />
                                     <input
-                                        required
                                         type="text"
-                                        value={form.pais}
-                                        onChange={e => set('pais', e.target.value)}
-                                        placeholder="Ej. Italia, Alemania, Japón"
+                                        value={form.direccion}
+                                        onChange={e => set('direccion', e.target.value)}
+                                        placeholder="Ej. Av. Principal, Edif. Pro, Local 1"
                                         className="w-full rounded-xl border-2 border-transparent bg-slate-50 pl-9 sm:pl-10 pr-4 py-3 sm:py-3.5 text-xs sm:text-sm font-medium text-slate-900 outline-none focus:border-[#135bec] focus:bg-white transition-all placeholder:text-slate-400"
                                     />
                                 </div>
+                            </div>
+
+                            {/* Teléfono */}
+                            <div className="flex flex-col gap-1.5">
+                                <label className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-slate-400">
+                                    Teléfono
+                                </label>
+                                <input
+                                    type="text"
+                                    value={form.telefono}
+                                    onChange={e => set('telefono', e.target.value)}
+                                    placeholder="Ej. +58 412-1234567"
+                                    className="w-full rounded-xl border-2 border-transparent bg-slate-50 p-3 sm:p-3.5 text-xs sm:text-sm font-medium text-slate-900 outline-none focus:border-[#135bec] focus:bg-white transition-all placeholder:text-slate-400"
+                                />
                             </div>
                         </div>
 
@@ -258,7 +182,7 @@ const ProveedorCard = ({ proveedor }) => (
         <div className="p-4 sm:p-5 flex flex-col flex-1">
             <div className="flex items-center gap-1 sm:gap-1.5 text-slate-400 mb-2 sm:mb-3">
                 <MapPin size={12} className="sm:w-3.5 sm:h-3.5" />
-                <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider">{proveedor.pais}</span>
+                <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider truncate">{proveedor.direccion}</span>
             </div>
 
             <h3 className="text-base sm:text-lg font-black text-slate-900 leading-tight mb-1.5 group-hover:text-[#135bec] transition-colors">
@@ -290,8 +214,8 @@ const AgregarCard = ({ onClick }) => (
         className="group flex flex-col items-center justify-center bg-slate-50/50 rounded-2xl sm:rounded-3xl border-2 border-dashed border-slate-200 p-6 sm:p-8 text-center hover:border-[#135bec] hover:bg-[#135bec]/5 transition-all cursor-pointer min-h-[220px] sm:min-h-[260px]"
     >
         <div className="h-12 w-12 sm:h-14 sm:w-14 bg-white rounded-xl sm:rounded-2xl flex items-center justify-center shadow-sm border border-slate-100 mb-3 sm:mb-4 group-hover:scale-110 group-hover:bg-[#135bec] transition-all duration-300">
-      <Building2 className="text-[#135bec] group-hover:text-white transition-colors sm:w-6 sm:h-6" size={20} strokeWidth={2.5} />
-    </div>
+            <Building2 className="text-[#135bec] group-hover:text-white transition-colors sm:w-6 sm:h-6" size={20} strokeWidth={2.5} />
+        </div>
         <h3 className="font-black text-base sm:text-lg text-slate-900 mb-1.5 sm:mb-2">Integrar Socio</h3>
         <p className="text-slate-500 text-[11px] sm:text-xs max-w-[180px] sm:max-w-[200px] leading-relaxed">
             Añade un nuevo fabricante o distribuidor oficial.
@@ -308,7 +232,17 @@ export const ProveedoresPage = () => {
     const [filtroActivo, setFiltroActivo] = useState('todos');
     const [busqueda, setBusqueda] = useState('');
     const [showModal, setShowModal] = useState(false);
-    const [proveedores, setProveedores] = useState(proveedoresData);
+    const [proveedores, setProveedores] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        fetch('/api/providers')
+            .then(res => res.json())
+            .then(res => {
+                if (res.success) setProveedores(res.data);
+            })
+            .finally(() => setLoading(false));
+    }, []);
 
     const filtrados = useMemo(() => {
         let lista = proveedores;
@@ -316,7 +250,7 @@ export const ProveedoresPage = () => {
         if (busqueda) {
             const b = busqueda.toLowerCase();
             lista = lista.filter(p =>
-                p.nombre.toLowerCase().includes(b) || p.pais.toLowerCase().includes(b)
+                p.nombre.toLowerCase().includes(b) || p.direccion.toLowerCase().includes(b)
             );
         }
         return lista;
@@ -368,14 +302,14 @@ export const ProveedoresPage = () => {
                                 key={f.key}
                                 onClick={() => setFiltroActivo(f.key)}
                                 className={`flex items-center gap-1.5 px-3 sm:px-4 py-1.5 sm:py-2 rounded-md sm:rounded-lg text-[9px] sm:text-[10px] font-bold uppercase tracking-wider transition-all whitespace-nowrap ${filtroActivo === f.key
-                                        ? 'bg-white text-[#135bec] shadow-sm'
-                                        : 'text-slate-400 hover:text-slate-600'
+                                    ? 'bg-white text-[#135bec] shadow-sm'
+                                    : 'text-slate-400 hover:text-slate-600'
                                     }`}
                             >
                                 {f.label}
                                 <span className={`px-1.5 py-0.5 rounded-sm sm:rounded-md text-[8px] sm:text-[9px] ${filtroActivo === f.key
-                                        ? 'bg-[#135bec]/10 text-[#135bec]'
-                                        : 'bg-slate-200 text-slate-500'
+                                    ? 'bg-[#135bec]/10 text-[#135bec]'
+                                    : 'bg-slate-200 text-slate-500'
                                     }`}>
                                     {count}
                                 </span>
@@ -385,8 +319,8 @@ export const ProveedoresPage = () => {
                 </div>
 
                 <div className="relative w-full lg:w-64 sm:min-w-[320px]">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 sm:w-4 sm:h-4" size={14} />
-          <input
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 sm:w-4 sm:h-4" size={14} />
+                    <input
                         type="text"
                         placeholder="Buscar por nombre o país..."
                         value={busqueda}
@@ -397,15 +331,19 @@ export const ProveedoresPage = () => {
             </div>
 
             {/* ── Grid ── */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5 lg:gap-6 mt-1 sm:mt-2">
-                {filtrados.map(p => (
-                    <ProveedorCard key={p.id} proveedor={p} />
-                ))}
+            {loading ? (
+                <div className="flex items-center justify-center py-20 text-slate-400 text-sm font-bold">Cargando proveedores...</div>
+            ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5 lg:gap-6 mt-1 sm:mt-2">
+                    {filtrados.map(p => (
+                        <ProveedorCard key={p.id} proveedor={p} />
+                    ))}
 
-                {filtroActivo === 'todos' && !busqueda && (
-                    <AgregarCard onClick={() => setShowModal(true)} />
-                )}
-            </div>
+                    {filtroActivo === 'todos' && !busqueda && (
+                        <AgregarCard onClick={() => setShowModal(true)} />
+                    )}
+                </div>
+            )}
 
             {/* ── Empty state ── */}
             {filtrados.length === 0 && (

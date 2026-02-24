@@ -147,7 +147,7 @@ export const ModalNuevoProducto = ({ onClose, onGuardar, productoEditar = null }
       fd.append("precioCompra", String(parseFloat(form.precioCompra) || 0));
       fd.append("precioVenta", String(parseFloat(form.precioVenta) || 0));
 
-      if (form.imagen) fd.append("imagen", form.imagen);
+      if (form.imagen) fd.append("image", form.imagen);
 
       // ── DINAMISMO ENTRE POST (CREAR) Y PUT (EDITAR) ──
       const url = modoEdicion 
