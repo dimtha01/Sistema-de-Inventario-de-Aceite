@@ -68,17 +68,16 @@ export const createProduct = async (req, res) => {
         .json({ success: false, message: "Faltan campos obligatorios" });
     }
 
-    // 🔴 CORRECCIÓN AQUÍ: Eliminamos "/products/" y la barra inicial
-    // Ahora coincide con la carpeta física de Multer y con el endpoint getProducts
     const imagenUrl = req.file ? `uploads/${req.file.filename}` : null;
 
+    // INICIA LA TRANSACCIÓN
     const newProduct = await prisma.$transaction(async (tx) => {
       const p = await tx.producto.create({
         data: {
           nombre_repuesto: nombre,
           stock_actual: Number(stock) || 0,
           stock_minimo_alerta: 5,
-          url_imagen: imagenUrl, // Se guarda como "uploads/product-123.jpg"
+          url_imagen: imagenUrl,
           id_categoria: Number(id_categoria),
           id_proveedor: Number(id_proveedor),
         },
@@ -96,6 +95,10 @@ export const createProduct = async (req, res) => {
         where: { id_producto: p.id_producto },
         include: { precio: true, categoria: true, proveedor: true },
       });
+    }, 
+    {
+      maxWait: 10000, 
+      timeout: 15000, 
     });
 
     const formatted = {

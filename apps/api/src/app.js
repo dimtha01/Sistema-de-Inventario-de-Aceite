@@ -1,6 +1,7 @@
 import express from "express";
 import authRoutes from "./routes/auth.routes.js";
 import inventoryRoutes from "./routes/inventory.routes.js";
+import categoryRoutes from "./routes/category.routes.js";
 import path from "path";
 import { fileURLToPath } from "url";
 // import { errorHandler } from "./middlewares/errorHandler.js";
@@ -13,6 +14,7 @@ app.use(express.json());
 
 app.use("/api", authRoutes);
 app.use("/api/inventory", inventoryRoutes);
+app.use("/api/categories", categoryRoutes);
 
 app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 
