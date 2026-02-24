@@ -1,0 +1,179 @@
+// Prisma Schema - Sistema de Inventario y Mantenimiento
+// Basado en inventario.sql
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// =============================================
+// 1. TABLAS DE CATÁLOGO (MAESTRAS INDEPENDIENTES)
+// =============================================
+
+model RolUsuario {
+  id_rol     Int       @id @default(autoincrement())
+  nombre_rol String    @db.VarChar(50)
+  usuarios   Usuario[]
+
+  @@map("roles_usuario")
+}
+
+model Categoria {
+  id_categoria     Int        @id @default(autoincrement())
+  nombre_categoria String     @db.VarChar(100)
+  productos        Producto[]
+
+  @@map("categorias")
+}
+
+model TipoMovimiento {
+  id_tipo_mov Int                   @id @default(autoincrement())
+  nombre_tipo String                @db.VarChar(50)
+  movimientos HistorialMovimiento[]
+
+  @@map("tipos_movimiento")
+}
+
+model EstadoPago {
+  id_estado_pago Int     @id @default(autoincrement())
+  nombre_estado  String  @db.VarChar(50)
+  ventas         Venta[]
+
+  @@map("estados_pago")
+}
+
+// =============================================
+// 2. ENTIDADES PRINCIPALES (MAESTROS)
+// =============================================
+
+model Usuario {
+  id_usuario    Int                   @id @default(autoincrement())
+  id_rol        Int
+  nombre        String                @db.VarChar(100)
+  email         String                @unique @db.VarChar(100)
+  password_hash String                @db.VarChar(255)
+  avatar_url    String?               @db.VarChar(255)
+  rol           RolUsuario            @relation(fields: [id_rol], references: [id_rol])
+  ventas        Venta[]
+  movimientos   HistorialMovimiento[]
+
+  @@map("usuarios")
+}
+
+model Proveedor {
+  id_proveedor    Int        @id @default(autoincrement())
+  nombre_empresa  String     @db.VarChar(150)
+  pais_origen     String?    @db.VarChar(100)
+  categoria_socio String?    @db.VarChar(50)
+  url_logo        String?    @db.VarChar(255)
+  productos       Producto[]
+
+  @@map("proveedores")
+}
+
+model Cliente {
+  id_cliente      Int      @id @default(autoincrement())
+  nombre_completo String   @db.VarChar(150)
+  ubicacion       String?  @db.VarChar(255)
+  es_premium      Boolean  @default(false)
+  limite_credito  Decimal  @default(0.00) @db.Decimal(10, 2)
+  fecha_registro  DateTime @default(now())
+  ventas          Venta[]
+
+  @@map("clientes")
+}
+
+// =============================================
+// 3. GESTIÓN DE INVENTARIO Y PRECIOS
+// =============================================
+
+model Producto {
+  id_producto         Int                   @id @default(autoincrement())
+  id_categoria        Int
+  id_proveedor        Int
+  nombre_repuesto     String                @db.VarChar(150)
+  url_imagen          String?               @db.VarChar(255)
+  stock_actual        Int                   @default(0)
+  stock_minimo_alerta Int                   @default(5)
+  categoria           Categoria             @relation(fields: [id_categoria], references: [id_categoria])
+  proveedor           Proveedor             @relation(fields: [id_proveedor], references: [id_proveedor])
+  precio              PrecioProducto?
+  detalles_venta      DetalleVenta[]
+  movimientos         HistorialMovimiento[]
+
+  @@map("productos")
+}
+
+model PrecioProducto {
+  id_producto   Int      @id
+  precio_compra Decimal  @db.Decimal(10, 2)
+  precio_venta  Decimal  @db.Decimal(10, 2)
+  producto      Producto @relation(fields: [id_producto], references: [id_producto], onDelete: Cascade)
+
+  @@map("precios_producto")
+}
+
+// =============================================
+// 4. OPERACIONES, VENTAS Y "FIADO"
+// =============================================
+
+model Venta {
+  id_venta       Int            @id @default(autoincrement())
+  id_cliente     Int
+  id_usuario     Int
+  id_estado_pago Int
+  fecha_venta    DateTime       @default(now())
+  monto_total    Decimal        @db.Decimal(10, 2)
+  cliente        Cliente        @relation(fields: [id_cliente], references: [id_cliente])
+  usuario        Usuario        @relation(fields: [id_usuario], references: [id_usuario])
+  estado_pago    EstadoPago     @relation(fields: [id_estado_pago], references: [id_estado_pago])
+  detalles       DetalleVenta[]
+  abonos         AbonoCredito[]
+
+  @@map("ventas")
+}
+
+model DetalleVenta {
+  id_detalle               Int      @id @default(autoincrement())
+  id_venta                 Int
+  id_producto              Int
+  cantidad                 Int
+  precio_unitario_aplicado Decimal  @db.Decimal(10, 2)
+  venta                    Venta    @relation(fields: [id_venta], references: [id_venta], onDelete: Cascade)
+  producto                 Producto @relation(fields: [id_producto], references: [id_producto])
+
+  @@map("detalle_venta")
+}
+
+model AbonoCredito {
+  id_abono      Int      @id @default(autoincrement())
+  id_venta      Int
+  monto_abonado Decimal  @db.Decimal(10, 2)
+  fecha_pago    DateTime @default(now())
+  venta         Venta    @relation(fields: [id_venta], references: [id_venta], onDelete: Cascade)
+
+  @@map("abonos_credito")
+}
+
+// =============================================
+// 5. AUDITORÍA Y TRAZABILIDAD (KARDEX)
+// =============================================
+
+model HistorialMovimiento {
+  id_movimiento   Int            @id @default(autoincrement())
+  id_producto     Int
+  id_usuario      Int
+  id_tipo_mov     Int
+  cantidad        Int
+  origen_destino  String?        @db.VarChar(100)
+  fecha_hora      DateTime       @default(now())
+  producto        Producto       @relation(fields: [id_producto], references: [id_producto])
+  usuario         Usuario        @relation(fields: [id_usuario], references: [id_usuario])
+  tipo_movimiento TipoMovimiento @relation(fields: [id_tipo_mov], references: [id_tipo_mov])
+
+  @@map("historial_movimientos")
+}
