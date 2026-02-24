@@ -1,0 +1,20 @@
+{
+  "name": "mantenimiento",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+   "dev": "env-cmd -f .env --silent turbo dev",
+   "dev:api":" env-cmd -f .env --silent turbo dev --filter=api",
+    "build": "turbo run build",
+    "lint": "turbo run lint"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.25.0",
+  "devDependencies": {
+    "env-cmd": "^11.0.0",
+    "turbo": "^2.8.3"
+  }
+}
