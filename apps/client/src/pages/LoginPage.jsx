@@ -39,13 +39,13 @@ export const LoginPage = () => {
 
           {/* Logo */}
           <div className="flex items-center justify-center gap-2 mb-8">
-            <div className="w-7 h-7 bg-[#135bec] rounded-full flex items-center justify-center">
+            {/* <div className="w-7 h-7 bg-[#135bec] rounded-full flex items-center justify-center">
               <svg className="w-3.5 h-3.5 fill-white" viewBox="0 0 24 24">
                 <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
               </svg>
-            </div>
+            </div> */}
             <span className="text-sm font-black tracking-[0.2em] uppercase text-slate-800">
-              AutoElite
+              ICON
             </span>
           </div>
 
