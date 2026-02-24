@@ -17,5 +17,8 @@
   "devDependencies": {
     "env-cmd": "^11.0.0",
     "turbo": "^2.8.10"
+  },
+  "dependencies": {
+    "lucide-react": "^0.575.0"
   }
 }
