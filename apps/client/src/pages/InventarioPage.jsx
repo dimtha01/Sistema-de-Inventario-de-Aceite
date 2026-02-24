@@ -259,7 +259,7 @@ export const InventarioPage = () => {
           {loading ? (
             <div className="flex items-center justify-center p-20 text-slate-400">Cargando inventario...</div>
           ) : (
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
               {productosFiltrados.map(p => (
                 <div key={p.id_producto} className="group cursor-pointer" onClick={() => seleccionar(p)}>
                   <div className={`aspect-square rounded-xl bg-white overflow-hidden border mb-2 transition-all duration-300 hover:shadow-lg hover:shadow-[#135bec]/5 ${

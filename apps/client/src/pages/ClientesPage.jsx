@@ -1,8 +1,6 @@
 import { useState, useMemo, useEffect } from 'react';
-import { Search, Plus, Users, Building2, MapPin, Calendar, CreditCard, X } from 'lucide-react';
+import { Search, Plus, Users, Building2, Calendar, CreditCard, X, History } from 'lucide-react';
 import { ModalNuevoCliente } from '../components/ModalNuevoCliente';
-
-// ── Datos iniciales removidos ─────────────────
 
 const TABS = [
   { key: 'todos', label: 'Todos' },
@@ -25,11 +23,10 @@ const ESTADO_CONFIG = {
   },
 };
 
-// ── Helpers de UI ─────────────────────────────────────────
 const EstadoBadge = ({ estado }) => {
   const cfg = ESTADO_CONFIG[estado] || ESTADO_CONFIG.aldia;
   return (
-    <span className={`px-2.5 py-1 text-[10px] font-bold rounded-full uppercase tracking-widest ${cfg.badge}`}>
+    <span className={`px-2 py-0.5 text-[9px] font-bold rounded-full uppercase tracking-widest ${cfg.badge}`}>
       {cfg.label}
     </span>
   );
@@ -38,137 +35,241 @@ const EstadoBadge = ({ estado }) => {
 const Avatar = ({ iniciales, estado }) => {
   const cfg = ESTADO_CONFIG[estado] || ESTADO_CONFIG.aldia;
   return (
-    <div className={`h-12 w-12 rounded-2xl flex items-center justify-center font-bold text-sm flex-shrink-0 ${cfg.avatar}`}>
+    <div className={`h-9 w-9 rounded-xl flex items-center justify-center font-bold text-xs flex-shrink-0 ${cfg.avatar}`}>
       {iniciales}
     </div>
   );
 };
 
-// ── Helper: genera iniciales desde nombre ─────────────────
 const getIniciales = (nombre = '') =>
-  nombre
-    .split(' ')
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((w) => w[0].toUpperCase())
-    .join('');
+  nombre.split(' ').filter(Boolean).slice(0, 2).map(w => w[0].toUpperCase()).join('');
 
-// ── Sidebar / Drawer content ──────────────────────────────
-const ClienteContent = ({ clienteSel }) => {
-  if (!clienteSel) return (
-    <div className="flex-1 flex flex-col items-center justify-center p-6 text-center gap-2.5 py-10">
-      <div className="w-12 h-12 rounded-2xl bg-white border border-slate-100 shadow-sm flex items-center justify-center">
-        <Users className="w-6 h-6 text-slate-300" />
+// ── Modal Historial de Compras ────────────────────────────
+const ModalHistorial = ({ cliente, onClose, onAbonar }) => {
+  const [abonoVentaId, setAbonoVentaId] = useState(null);
+  const [montoAbono, setMontoAbono] = useState('');
+  const [loadingAbono, setLoadingAbono] = useState(false);
+
+  const handleRegistrarAbono = async (e) => {
+    e.preventDefault();
+    if (!montoAbono || montoAbono <= 0) return alert('Monto inválido');
+    setLoadingAbono(true);
+    await onAbonar(abonoVentaId, Number(montoAbono));
+    setLoadingAbono(false);
+    setAbonoVentaId(null);
+    setMontoAbono('');
+  };
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm"
+      onClick={onClose}
+    >
+      <div
+        className="relative w-full max-w-lg bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col max-h-[85vh]"
+        onClick={e => e.stopPropagation()}
+      >
+        {/* Header */}
+        <div className="flex items-center justify-between px-5 py-3.5 border-b border-slate-100 bg-slate-50/60">
+          <div className="flex items-center gap-2">
+            <History size={15} className="text-[#135bec]" />
+            <div>
+              <h2 className="text-sm font-black text-slate-900 leading-tight">Historial de Compras</h2>
+              <p className="text-[10px] text-slate-400 font-medium">{cliente.nombre}</p>
+            </div>
+          </div>
+          <button
+            onClick={onClose}
+            className="h-7 w-7 flex items-center justify-center rounded-full hover:bg-slate-200 text-slate-400 transition-colors"
+          >
+            <X size={14} />
+          </button>
+        </div>
+
+        {/* Resumen rápido */}
+        <div className="grid grid-cols-3 gap-2 px-5 py-3 border-b border-slate-100">
+          <div className="bg-slate-50 rounded-lg p-2 text-center border border-slate-100">
+            <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest block mb-0.5">Ventas</span>
+            <span className="text-sm font-black text-slate-900">{cliente.ventas?.length ?? 0}</span>
+          </div>
+          <div className="bg-slate-50 rounded-lg p-2 text-center border border-slate-100">
+            <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest block mb-0.5">Total</span>
+            <span className="text-sm font-black text-slate-900">
+              ${(cliente.ventas?.reduce((s, v) => s + (v.monto || 0), 0) ?? 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}
+            </span>
+          </div>
+          <div className={`rounded-lg p-2 text-center border ${cliente.saldo > 0 ? 'bg-red-50 border-red-100' : 'bg-emerald-50 border-emerald-100'}`}>
+            <span className={`text-[8px] font-black uppercase tracking-widest block mb-0.5 ${cliente.saldo > 0 ? 'text-red-400' : 'text-emerald-400'}`}>Saldo</span>
+            <span className={`text-sm font-black ${cliente.saldo > 0 ? 'text-red-600' : 'text-emerald-600'}`}>
+              ${(cliente.saldo ?? 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}
+            </span>
+          </div>
+        </div>
+
+        {/* Lista de ventas */}
+        <div className="overflow-y-auto flex-1 px-5 py-3 flex flex-col gap-3">
+          {(!cliente.ventas || cliente.ventas.length === 0) ? (
+            <div className="flex flex-col items-center justify-center py-10 text-center gap-2">
+              <History size={22} className="text-slate-300" />
+              <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Sin compras registradas</p>
+            </div>
+          ) : (
+            cliente.ventas.map(v => (
+              <div key={v.id_venta} className="bg-slate-50 border border-slate-100 rounded-xl p-3 flex flex-col gap-2">
+
+                {/* Cabecera de venta */}
+                <div className="flex justify-between items-center bg-white px-3 py-2 rounded-lg border border-slate-100 shadow-sm">
+                  <div className="flex items-center gap-1.5 text-xs font-bold text-slate-700">
+                    <Calendar size={11} className="text-[#135bec]" />
+                    {v.fecha}
+                  </div>
+                  <div className="text-right">
+                    <span className="text-[9px] uppercase font-black tracking-widest text-[#135bec] block">Total</span>
+                    <span className="text-sm font-black text-slate-900 leading-none">
+                      ${(v.monto || 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Productos */}
+                <div className="flex flex-col gap-1 px-1">
+                  {v.detalles.map((d, i) => (
+                    <div key={i} className="flex justify-between items-start text-[10px] border-b border-slate-100/60 last:border-0 pb-1 last:pb-0">
+                      <span className="text-slate-600 font-medium truncate pr-2" title={d.producto}>
+                        <span className="font-black text-slate-400 mr-1">{d.cantidad}×</span>{d.producto}
+                      </span>
+                      <span className="text-slate-900 font-bold whitespace-nowrap">
+                        ${(d.precio || 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Abonos / estado */}
+                <div className="flex items-center justify-between px-1">
+                  <span className="text-[9px] font-bold text-slate-400">
+                    Abonado: <strong className="text-slate-600">
+                      ${(v.abonado || 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                    </strong>
+                  </span>
+                  <span className={`text-[9px] font-black uppercase ${v.saldo_restante > 0 ? 'text-red-500' : 'text-emerald-500'}`}>
+                    Resta: ${(v.saldo_restante || 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                  </span>
+                </div>
+
+                {/* Acción abonar */}
+                {v.estado.toLowerCase() === 'pendiente' ? (
+                  abonoVentaId === v.id_venta ? (
+                    <form onSubmit={handleRegistrarAbono} className="flex gap-2">
+                      <input
+                        type="number" step="0.01" max={v.saldo_restante}
+                        value={montoAbono} onChange={e => setMontoAbono(e.target.value)}
+                        placeholder="Monto..." autoFocus
+                        className="flex-1 bg-white border border-slate-200 rounded-lg text-xs px-2 py-1.5 outline-none focus:border-[#135bec]"
+                      />
+                      <button type="submit" disabled={loadingAbono}
+                        className="bg-[#135bec] hover:bg-[#1048bc] text-white text-[9px] font-black px-3 py-1.5 rounded-lg uppercase transition-all">
+                        {loadingAbono ? '...' : 'Pagar'}
+                      </button>
+                      <button type="button" onClick={() => setAbonoVentaId(null)}
+                        className="bg-slate-200 text-slate-600 text-[9px] font-black px-2.5 py-1.5 rounded-lg hover:bg-slate-300">
+                        ✕
+                      </button>
+                    </form>
+                  ) : (
+                    <button
+                      onClick={() => { setAbonoVentaId(v.id_venta); setMontoAbono(v.saldo_restante); }}
+                      className="w-full bg-white border border-slate-200 text-slate-600 font-bold py-1.5 rounded-lg text-[9px] hover:bg-slate-50 transition-colors uppercase tracking-widest flex items-center justify-center gap-1"
+                    >
+                      <CreditCard size={11} /> Abonar a esta venta
+                    </button>
+                  )
+                ) : (
+                  <div className="py-1 rounded text-[8px] font-black text-center uppercase tracking-widest bg-emerald-50 text-emerald-600 border border-emerald-100">
+                    Totalmente Pagado
+                  </div>
+                )}
+              </div>
+            ))
+          )}
+        </div>
       </div>
-      <p className="text-xs font-semibold text-slate-400">Selecciona un cliente</p>
-      <p className="text-[10px] text-slate-400 max-w-[200px] leading-relaxed">
-        Haz clic en cualquier cliente del listado para ver su historial y contacto
+    </div>
+  );
+};
+
+// ── Sidebar info del cliente (sin historial) ──────────────
+const ClienteContent = ({ clienteSel, onVerHistorial }) => {
+  if (!clienteSel) return (
+    <div className="flex-1 flex flex-col items-center justify-center p-5 text-center gap-2 py-8">
+      <div className="w-10 h-10 rounded-xl bg-white border border-slate-100 shadow-sm flex items-center justify-center">
+        <Users className="w-5 h-5 text-slate-300" />
+      </div>
+      <p className="text-[11px] font-semibold text-slate-400">Selecciona un cliente</p>
+      <p className="text-[10px] text-slate-400 max-w-[180px] leading-relaxed">
+        Haz clic en cualquier cliente para ver su perfil
       </p>
     </div>
   );
 
   return (
-    <div className="p-5 flex flex-col gap-5">
+    <div className="p-4 flex flex-col gap-3.5">
       {/* Perfil */}
-      <div className="flex flex-col items-center text-center gap-3">
+      <div className="flex flex-col items-center text-center gap-2">
         <Avatar iniciales={clienteSel.iniciales} estado={clienteSel.estado} />
         <div>
           <EstadoBadge estado={clienteSel.estado} />
-          <h3 className="text-lg font-black text-slate-900 mt-2 mb-1">{clienteSel.nombre}</h3>
-          <p className="text-xs font-medium text-slate-500 flex items-center justify-center gap-1">
-            <Building2 size={12} /> {clienteSel.tipo || '—'}
+          <h3 className="text-base font-black text-slate-900 mt-1.5 mb-0.5 leading-tight">{clienteSel.nombre}</h3>
+          <p className="text-[10px] font-medium text-slate-500 flex items-center justify-center gap-1">
+            <Building2 size={11} /> {clienteSel.tipo || '—'}
           </p>
         </div>
       </div>
 
       {/* Métricas */}
       <div className="grid grid-cols-2 gap-2">
-        <div className="bg-slate-50 p-3 rounded-2xl border border-slate-100">
-          <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Saldo</span>
+        <div className="bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+          <span className="text-[8px] font-bold text-slate-400 uppercase tracking-wider block mb-0.5">Saldo</span>
           <div className="flex items-baseline gap-0.5">
-            <span className="text-[10px] text-slate-400 font-medium">$</span>
-            <span className={`text-xl font-black tracking-tighter leading-tight ${ESTADO_CONFIG[clienteSel.estado]?.saldo || 'text-slate-900'}`}>
+            <span className="text-[9px] text-slate-400 font-medium">$</span>
+            <span className={`text-lg font-black tracking-tighter leading-tight ${ESTADO_CONFIG[clienteSel.estado]?.saldo || 'text-slate-900'}`}>
               {(clienteSel.saldo ?? 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}
             </span>
           </div>
         </div>
-        <div className="bg-[#135bec]/5 p-3 rounded-2xl border border-[#135bec]/10">
-          <span className="text-[9px] font-bold text-[#135bec]/70 uppercase tracking-wider block mb-1">Últ. Compra</span>
-          <div className="flex items-center gap-1.5 h-full">
-            <Calendar size={14} className="text-[#135bec]" />
-            <span className="text-sm font-bold text-[#135bec]">
-              {clienteSel.ultimaCompra || 'Sin compras'}
-            </span>
+        <div className="bg-[#135bec]/5 p-2.5 rounded-xl border border-[#135bec]/10">
+          <span className="text-[8px] font-bold text-[#135bec]/70 uppercase tracking-wider block mb-0.5">Últ. Compra</span>
+          <div className="flex items-center gap-1 mt-1">
+            <Calendar size={12} className="text-[#135bec]" />
+            <span className="text-xs font-bold text-[#135bec]">{clienteSel.ultimaCompra || 'Sin compras'}</span>
           </div>
         </div>
       </div>
 
       {/* Contacto */}
-      <div className="flex flex-col gap-2">
-        <h4 className="text-[10px] font-black uppercase tracking-widest text-[#135bec] mb-1 pl-1">Contacto</h4>
-        <div className="flex items-center gap-3 bg-white border border-slate-100 p-3 rounded-2xl">
-          <div className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-slate-400">
-            <Users size={14} />
-          </div>
-          <div>
-            <p className="text-[10px] text-slate-400 uppercase tracking-wide font-bold">Teléfono</p>
-            <p className="text-xs font-semibold text-slate-700">{clienteSel.telefono || '—'}</p>
-          </div>
+      <div className="flex items-center gap-2.5 bg-white border border-slate-100 p-2.5 rounded-xl">
+        <div className="w-7 h-7 rounded-full bg-slate-50 flex items-center justify-center text-slate-400">
+          <Users size={12} />
+        </div>
+        <div>
+          <p className="text-[9px] text-slate-400 uppercase tracking-wide font-bold">Teléfono</p>
+          <p className="text-[11px] font-semibold text-slate-700">{clienteSel.telefono || '—'}</p>
         </div>
       </div>
 
-      <button className="w-full mt-2 bg-[#135bec] text-white font-bold py-3.5 rounded-2xl text-xs transition-all hover:bg-[#135bec]/90 active:scale-[0.98] uppercase tracking-wider shadow-lg shadow-[#135bec]/25 flex items-center justify-center gap-2">
-        <CreditCard size={14} /> Registrar Pago
+      {/* Botón historial */}
+      <button
+        onClick={() => onVerHistorial(clienteSel)}
+        className="w-full flex items-center justify-center gap-1.5 py-2.5 bg-[#135bec]/5 border border-[#135bec]/20 text-[#135bec] font-bold rounded-xl text-[10px] uppercase tracking-widest hover:bg-[#135bec]/10 transition-colors"
+      >
+        <History size={13} />
+        Ver Historial de Compras
+        {clienteSel.ventas?.some(v => v.estado.toLowerCase() === 'pendiente') && (
+          <span className="ml-1 bg-red-500 text-white text-[8px] font-black px-1.5 py-0.5 rounded-full">
+            {clienteSel.ventas.filter(v => v.estado.toLowerCase() === 'pendiente').length}
+          </span>
+        )}
       </button>
-
-      {/* ── Detalle de Ventas ── */}
-      {clienteSel.ventas && clienteSel.ventas.length > 0 && (
-        <div className="flex flex-col gap-3 mt-2 border-t border-slate-100 pt-4">
-          <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-800 mb-1 pl-1">
-            Historial de Compras
-          </h4>
-          <div className="flex flex-col gap-2 max-h-64 overflow-y-auto pr-1">
-            {clienteSel.ventas.map((v) => (
-              <div key={v.id_venta} className="bg-slate-50 border border-slate-100 p-3 rounded-xl flex flex-col gap-2">
-                <div className="flex justify-between items-center bg-white p-2 rounded-lg shadow-sm border border-slate-100 mb-1">
-                  <div className="flex items-center gap-1.5 text-xs font-bold text-slate-700">
-                    <Calendar size={12} className="text-[#135bec]" />
-                    {v.fecha}
-                  </div>
-                  <div className="text-right">
-                    <span className="text-[10px] uppercase font-black tracking-widest text-[#135bec] block mb-0.5">
-                      Total
-                    </span>
-                    <span className="text-sm font-black text-slate-900 leading-none block">
-                      ${v.monto.toLocaleString('en-US', { minimumFractionDigits: 2 })}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Detalles por producto */}
-                <div className="flex flex-col gap-1.5 px-1">
-                  {v.detalles.map((d, i) => (
-                    <div key={i} className="flex justify-between items-center text-[11px]">
-                      <span className="text-slate-600 font-medium truncate max-w-[160px]" title={d.producto}>
-                        {d.cantidad}x {d.producto}
-                      </span>
-                      <span className="text-slate-900 font-bold whitespace-nowrap">
-                        ${d.precio.toLocaleString('en-US', { minimumFractionDigits: 2 })}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Estado de pago de la venta */}
-                <div className={`mt-1 py-1 rounded-md text-[9px] font-black text-center uppercase tracking-widest ${v.estado.toLowerCase() === 'pendiente' ? 'bg-red-50 text-red-600 border border-red-100' : 'bg-emerald-50 text-emerald-600 border border-emerald-100'
-                  }`}>
-                  Pago {v.estado}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
     </div>
   );
 };
@@ -180,25 +281,53 @@ export const ClientesPage = () => {
   const [busqueda, setBusqueda] = useState('');
   const [clienteSel, setClienteSel] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [showHistorial, setShowHistorial] = useState(false);
+  const [clienteHistorial, setClienteHistorial] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+  const fetchClientes = () => {
+    setLoading(true);
     fetch('/api/clientes')
       .then(res => res.json())
       .then(res => {
         if (res.success && res.data) {
-          // Agregar property 'iniciales'
           const formatted = res.data.map(c => ({
             ...c,
             iniciales: getIniciales(`${c.nombre} ${c.apellido || ''}`)
           }));
           setClientes(formatted);
+          if (clienteSel) {
+            const updated = formatted.find(c => c.id === clienteSel.id);
+            if (updated) setClienteSel(updated);
+          }
         }
       })
       .finally(() => setLoading(false));
-  }, []);
+  };
 
-  // ── Optimistic UI: inserta el cliente al inicio sin esperar refetch ──
+  useEffect(() => { fetchClientes(); }, []);
+
+  const handleAbonar = async (id_venta, monto) => {
+    try {
+      const resp = await fetch('/api/clientes/abono', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id_venta, monto })
+      });
+      const data = await resp.json();
+      if (resp.ok && data.success) {
+        alert('Abono registrado con éxito');
+        fetchClientes();
+      }
+      else {
+        alert(data.message || 'Error al abonar');
+      }
+    } catch (e) {
+      console.error("Error catch en handleAbonar:", e);
+      alert('Error de conexión o fallo del servidor');
+    }
+  };
+
   const handleGuardar = (nuevoCliente) => {
     const clienteFormateado = {
       ...nuevoCliente,
@@ -207,76 +336,83 @@ export const ClientesPage = () => {
       estado: nuevoCliente.estado ?? 'aldia',
       iniciales: nuevoCliente.iniciales ?? getIniciales(nuevoCliente.nombre),
     };
-    setClientes((prev) => [clienteFormateado, ...prev]);
-    setClienteSel(clienteFormateado); // auto-selecciona en sidebar
+    setClientes(prev => [clienteFormateado, ...prev]);
+    setClienteSel(clienteFormateado);
   };
 
-  // ── Filtrado (useMemo sobre estado dinámico) ──
+  const handleVerHistorial = (cliente) => {
+    setClienteHistorial(cliente);
+    setShowHistorial(true);
+  };
+
   const clientesFiltrados = useMemo(() => {
     let lista = clientes;
-    if (tabActiva !== 'todos') lista = lista.filter((c) => c.estado === tabActiva);
+    if (tabActiva !== 'todos') lista = lista.filter(c => c.estado === tabActiva);
     if (busqueda) {
       const b = busqueda.toLowerCase();
-      lista = lista.filter((c) => c.nombre.toLowerCase().includes(b));
+      lista = lista.filter(c => c.nombre.toLowerCase().includes(b));
     }
     return lista;
   }, [clientes, tabActiva, busqueda]);
 
   return (
     <>
-      {/* ── Modal ── */}
       {showModal && (
-        <ModalNuevoCliente
-          onClose={() => setShowModal(false)}
-          onGuardar={handleGuardar}
+        <ModalNuevoCliente onClose={() => setShowModal(false)} onGuardar={handleGuardar} />
+      )}
+
+      {showHistorial && clienteHistorial && (
+        <ModalHistorial
+          cliente={clienteHistorial}
+          onClose={() => { setShowHistorial(false); setClienteHistorial(null); }}
+          onAbonar={handleAbonar}
         />
       )}
 
-      <div className="flex flex-col lg:flex-row gap-6 items-start">
+      <div className="flex flex-col lg:flex-row gap-4 items-start p-3 lg:p-5 max-w-7xl mx-auto w-full">
 
         {/* ── Main ── */}
-        <div className="flex-1 flex flex-col gap-6 w-full">
+        <div className="flex-1 flex flex-col gap-4 w-full">
 
           {/* Header */}
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
             <div>
-              <h1 className="text-2xl font-black text-slate-900 tracking-tight leading-tight">
+              <h1 className="text-xl font-black text-slate-900 tracking-tight leading-tight">
                 Directorio de Clientes
               </h1>
-              <p className="text-sm font-medium text-slate-500 mt-1">
+              <p className="text-[11px] font-medium text-slate-500 mt-0.5">
                 {clientes.length} clientes registrados en total.
               </p>
             </div>
             <button
               onClick={() => setShowModal(true)}
-              className="flex justify-center items-center gap-2 bg-[#135bec] hover:bg-[#1048bc] text-white px-5 py-2.5 rounded-xl text-xs font-bold transition-all shadow-lg shadow-[#135bec]/25"
+              className="flex justify-center items-center gap-1.5 bg-[#135bec] hover:bg-[#1048bc] text-white px-4 py-2 rounded-lg text-[10px] font-bold transition-all shadow-md shadow-[#135bec]/25 uppercase tracking-widest"
             >
-              <Plus size={16} strokeWidth={3} />
-              NUEVO CLIENTE
+              <Plus size={13} strokeWidth={3} />
+              Nuevo Cliente
             </button>
           </div>
 
           {/* Filtros */}
-          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 bg-white p-4 rounded-2xl border border-slate-100 shadow-sm">
-            <div className="flex bg-slate-50 p-1 rounded-xl w-full lg:w-auto overflow-x-auto">
-              {TABS.map((tab) => {
-                // contador sobre estado dinámico
+          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-2.5 bg-white p-2.5 rounded-xl border border-slate-100 shadow-sm">
+            <div className="flex bg-slate-50 p-0.5 rounded-lg w-full lg:w-auto overflow-x-auto">
+              {TABS.map(tab => {
                 const count = tab.key === 'todos'
                   ? clientes.length
-                  : clientes.filter((c) => c.estado === tab.key).length;
+                  : clientes.filter(c => c.estado === tab.key).length;
                 return (
                   <button
                     key={tab.key}
                     onClick={() => setTabActiva(tab.key)}
-                    className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-[11px] font-bold uppercase tracking-wider transition-all whitespace-nowrap ${tabActiva === tab.key
-                      ? 'bg-white text-[#135bec] shadow-sm'
-                      : 'text-slate-400 hover:text-slate-600'
+                    className={`flex items-center gap-1 px-3 py-1.5 rounded-md text-[9px] font-bold uppercase tracking-wider transition-all whitespace-nowrap ${tabActiva === tab.key
+                        ? 'bg-white text-[#135bec] shadow-sm'
+                        : 'text-slate-400 hover:text-slate-600'
                       }`}
                   >
                     {tab.label}
-                    <span className={`px-1.5 py-0.5 rounded-md text-[9px] ${tabActiva === tab.key
-                      ? 'bg-[#135bec]/10 text-[#135bec]'
-                      : 'bg-slate-200 text-slate-500'
+                    <span className={`px-1 py-0.5 rounded text-[8px] ${tabActiva === tab.key
+                        ? 'bg-[#135bec]/10 text-[#135bec]'
+                        : 'bg-slate-200 text-slate-500'
                       }`}>
                       {count}
                     </span>
@@ -284,113 +420,99 @@ export const ClientesPage = () => {
                 );
               })}
             </div>
-
-            <div className="relative w-full lg:w-72">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
+            <div className="relative w-full lg:w-64">
+              <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400" size={13} />
               <input
-                type="text"
-                placeholder="Buscar cliente..."
-                value={busqueda}
-                onChange={(e) => setBusqueda(e.target.value)}
-                className="w-full pl-9 pr-4 py-2.5 bg-slate-50 border-2 border-transparent focus:border-[#135bec] rounded-xl text-sm font-medium outline-none transition-all placeholder:text-slate-400"
+                type="text" placeholder="Buscar cliente..."
+                value={busqueda} onChange={e => setBusqueda(e.target.value)}
+                className="w-full pl-8 pr-3 py-2 bg-slate-50 border-2 border-transparent focus:border-[#135bec] rounded-lg text-[11px] font-medium outline-none transition-all placeholder:text-slate-400"
               />
             </div>
           </div>
 
           {/* Lista */}
           {loading ? (
-            <div className="flex items-center justify-center py-20 text-slate-400 text-sm font-bold">Cargando clientes...</div>
+            <div className="flex items-center justify-center py-16 text-slate-400 text-xs font-bold">
+              Cargando clientes...
+            </div>
           ) : clientesFiltrados.length > 0 ? (
-            <div className="flex flex-col gap-3">
-              {clientesFiltrados.map((cliente) => {
+            <div className="flex flex-col gap-2">
+              {clientesFiltrados.map(cliente => {
                 const cfg = ESTADO_CONFIG[cliente.estado] || ESTADO_CONFIG.aldia;
                 const isSelected = clienteSel?.id === cliente.id;
                 return (
                   <div
                     key={cliente.id}
                     onClick={() => setClienteSel(cliente)}
-                    className={`group relative bg-white rounded-2xl p-4 transition-all duration-300 cursor-pointer overflow-hidden border-2 ${isSelected
-                      ? 'border-[#135bec] shadow-md'
-                      : 'border-slate-100 hover:border-slate-200 hover:shadow-sm'
-                      } flex flex-col sm:flex-row items-start sm:items-center gap-4`}
+                    className={`group relative bg-white rounded-xl p-3 transition-all duration-200 cursor-pointer border-2 ${isSelected
+                        ? 'border-[#135bec] shadow-sm'
+                        : 'border-slate-100 hover:border-slate-200 hover:shadow-sm'
+                      } flex items-center gap-3`}
                   >
                     <Avatar iniciales={cliente.iniciales} estado={cliente.estado} />
 
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-1">
-                        <h3 className="font-bold text-sm text-slate-900 truncate group-hover:text-[#135bec] transition-colors">
+                      <div className="flex items-center gap-1.5 mb-0.5">
+                        <h3 className="font-bold text-xs text-slate-900 truncate group-hover:text-[#135bec] transition-colors">
                           {cliente.nombre}
                         </h3>
                         <EstadoBadge estado={cliente.estado} />
                       </div>
-                      <div className="flex items-center gap-3 text-[11px] font-medium text-slate-500">
+                      <div className="flex items-center gap-2 text-[10px] font-medium text-slate-400">
                         <span className="flex items-center gap-1">
-                          <Building2 size={12} /> {cliente.tipo || '—'}
+                          <Building2 size={10} /> {cliente.tipo || '—'}
                         </span>
                       </div>
                     </div>
 
-                    <div className="flex flex-row sm:flex-col items-center sm:items-end justify-between w-full sm:w-auto gap-1 pl-0 sm:pl-4 border-t sm:border-t-0 border-slate-100 pt-3 sm:pt-0 mt-2 sm:mt-0">
-                      <div className="flex flex-col items-start sm:items-end w-1/2 sm:w-auto">
-                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none mb-1">Saldo</span>
-                        <span className={`text-sm font-black tracking-tighter leading-none ${cfg.saldo}`}>
-                          ${(cliente.saldo ?? 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}
-                        </span>
-                      </div>
-                      <div className="flex flex-col items-end w-1/2 sm:w-auto">
-                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none mb-1">Últ. Compra</span>
-                        <span className="text-[11px] font-bold text-slate-700 leading-none">
-                          {cliente.ultimaCompra || '—'}
-                        </span>
-                      </div>
+                    <div className="flex flex-col items-end gap-1 flex-shrink-0">
+                      <span className="text-[8px] font-bold text-slate-400 uppercase tracking-widest">Saldo</span>
+                      <span className={`text-xs font-black tracking-tighter ${cfg.saldo}`}>
+                        ${(cliente.saldo ?? 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                      </span>
+                      <span className="text-[9px] font-medium text-slate-400">
+                        {cliente.ultimaCompra || '—'}
+                      </span>
                     </div>
                   </div>
                 );
               })}
             </div>
           ) : (
-            <div className="flex flex-col items-center justify-center py-20 bg-white rounded-3xl border border-slate-100 border-dashed text-center">
-              <div className="w-16 h-16 rounded-full bg-slate-50 flex items-center justify-center mb-4 border border-slate-100">
-                <Users size={24} className="text-slate-300" />
+            <div className="flex flex-col items-center justify-center py-14 bg-white rounded-xl border border-dashed border-slate-100 text-center">
+              <div className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center mb-3 border border-slate-100">
+                <Users size={18} className="text-slate-300" />
               </div>
-              <h3 className="text-sm font-bold text-slate-900 uppercase tracking-widest">No hay resultados</h3>
-              <p className="text-xs font-medium text-slate-500 mt-1">Intenta con otros términos u otra categoría.</p>
+              <h3 className="text-xs font-bold text-slate-900 uppercase tracking-widest">No hay resultados</h3>
+              <p className="text-[10px] font-medium text-slate-500 mt-0.5">Intenta con otros términos.</p>
             </div>
           )}
         </div>
 
         {/* ── Sidebar Desktop ── */}
-        <aside className="w-full lg:w-[320px] bg-white border border-slate-100 rounded-3xl shadow-sm overflow-hidden sticky top-24 flex-shrink-0 hidden lg:flex flex-col">
-          <div className="px-5 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
-            <h2 className="font-bold text-[10px] text-[#135bec] uppercase tracking-[0.2em]">Info del Cliente</h2>
+        <aside className="w-full lg:w-[280px] bg-white border border-slate-100 rounded-2xl shadow-sm overflow-hidden sticky top-20 flex-shrink-0 hidden lg:flex flex-col">
+          <div className="px-4 py-3 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+            <h2 className="font-bold text-[9px] text-[#135bec] uppercase tracking-[0.2em]">Info del Cliente</h2>
             {clienteSel && (
-              <button
-                onClick={() => setClienteSel(null)}
-                className="text-slate-400 hover:text-slate-600 transition-colors p-1"
-              >
-                <X size={14} strokeWidth={2.5} />
+              <button onClick={() => setClienteSel(null)} className="text-slate-400 hover:text-slate-600 transition-colors p-0.5">
+                <X size={13} strokeWidth={2.5} />
               </button>
             )}
           </div>
-          <ClienteContent clienteSel={clienteSel} />
+          <ClienteContent clienteSel={clienteSel} onVerHistorial={handleVerHistorial} />
         </aside>
 
         {/* ── Drawer Móvil ── */}
         {clienteSel && (
           <div className="lg:hidden fixed inset-0 z-50 flex justify-end">
-            <div
-              className="absolute inset-0 bg-black/20 backdrop-blur-sm"
-              onClick={() => setClienteSel(null)}
-            />
-            <div className="relative w-80 max-w-full bg-white h-full shadow-2xl flex flex-col">
-              <div className="px-5 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
-                <h2 className="font-bold text-[10px] text-[#135bec] uppercase tracking-[0.2em]">Info del Cliente</h2>
-                <button onClick={() => setClienteSel(null)} className="text-slate-400 p-1">
-                  <X size={14} />
-                </button>
+            <div className="absolute inset-0 bg-black/20 backdrop-blur-sm" onClick={() => setClienteSel(null)} />
+            <div className="relative w-72 max-w-full bg-white h-full shadow-2xl flex flex-col">
+              <div className="px-4 py-3 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+                <h2 className="font-bold text-[9px] text-[#135bec] uppercase tracking-[0.2em]">Info del Cliente</h2>
+                <button onClick={() => setClienteSel(null)} className="text-slate-400 p-0.5"><X size={13} /></button>
               </div>
-              <div className="overflow-y-auto flex-1 pb-10">
-                <ClienteContent clienteSel={clienteSel} />
+              <div className="overflow-y-auto flex-1 pb-8">
+                <ClienteContent clienteSel={clienteSel} onVerHistorial={handleVerHistorial} />
               </div>
             </div>
           </div>

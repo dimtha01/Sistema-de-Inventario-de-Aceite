@@ -7,6 +7,7 @@ import { ClientesPage } from '../pages/ClientesPage';
 import { ProveedoresPage } from '../pages/ProveedoresPage';
 import { HistorialPage } from '../pages/HistorialPage';
 import { CategoriasPage } from '../pages/CategoriasPage';
+import { PosPage } from '../pages/PosPage';
 
 export const router = createBrowserRouter([
     {
@@ -40,6 +41,10 @@ export const router = createBrowserRouter([
             {
                 path: 'categorias',
                 element: <CategoriasPage />,
+            },
+            {
+                path: 'pos',
+                element: <PosPage />,
             },
         ],
     },

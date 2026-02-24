@@ -4,11 +4,12 @@ import { Bell, LogOut, Menu, X } from 'lucide-react';
 import { NotificacionesPanel } from './NotificacionesPanel';
 
 const navLinks = [
-  { to: '/inventario',  label: 'Inventario'  },
-  { to: '/clientes',    label: 'Clientes'    },
+  { to: '/pos', label: 'Vender (POS)' },
+  { to: '/inventario', label: 'Inventario' },
+  { to: '/clientes', label: 'Clientes' },
   { to: '/proveedores', label: 'Proveedores' },
-  { to: '/categorias',  label: 'Categorias'  },
-  { to: '/historial',   label: 'Historial'   },
+  { to: '/categorias', label: 'Categorias' },
+  { to: '/historial', label: 'Historial' },
 ];
 
 // cantidad de alertas sin leer (puedes hacerlo dinámico luego)
@@ -16,7 +17,7 @@ const UNREAD_COUNT = 2;
 
 export const Header = () => {
   const navigate = useNavigate();
-  const [menuOpen,  setMenuOpen]  = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const [showNotif, setShowNotif] = useState(false);
 
   const handleLogout = () => {
@@ -49,10 +50,9 @@ export const Header = () => {
                   key={to}
                   to={to}
                   className={({ isActive }) =>
-                    `text-[11px] font-semibold uppercase tracking-widest transition-colors pb-0.5 whitespace-nowrap ${
-                      isActive
-                        ? 'text-[#135bec] border-b-2 border-[#135bec]'
-                        : 'text-slate-400 hover:text-slate-700 border-b-2 border-transparent'
+                    `text-[11px] font-semibold uppercase tracking-widest transition-colors pb-0.5 whitespace-nowrap ${isActive
+                      ? 'text-[#135bec] border-b-2 border-[#135bec]'
+                      : 'text-slate-400 hover:text-slate-700 border-b-2 border-transparent'
                     }`
                   }
                 >
@@ -82,11 +82,10 @@ export const Header = () => {
             {/* ── Botón Bell con badge ── */}
             <button
               onClick={() => setShowNotif(p => !p)}
-              className={`relative p-2 rounded-full transition-colors group ${
-                showNotif
+              className={`relative p-2 rounded-full transition-colors group ${showNotif
                   ? 'bg-[#135bec]/10 text-[#135bec]'
                   : 'hover:bg-slate-100 text-slate-400'
-              }`}
+                }`}
               aria-label="Notificaciones"
             >
               <Bell
@@ -129,7 +128,7 @@ export const Header = () => {
               aria-label="Menú"
             >
               {menuOpen
-                ? <X    size={18} strokeWidth={2} className="text-slate-600" />
+                ? <X size={18} strokeWidth={2} className="text-slate-600" />
                 : <Menu size={18} strokeWidth={2} className="text-slate-500" />
               }
             </button>
@@ -151,10 +150,9 @@ export const Header = () => {
                 to={to}
                 onClick={closeMobile}
                 className={({ isActive }) =>
-                  `flex items-center px-4 py-3 rounded-xl text-xs font-bold uppercase tracking-widest transition-all ${
-                    isActive
-                      ? 'bg-[#135bec]/8 text-[#135bec]'
-                      : 'text-slate-500 hover:bg-slate-50 hover:text-slate-800'
+                  `flex items-center px-4 py-3 rounded-xl text-xs font-bold uppercase tracking-widest transition-all ${isActive
+                    ? 'bg-[#135bec]/8 text-[#135bec]'
+                    : 'text-slate-500 hover:bg-slate-50 hover:text-slate-800'
                   }`
                 }
               >

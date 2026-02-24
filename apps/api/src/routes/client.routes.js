@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getClientes, createCliente } from '../controllers/client.controller.js';
+import { getClientes, createCliente, registrarAbono } from '../controllers/client.controller.js';
 
 const router = Router();
 
@@ -10,7 +10,10 @@ router.use((req, res, next) => {
 
 router.get('/', getClientes);
 router.post('/', createCliente);
-router.get('', getClientes); // just in case
+router.post('/abono', registrarAbono);
+
+// just in case
+router.get('', getClientes);
 router.post('', createCliente);
 
 export default router;
