@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import {
   ArrowDownToLine,
   ArrowUpFromLine,
@@ -15,73 +15,7 @@ import {
 } from 'lucide-react';
 
 // ── Datos ────────────────────────────────────────────────
-const movimientosData = [
-  {
-    id: 1,
-    tipo: 'entrada',
-    descripcion: (
-      <>
-        <span className="font-semibold text-slate-900">Alex</span> añadió{' '}
-        <span className="font-black text-[#135bec]">10 Neumáticos Michelin</span>
-      </>
-    ),
-    tiempo: 'Hace 5 min',
-    lugar: 'Almacén Central',
-    iconoInterno: <Box size={14} />,
-  },
-  {
-    id: 2,
-    tipo: 'salida',
-    descripcion: (
-      <>
-        <span className="font-semibold text-slate-900">Venta #104</span>: Salida de{' '}
-        <span className="font-black text-rose-500">1 Disco Brembo</span>
-      </>
-    ),
-    tiempo: 'Hace 2 horas',
-    lugar: 'Punto de Venta',
-    iconoInterno: <ShoppingCart size={14} />,
-  },
-  {
-    id: 3,
-    tipo: 'ajuste',
-    descripcion: (
-      <>
-        <span className="font-semibold text-slate-900">Inventario</span>: Ajuste de stock{' '}
-        <span className="font-black text-emerald-600">+5 Aceite Motul 10W40</span>
-      </>
-    ),
-    tiempo: 'Ayer, 14:30',
-    lugar: 'Admin (Revisión Anual)',
-    iconoInterno: <User size={14} />,
-  },
-  {
-    id: 4,
-    tipo: 'salida',
-    descripcion: (
-      <>
-        <span className="font-semibold text-slate-900">Pedido #88</span>: Salida de{' '}
-        <span className="font-black text-rose-500">2 Pastillas de Freno</span>
-      </>
-    ),
-    tiempo: '15 Oct 2023',
-    lugar: 'Despacho Internacional',
-    iconoInterno: <Truck size={14} />,
-  },
-  {
-    id: 5,
-    tipo: 'entrada',
-    descripcion: (
-      <>
-        <span className="font-semibold text-slate-900">Proveedor Continental</span>: Nueva entrega de{' '}
-        <span className="font-black text-emerald-600">40 Correas de Distribución</span>
-      </>
-    ),
-    tiempo: '12 Oct 2023',
-    lugar: 'Recepción de Carga',
-    iconoInterno: <Box size={14} />,
-  },
-];
+// ── Datos eliminados (cargando de API) ───────────────────
 
 const FILTROS = [
   { key: 'todos', label: 'Todos' },
@@ -167,16 +101,63 @@ const MovimientoItem = ({ movimiento, isLast }) => {
 export const HistorialPage = () => {
   const [filtroActivo, setFiltroActivo] = useState('todos');
   const [busqueda, setBusqueda] = useState('');
+  const [movimientos, setMovimientos] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch('/api/historial')
+      .then(res => res.json())
+      .then(res => {
+        if (res.success) {
+          const formatted = res.data.map(m => {
+            let iconoInterno = <Box size={14} />;
+            let colorCnt = 'text-emerald-600';
+            const sign = m.tipo === 'salida' ? '-' : '+';
+
+            if (m.tipo === 'salida') {
+              iconoInterno = <ShoppingCart size={14} />;
+              colorCnt = 'text-rose-500';
+            } else if (m.tipo === 'ajuste') {
+              iconoInterno = <User size={14} />;
+              colorCnt = 'text-blue-600';
+            }
+
+            return {
+              ...m,
+              descripcion: (
+                <>
+                  <span className="font-semibold text-slate-900">{m.usuario}</span>{' '}
+                  <span className="text-slate-500">{m.tipo_original}</span>:{' '}
+                  <span className={`font-black ${colorCnt}`}>{sign}{m.cantidad} {m.producto}</span>
+                </>
+              ),
+              iconoInterno
+            };
+          });
+          setMovimientos(formatted);
+        }
+      })
+      .catch(err => console.error("Error cargando historial", err))
+      .finally(() => setLoading(false));
+  }, []);
 
   const filtrados = useMemo(() => {
-    let filtradosAc = movimientosData;
+    let filtradosAc = movimientos;
     if (filtroActivo !== 'todos') {
       filtradosAc = filtradosAc.filter(m => m.tipo === filtroActivo);
     }
-    // Si necesitas filtro por búsqueda, puedes implementarlo sobre la descripción (es JSX, así que es más complejo, 
-    // pero para este ejemplo lo dejamos preparado conceptualmente o lo omitimos de la funcionalidad estricta)
+
+    if (busqueda.trim()) {
+      const q = busqueda.toLowerCase();
+      filtradosAc = filtradosAc.filter(m =>
+        m.producto.toLowerCase().includes(q) ||
+        m.usuario.toLowerCase().includes(q) ||
+        m.tipo_original.toLowerCase().includes(q)
+      );
+    }
+
     return filtradosAc;
-  }, [filtroActivo, busqueda]);
+  }, [filtroActivo, busqueda, movimientos]);
 
   return (
     <main className="flex-1 w-full px-4 sm:px-6 py-8 flex justify-center">
@@ -209,14 +190,14 @@ export const HistorialPage = () => {
 
           <div className="flex bg-slate-50 p-1 rounded-xl w-full sm:w-auto overflow-x-auto">
             {FILTROS.map(f => {
-              const count = f.key === 'todos' ? movimientosData.length : movimientosData.filter(m => m.tipo === f.key).length;
+              const count = f.key === 'todos' ? movimientos.length : movimientos.filter(m => m.tipo === f.key).length;
               return (
                 <button
                   key={f.key}
                   onClick={() => setFiltroActivo(f.key)}
                   className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-bold uppercase tracking-wider transition-all whitespace-nowrap ${filtroActivo === f.key
-                      ? 'bg-white text-[#135bec] shadow-sm'
-                      : 'text-slate-400 hover:text-slate-600'
+                    ? 'bg-white text-[#135bec] shadow-sm'
+                    : 'text-slate-400 hover:text-slate-600'
                     }`}
                 >
                   {f.label}
@@ -243,7 +224,9 @@ export const HistorialPage = () => {
 
         {/* ── Timeline de Resultados ── */}
         <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-100 shadow-sm">
-          {filtrados.length > 0 ? (
+          {loading ? (
+            <div className="flex justify-center text-slate-400 font-bold text-xs py-10">Cargando movimientos...</div>
+          ) : filtrados.length > 0 ? (
             <div className="relative">
               {filtrados.map((mov, i) => (
                 <MovimientoItem

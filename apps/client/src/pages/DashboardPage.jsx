@@ -1,48 +1,56 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export const DashboardPage = () => {
   const [periodo, setPeriodo] = useState('Últimos 6 Meses');
+  const [data, setData] = useState({
+    kpis: { valorInventario: '$0', totalVentas: '0', ingresosTotales: '$0' },
+    barras: []
+  });
+  const [loading, setLoading] = useState(true);
 
-  const barras = [
-    { mes: 'Ene', altura: '40%', valor: '4.2k', activa: false },
-    { mes: 'Feb', altura: '65%', valor: '6.8k', activa: false },
-    { mes: 'Mar', altura: '55%', valor: '5.9k', activa: false },
-    { mes: 'Abr', altura: '90%', valor: '9.4k', activa: true },
-    { mes: 'May', altura: '75%', valor: '7.2k', activa: false },
-    { mes: 'Jun', altura: '60%', valor: '6.1k', activa: false },
-  ];
+  useEffect(() => {
+    fetch('/api/dashboard')
+      .then(res => res.json())
+      .then(res => {
+        if (res.success) {
+          setData(res.data);
+        }
+      })
+      .catch(err => console.error("Error fetching dashboard data:", err))
+      .finally(() => setLoading(false));
+  }, []);
 
   const kpis = [
     {
       label: 'Valor del Inventario',
-      valor: '$4.2M',
-      sub: '+12% último trimestre',
+      valor: data.kpis.valorInventario,
+      sub: 'Actualizado hoy',
       subColor: 'text-emerald-500',
       icon: (
         <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
-          <path d="M22 7 13.5 15.5l-5-5L2 17"/><path d="M16 7h6v6"/>
+          <path d="M22 7 13.5 15.5l-5-5L2 17" /><path d="M16 7h6v6" />
         </svg>
       ),
     },
     {
-      label: 'Envíos Activos',
-      valor: '184',
-      sub: '32 Express Hoy',
+      label: 'Ventas Realizadas',
+      valor: data.kpis.totalVentas,
+      sub: 'Histórico',
       subColor: 'text-[#135bec]',
       icon: (
         <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-          <rect width="16" height="13" x="1" y="3" rx="2"/><path d="M1 9h16M16 3l4 4-4 4"/>
+          <rect width="16" height="13" x="1" y="3" rx="2" /><path d="M1 9h16M16 3l4 4-4 4" />
         </svg>
       ),
     },
     {
-      label: 'Crecimiento de Ingresos',
-      valor: '$842k',
-      sub: '+24.8% este año',
+      label: 'Ingresos Totales',
+      valor: data.kpis.ingresosTotales,
+      sub: 'Acumulado',
       subColor: 'text-emerald-500',
       icon: (
         <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
-          <path d="M22 7 13.5 15.5l-5-5L2 17"/><path d="M16 7h6v6"/>
+          <path d="M22 7 13.5 15.5l-5-5L2 17" /><path d="M16 7h6v6" />
         </svg>
       ),
       chart: true,
@@ -58,7 +66,7 @@ export const DashboardPage = () => {
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-slate-200 pb-6">
           <div>
             <h1 className="text-3xl md:text-5xl font-extralight tracking-tighter text-slate-900 leading-tight">
-              Analíticas de <span className="font-bold">Rendimiento</span>
+              Visión <span className="font-bold">General</span>
             </h1>
           </div>
           <div className="flex gap-3 flex-shrink-0">
@@ -66,8 +74,8 @@ export const DashboardPage = () => {
               className="px-4 py-2.5 bg-[#135bec] text-white rounded-xl"
               style={{ boxShadow: '0 6px 20px -4px rgba(19,91,236,0.4)' }}
             >
-              <p className="text-white/70 text-[9px] uppercase font-bold tracking-widest">Crecimiento</p>
-              <p className="text-xl font-black leading-tight">+24.8%</p>
+              <p className="text-white/70 text-[9px] uppercase font-bold tracking-widest">Estado</p>
+              <p className="text-xl font-black leading-tight">Activo</p>
             </div>
           </div>
         </div>
@@ -86,14 +94,14 @@ export const DashboardPage = () => {
                     <svg className="w-full h-10" viewBox="0 0 100 20" preserveAspectRatio="none">
                       <defs>
                         <linearGradient id="grad2" x1="0%" y1="0%" x2="0%" y2="100%">
-                          <stop offset="0%" stopColor="#135bec" stopOpacity="0.6"/>
-                          <stop offset="100%" stopColor="#135bec" stopOpacity="0"/>
+                          <stop offset="0%" stopColor="#135bec" stopOpacity="0.6" />
+                          <stop offset="100%" stopColor="#135bec" stopOpacity="0" />
                         </linearGradient>
                       </defs>
                       <path d="M0 18 Q 10 15, 20 16 T 40 10 T 60 12 T 80 4 T 100 8"
-                        fill="none" stroke="#135bec" strokeWidth="1.5" strokeLinecap="round"/>
+                        fill="none" stroke="#135bec" strokeWidth="1.5" strokeLinecap="round" />
                       <path d="M0 18 Q 10 15, 20 16 T 40 10 T 60 12 T 80 4 T 100 8 V 20 H 0 Z"
-                        fill="url(#grad2)" fillOpacity="0.15"/>
+                        fill="url(#grad2)" fillOpacity="0.15" />
                     </svg>
                   </div>
                 ) : (
@@ -130,7 +138,7 @@ export const DashboardPage = () => {
               <button className="mt-5 flex items-center gap-2 text-white font-bold text-[11px] uppercase tracking-widest w-fit hover:gap-3 transition-all">
                 Explorar Rendimiento
                 <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
-                  <path d="M5 12h14m-7-7 7 7-7 7"/>
+                  <path d="M5 12h14m-7-7 7 7-7 7" />
                 </svg>
               </button>
             </div>
@@ -152,30 +160,34 @@ export const DashboardPage = () => {
                 <option>Este Año</option>
               </select>
             </div>
-            <div className="flex-1 flex items-end justify-between gap-2 h-44">
-              {barras.map((barra) => (
-                <div key={barra.mes} className="flex-1 flex flex-col items-center gap-2 group">
-                  <div
-                    className={`w-full rounded-t-lg transition-all duration-500 relative ${
-                      barra.activa ? 'bg-[#135bec]' : 'bg-slate-100 group-hover:bg-[#135bec]/20'
-                    }`}
-                    style={{ height: barra.altura }}
-                  >
+            <div className="flex-1 flex items-end justify-between gap-2 h-44 cursor-default">
+              {loading ? (
+                <div className="w-full flex justify-center text-slate-400 font-bold text-xs mt-10">Cargando gráficos...</div>
+              ) : data.barras.length > 0 ? (
+                data.barras.map((barra, i) => (
+                  <div key={i} className="flex-1 flex flex-col items-center gap-2 group">
                     <div
-                      className={`absolute -top-6 left-1/2 -translate-x-1/2 text-[9px] font-bold whitespace-nowrap transition-opacity ${
-                        barra.activa
-                          ? 'opacity-100 text-[#135bec]'
-                          : 'opacity-0 group-hover:opacity-100 text-slate-500'
-                      }`}
+                      className={`w-full rounded-t-lg transition-all duration-500 relative ${barra.activa ? 'bg-[#135bec]' : 'bg-slate-100 group-hover:bg-[#135bec]/20'
+                        }`}
+                      style={{ height: barra.altura }}
                     >
-                      {barra.valor}
+                      <div
+                        className={`absolute -top-6 left-1/2 -translate-x-1/2 text-[9px] font-bold whitespace-nowrap transition-opacity ${barra.activa
+                            ? 'opacity-100 text-[#135bec]'
+                            : 'opacity-0 group-hover:opacity-100 text-slate-500'
+                          }`}
+                      >
+                        {barra.valor}
+                      </div>
                     </div>
+                    <span className={`text-[9px] font-bold uppercase ${barra.activa ? 'text-slate-800' : 'text-slate-400'}`}>
+                      {barra.mes}
+                    </span>
                   </div>
-                  <span className={`text-[9px] font-bold uppercase ${barra.activa ? 'text-slate-800' : 'text-slate-400'}`}>
-                    {barra.mes}
-                  </span>
-                </div>
-              ))}
+                ))
+              ) : (
+                <div className="w-full flex justify-center text-slate-400 font-bold text-xs mt-10">Sin datos registrados.</div>
+              )}
             </div>
           </div>
         </div>

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { Bell, LogOut, Menu, X } from 'lucide-react';
+import { NotificacionesPanel } from './NotificacionesPanel';
 
 const navLinks = [
   { to: '/inventario',  label: 'Inventario'  },
@@ -10,9 +11,13 @@ const navLinks = [
   { to: '/historial',   label: 'Historial'   },
 ];
 
+// cantidad de alertas sin leer (puedes hacerlo dinámico luego)
+const UNREAD_COUNT = 2;
+
 export const Header = () => {
-  const navigate   = useNavigate();
-  const [open, setOpen] = useState(false); // menú móvil
+  const navigate = useNavigate();
+  const [menuOpen,  setMenuOpen]  = useState(false);
+  const [showNotif, setShowNotif] = useState(false);
 
   const handleLogout = () => {
     localStorage.removeItem('mp_token');
@@ -20,28 +25,24 @@ export const Header = () => {
     navigate('/');
   };
 
-  const closeMobile = () => setOpen(false);
+  const closeMobile = () => setMenuOpen(false);
 
   return (
     <>
+      {/* ── Panel de notificaciones ── */}
+      {showNotif && (
+        <NotificacionesPanel onClose={() => setShowNotif(false)} />
+      )}
+
       <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200 px-4 md:px-8 py-3">
         <div className="max-w-6xl mx-auto flex items-center justify-between gap-4">
 
-          {/* ── Logo + Nav desktop ── */}
+          {/* Logo + Nav desktop */}
           <div className="flex items-center gap-8">
-
-            {/* Logo */}
-            <NavLink
-              to="/dashboard"
-              onClick={closeMobile}
-              className="flex items-center gap-2 flex-shrink-0"
-            >
-              <span className="text-sm font-black tracking-tight text-slate-800">
-                ICON
-              </span>
+            <NavLink to="/dashboard" onClick={closeMobile} className="flex items-center gap-2 flex-shrink-0">
+              <span className="text-sm font-black tracking-tight text-slate-800">ICON</span>
             </NavLink>
 
-            {/* Nav desktop (md+) */}
             <nav className="hidden md:flex items-center gap-6">
               {navLinks.map(({ to, label }) => (
                 <NavLink
@@ -61,15 +62,13 @@ export const Header = () => {
             </nav>
           </div>
 
-          {/* ── Acciones ── */}
+          {/* Acciones */}
           <div className="flex items-center gap-2 sm:gap-3">
 
-            {/* Buscador (sm+) */}
+            {/* Buscador */}
             <div className="relative hidden sm:block">
-              <svg
-                className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400"
-                fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"
-              >
+              <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400"
+                fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                 <circle cx="11" cy="11" r="8" />
                 <path d="m21 21-4.35-4.35" />
               </svg>
@@ -80,13 +79,29 @@ export const Header = () => {
               />
             </div>
 
-            {/* Bell */}
+            {/* ── Botón Bell con badge ── */}
             <button
-              className="relative p-2 rounded-full hover:bg-slate-100 transition-colors group"
-              aria-label="Alertas de stock"
+              onClick={() => setShowNotif(p => !p)}
+              className={`relative p-2 rounded-full transition-colors group ${
+                showNotif
+                  ? 'bg-[#135bec]/10 text-[#135bec]'
+                  : 'hover:bg-slate-100 text-slate-400'
+              }`}
+              aria-label="Notificaciones"
             >
-              <Bell size={18} strokeWidth={2} className="text-slate-400 group-hover:text-[#135bec] transition-colors" />
-              <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white" />
+              <Bell
+                size={18}
+                strokeWidth={2}
+                className={`transition-colors ${showNotif ? 'text-[#135bec]' : 'group-hover:text-[#135bec]'}`}
+              />
+              {/* Badge contador */}
+              {UNREAD_COUNT > 0 && (
+                <span className="absolute top-1 right-1 min-w-[14px] h-[14px] bg-red-500 rounded-full border-2 border-white flex items-center justify-center">
+                  <span className="text-[8px] font-black text-white leading-none px-0.5">
+                    {UNREAD_COUNT}
+                  </span>
+                </span>
+              )}
             </button>
 
             {/* Avatar */}
@@ -97,7 +112,7 @@ export const Header = () => {
               }}
             />
 
-            {/* Logout */}
+            {/* Logout desktop */}
             <button
               onClick={handleLogout}
               className="p-2 rounded-full hover:bg-slate-100 transition-colors group hidden sm:block"
@@ -107,14 +122,14 @@ export const Header = () => {
               <LogOut size={18} strokeWidth={2} className="text-slate-400 group-hover:text-red-500 transition-colors" />
             </button>
 
-            {/* ── Hamburguesa (solo < md) ── */}
+            {/* Hamburguesa móvil */}
             <button
-              onClick={() => setOpen(p => !p)}
+              onClick={() => setMenuOpen(p => !p)}
               className="md:hidden p-2 rounded-full hover:bg-slate-100 transition-colors"
               aria-label="Menú"
             >
-              {open
-                ? <X size={18} strokeWidth={2} className="text-slate-600" />
+              {menuOpen
+                ? <X    size={18} strokeWidth={2} className="text-slate-600" />
                 : <Menu size={18} strokeWidth={2} className="text-slate-500" />
               }
             </button>
@@ -122,17 +137,14 @@ export const Header = () => {
         </div>
       </header>
 
-      {/* ── Menú móvil (desplegable) ── */}
-      {open && (
+      {/* ── Menú móvil ── */}
+      {menuOpen && (
         <>
-          {/* Overlay para cerrar al tocar fuera */}
           <div
             className="fixed inset-0 z-40 bg-black/10 backdrop-blur-[1px] md:hidden"
             onClick={closeMobile}
           />
-
-          <nav className="fixed top-[57px] left-0 right-0 z-40 md:hidden bg-white border-b border-slate-100 shadow-lg shadow-slate-200/60 px-4 pb-4 pt-2 flex flex-col gap-1">
-
+          <nav className="fixed top-[57px] left-0 right-0 z-40 md:hidden bg-white border-b border-slate-100 shadow-lg px-4 pb-4 pt-2 flex flex-col gap-1">
             {navLinks.map(({ to, label }) => (
               <NavLink
                 key={to}
@@ -150,15 +162,11 @@ export const Header = () => {
               </NavLink>
             ))}
 
-            {/* Divisor */}
             <div className="border-t border-slate-100 my-1" />
 
-            {/* Buscador móvil */}
-            <div className="relative px-0">
-              <svg
-                className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400"
-                fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"
-              >
+            <div className="relative">
+              <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400"
+                fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                 <circle cx="11" cy="11" r="8" />
                 <path d="m21 21-4.35-4.35" />
               </svg>
@@ -169,7 +177,6 @@ export const Header = () => {
               />
             </div>
 
-            {/* Cerrar sesión móvil */}
             <button
               onClick={() => { closeMobile(); handleLogout(); }}
               className="flex items-center gap-2 px-4 py-3 rounded-xl text-xs font-bold uppercase tracking-widest text-red-400 hover:bg-red-50 hover:text-red-600 transition-all"
