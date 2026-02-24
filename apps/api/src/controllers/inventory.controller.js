@@ -129,6 +129,110 @@ export const createProduct = async (req, res) => {
   }
 };
 
+// Actualizar producto existente (PUT)
+export const updateProduct = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const {
+            nombre,
+            stock,
+            id_categoria,
+            id_proveedor,
+            precioCompra,
+            precioVenta,
+        } = req.body;
+
+        if (!id) {
+            return res.status(400).json({ success: false, message: "ID del producto requerido" });
+        }
+
+        // Buscamos el producto actual para saber si ya tenía imagen
+        const existingProduct = await prisma.producto.findUnique({
+            where: { id_producto: Number(id) }
+        });
+
+        if (!existingProduct) {
+            return res.status(404).json({ success: false, message: "Producto no encontrado" });
+        }
+
+        // Si subieron un archivo nuevo, actualizamos la ruta, sino, conservamos la que ya tenía
+        const imagenUrl = req.file ? `uploads/${req.file.filename}` : existingProduct.url_imagen;
+
+        // Inicia transacción segura para actualizar ambas tablas
+        const updatedProduct = await prisma.$transaction(async (tx) => {
+            const p = await tx.producto.update({
+                where: { id_producto: Number(id) },
+                data: {
+                    nombre_repuesto: nombre || existingProduct.nombre_repuesto,
+                    stock_actual: stock !== undefined ? Number(stock) : existingProduct.stock_actual,
+                    url_imagen: imagenUrl,
+                    id_categoria: id_categoria ? Number(id_categoria) : existingProduct.id_categoria,
+                    id_proveedor: id_proveedor ? Number(id_proveedor) : existingProduct.id_proveedor,
+                },
+            });
+
+            // Actualizamos los precios buscando el registro asociado al producto
+            if (precioCompra !== undefined || precioVenta !== undefined) {
+                // Buscamos el precio actual
+                const precioExistente = await tx.precioProducto.findUnique({
+                    where: { id_producto: Number(id) }
+                });
+
+                if (precioExistente) {
+                    await tx.precioProducto.update({
+                        where: { id_producto: Number(id) },
+                        data: {
+                            precio_compra: precioCompra !== undefined ? Number(precioCompra) : precioExistente.precio_compra,
+                            precio_venta: precioVenta !== undefined ? Number(precioVenta) : precioExistente.precio_venta,
+                        },
+                    });
+                } else {
+                     // Por si acaso había un producto sin precio registrado
+                    await tx.precioProducto.create({
+                        data: {
+                            id_producto: Number(id),
+                            precio_compra: Number(precioCompra) || 0,
+                            precio_venta: Number(precioVenta) || 0,
+                        },
+                    });
+                }
+            }
+
+            return tx.producto.findUnique({
+                where: { id_producto: Number(id) },
+                include: { precio: true, categoria: true, proveedor: true },
+            });
+        },
+        {
+            maxWait: 10000, 
+            timeout: 15000, 
+        });
+
+        const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:3000';
+        const cleanImagePath = updatedProduct.url_imagen ? updatedProduct.url_imagen.replace(/\\/g, '/') : '';
+        const imageUrlFormatted = cleanImagePath 
+            ? (cleanImagePath.startsWith('http') ? cleanImagePath : `${BACKEND_URL}/${cleanImagePath}`) 
+            : '';
+
+        const formatted = {
+            id_producto: updatedProduct.id_producto,
+            nombre: updatedProduct.nombre_repuesto,
+            stock: updatedProduct.stock_actual,
+            stockColor: updatedProduct.stock_actual <= updatedProduct.stock_minimo_alerta ? "text-orange-500" : "text-slate-900",
+            imagen: imageUrlFormatted,
+            precioCompra: updatedProduct.precio?.precio_compra ? Number(updatedProduct.precio.precio_compra) : 0,
+            precioVenta: updatedProduct.precio?.precio_venta ? Number(updatedProduct.precio.precio_venta) : 0,
+            categoria: updatedProduct.categoria?.nombre_categoria || "Generico",
+            proveedor: updatedProduct.proveedor?.nombre_empresa || "Generico",
+        };
+
+        return res.status(200).json({ success: true, data: formatted });
+    } catch (error) {
+        console.error("Error in updateProduct:", error);
+        return res.status(500).json({ success: false, message: error?.message || "Error al actualizar producto" });
+    }
+};
+
 // Obtener categorias y proveedores para los selects
 export const getFormOptions = async (req, res) => {
     try {

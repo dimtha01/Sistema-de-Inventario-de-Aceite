@@ -1,44 +1,27 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { Search, Plus, Users, Building2, MapPin, Calendar, CreditCard, X } from 'lucide-react';
 import { ModalNuevoCliente } from '../components/ModalNuevoCliente';
 
-// ── Datos iniciales (mientras no hay API) ─────────────────
-const clientesIniciales = [
-  { id: 1, nombre: 'Talleres Pérez S.A.', ubicacion: 'Av. Libertador, Caracas', ultimaCompra: '12 Oct 2023', saldo: 0, estado: 'aldia', iniciales: 'TP', tipo: 'Taller', telefono: '+58 414-1234567' },
-  { id: 2, nombre: 'Mecánica Rápida Juan', ubicacion: 'Av. Las Delicias, Maracay', ultimaCompra: '05 Oct 2023', saldo: 1540.25, estado: 'pendiente', iniciales: 'MJ', tipo: 'Mecánico', telefono: '+58 412-9876543' },
-  { id: 3, nombre: 'Autoservicio El Rayo', ubicacion: 'Av. Bolívar, Valencia', ultimaCompra: '08 Oct 2023', saldo: 0, estado: 'aldia', iniciales: 'AR', tipo: 'Servicio', telefono: '+58 424-3456789' },
-  { id: 4, nombre: 'Frenos & Embragues', ubicacion: 'Zona Industrial, Valencia', ultimaCompra: '01 Oct 2023', saldo: 450.00, estado: 'pendiente', iniciales: 'FE', tipo: 'Especializado', telefono: '+58 414-0987654' },
-  { id: 5, nombre: 'Lubricentro Norte', ubicacion: 'Calle 72, Maracaibo', ultimaCompra: '28 Sep 2023', saldo: 0, estado: 'aldia', iniciales: 'LN', tipo: 'Servicio', telefono: '+58 412-2345678' },
-  { id: 6, nombre: 'Taller Los Amigos', ubicacion: 'Av. Intercomunal, Barquisimeto', ultimaCompra: '15 Oct 2023', saldo: 0, estado: 'premium', iniciales: 'LA', tipo: 'Taller', telefono: '+58 424-8765432' },
-  { id: 7, nombre: 'Escapes Pepe', ubicacion: 'Centro, San Cristóbal', ultimaCompra: '10 Oct 2023', saldo: 3120.00, estado: 'pendiente', iniciales: 'EP', tipo: 'Especializado', telefono: '+58 414-5678901' },
-  { id: 8, nombre: 'Detailing Profesional', ubicacion: 'Las Mercedes, Caracas', ultimaCompra: '14 Oct 2023', saldo: 0, estado: 'aldia', iniciales: 'DP', tipo: 'Servicio', telefono: '+58 412-3450987' },
-];
+// ── Datos iniciales removidos ─────────────────
 
 const TABS = [
-  { key: 'todos',     label: 'Todos'      },
+  { key: 'todos', label: 'Todos' },
   { key: 'pendiente', label: 'Pendientes' },
-  { key: 'premium',   label: 'Premium'    },
-  { key: 'aldia',     label: 'Al Día'     },
+  { key: 'aldia', label: 'Al Día' },
 ];
 
 const ESTADO_CONFIG = {
   pendiente: {
-    badge:  'bg-red-50 text-red-600 border border-red-200',
-    label:  'Pendiente',
+    badge: 'bg-red-50 text-red-600 border border-red-200',
+    label: 'Pendiente',
     avatar: 'bg-red-50 text-red-600',
-    saldo:  'text-red-600',
+    saldo: 'text-red-600',
   },
   aldia: {
-    badge:  'bg-emerald-50 text-emerald-600 border border-emerald-200',
-    label:  'Al día',
+    badge: 'bg-emerald-50 text-emerald-600 border border-emerald-200',
+    label: 'Al día',
     avatar: 'bg-emerald-50 text-emerald-600',
-    saldo:  'text-slate-900',
-  },
-  premium: {
-    badge:  'bg-amber-50 text-amber-600 border border-amber-200',
-    label:  'Premium',
-    avatar: 'bg-amber-50 text-amber-600',
-    saldo:  'text-slate-900',
+    saldo: 'text-slate-900',
   },
 };
 
@@ -125,15 +108,6 @@ const ClienteContent = ({ clienteSel }) => {
         <h4 className="text-[10px] font-black uppercase tracking-widest text-[#135bec] mb-1 pl-1">Contacto</h4>
         <div className="flex items-center gap-3 bg-white border border-slate-100 p-3 rounded-2xl">
           <div className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-slate-400">
-            <MapPin size={14} />
-          </div>
-          <div>
-            <p className="text-[10px] text-slate-400 uppercase tracking-wide font-bold">Ubicación</p>
-            <p className="text-xs font-semibold text-slate-700">{clienteSel.ubicacion || '—'}</p>
-          </div>
-        </div>
-        <div className="flex items-center gap-3 bg-white border border-slate-100 p-3 rounded-2xl">
-          <div className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-slate-400">
             <Users size={14} />
           </div>
           <div>
@@ -146,27 +120,92 @@ const ClienteContent = ({ clienteSel }) => {
       <button className="w-full mt-2 bg-[#135bec] text-white font-bold py-3.5 rounded-2xl text-xs transition-all hover:bg-[#135bec]/90 active:scale-[0.98] uppercase tracking-wider shadow-lg shadow-[#135bec]/25 flex items-center justify-center gap-2">
         <CreditCard size={14} /> Registrar Pago
       </button>
+
+      {/* ── Detalle de Ventas ── */}
+      {clienteSel.ventas && clienteSel.ventas.length > 0 && (
+        <div className="flex flex-col gap-3 mt-2 border-t border-slate-100 pt-4">
+          <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-800 mb-1 pl-1">
+            Historial de Compras
+          </h4>
+          <div className="flex flex-col gap-2 max-h-64 overflow-y-auto pr-1">
+            {clienteSel.ventas.map((v) => (
+              <div key={v.id_venta} className="bg-slate-50 border border-slate-100 p-3 rounded-xl flex flex-col gap-2">
+                <div className="flex justify-between items-center bg-white p-2 rounded-lg shadow-sm border border-slate-100 mb-1">
+                  <div className="flex items-center gap-1.5 text-xs font-bold text-slate-700">
+                    <Calendar size={12} className="text-[#135bec]" />
+                    {v.fecha}
+                  </div>
+                  <div className="text-right">
+                    <span className="text-[10px] uppercase font-black tracking-widest text-[#135bec] block mb-0.5">
+                      Total
+                    </span>
+                    <span className="text-sm font-black text-slate-900 leading-none block">
+                      ${v.monto.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Detalles por producto */}
+                <div className="flex flex-col gap-1.5 px-1">
+                  {v.detalles.map((d, i) => (
+                    <div key={i} className="flex justify-between items-center text-[11px]">
+                      <span className="text-slate-600 font-medium truncate max-w-[160px]" title={d.producto}>
+                        {d.cantidad}x {d.producto}
+                      </span>
+                      <span className="text-slate-900 font-bold whitespace-nowrap">
+                        ${d.precio.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Estado de pago de la venta */}
+                <div className={`mt-1 py-1 rounded-md text-[9px] font-black text-center uppercase tracking-widest ${v.estado.toLowerCase() === 'pendiente' ? 'bg-red-50 text-red-600 border border-red-100' : 'bg-emerald-50 text-emerald-600 border border-emerald-100'
+                  }`}>
+                  Pago {v.estado}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
 // ── Página principal ──────────────────────────────────────
 export const ClientesPage = () => {
-  // ── Estado dinámico (Optimistic UI) ──
-  const [clientes, setClientes] = useState(clientesIniciales);
-  const [tabActiva, setTabActiva]   = useState('todos');
-  const [busqueda, setBusqueda]     = useState('');
+  const [clientes, setClientes] = useState([]);
+  const [tabActiva, setTabActiva] = useState('todos');
+  const [busqueda, setBusqueda] = useState('');
   const [clienteSel, setClienteSel] = useState(null);
-  const [showModal, setShowModal]   = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch('/api/clientes')
+      .then(res => res.json())
+      .then(res => {
+        if (res.success && res.data) {
+          // Agregar property 'iniciales'
+          const formatted = res.data.map(c => ({
+            ...c,
+            iniciales: getIniciales(`${c.nombre} ${c.apellido || ''}`)
+          }));
+          setClientes(formatted);
+        }
+      })
+      .finally(() => setLoading(false));
+  }, []);
 
   // ── Optimistic UI: inserta el cliente al inicio sin esperar refetch ──
   const handleGuardar = (nuevoCliente) => {
     const clienteFormateado = {
       ...nuevoCliente,
-      saldo:        nuevoCliente.saldo        ?? 0,
+      saldo: nuevoCliente.saldo ?? 0,
       ultimaCompra: nuevoCliente.ultimaCompra ?? '—',
-      estado:       nuevoCliente.estado       ?? 'aldia',
-      iniciales:    nuevoCliente.iniciales    ?? getIniciales(nuevoCliente.nombre),
+      estado: nuevoCliente.estado ?? 'aldia',
+      iniciales: nuevoCliente.iniciales ?? getIniciales(nuevoCliente.nombre),
     };
     setClientes((prev) => [clienteFormateado, ...prev]);
     setClienteSel(clienteFormateado); // auto-selecciona en sidebar
@@ -229,18 +268,16 @@ export const ClientesPage = () => {
                   <button
                     key={tab.key}
                     onClick={() => setTabActiva(tab.key)}
-                    className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-[11px] font-bold uppercase tracking-wider transition-all whitespace-nowrap ${
-                      tabActiva === tab.key
-                        ? 'bg-white text-[#135bec] shadow-sm'
-                        : 'text-slate-400 hover:text-slate-600'
-                    }`}
+                    className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-[11px] font-bold uppercase tracking-wider transition-all whitespace-nowrap ${tabActiva === tab.key
+                      ? 'bg-white text-[#135bec] shadow-sm'
+                      : 'text-slate-400 hover:text-slate-600'
+                      }`}
                   >
                     {tab.label}
-                    <span className={`px-1.5 py-0.5 rounded-md text-[9px] ${
-                      tabActiva === tab.key
-                        ? 'bg-[#135bec]/10 text-[#135bec]'
-                        : 'bg-slate-200 text-slate-500'
-                    }`}>
+                    <span className={`px-1.5 py-0.5 rounded-md text-[9px] ${tabActiva === tab.key
+                      ? 'bg-[#135bec]/10 text-[#135bec]'
+                      : 'bg-slate-200 text-slate-500'
+                      }`}>
                       {count}
                     </span>
                   </button>
@@ -261,7 +298,9 @@ export const ClientesPage = () => {
           </div>
 
           {/* Lista */}
-          {clientesFiltrados.length > 0 ? (
+          {loading ? (
+            <div className="flex items-center justify-center py-20 text-slate-400 text-sm font-bold">Cargando clientes...</div>
+          ) : clientesFiltrados.length > 0 ? (
             <div className="flex flex-col gap-3">
               {clientesFiltrados.map((cliente) => {
                 const cfg = ESTADO_CONFIG[cliente.estado] || ESTADO_CONFIG.aldia;
@@ -270,11 +309,10 @@ export const ClientesPage = () => {
                   <div
                     key={cliente.id}
                     onClick={() => setClienteSel(cliente)}
-                    className={`group relative bg-white rounded-2xl p-4 transition-all duration-300 cursor-pointer overflow-hidden border-2 ${
-                      isSelected
-                        ? 'border-[#135bec] shadow-md'
-                        : 'border-slate-100 hover:border-slate-200 hover:shadow-sm'
-                    } flex flex-col sm:flex-row items-start sm:items-center gap-4`}
+                    className={`group relative bg-white rounded-2xl p-4 transition-all duration-300 cursor-pointer overflow-hidden border-2 ${isSelected
+                      ? 'border-[#135bec] shadow-md'
+                      : 'border-slate-100 hover:border-slate-200 hover:shadow-sm'
+                      } flex flex-col sm:flex-row items-start sm:items-center gap-4`}
                   >
                     <Avatar iniciales={cliente.iniciales} estado={cliente.estado} />
 
@@ -286,9 +324,6 @@ export const ClientesPage = () => {
                         <EstadoBadge estado={cliente.estado} />
                       </div>
                       <div className="flex items-center gap-3 text-[11px] font-medium text-slate-500">
-                        <span className="flex items-center gap-1">
-                          <MapPin size={12} /> {cliente.ubicacion || '—'}
-                        </span>
                         <span className="flex items-center gap-1">
                           <Building2 size={12} /> {cliente.tipo || '—'}
                         </span>
@@ -303,7 +338,7 @@ export const ClientesPage = () => {
                         </span>
                       </div>
                       <div className="flex flex-col items-end w-1/2 sm:w-auto">
-                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none mb-1">Últ. Mov.</span>
+                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none mb-1">Últ. Compra</span>
                         <span className="text-[11px] font-bold text-slate-700 leading-none">
                           {cliente.ultimaCompra || '—'}
                         </span>

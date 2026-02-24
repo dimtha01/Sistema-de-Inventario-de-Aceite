@@ -1,21 +1,25 @@
 import { useState, useEffect } from 'react';
 import { ModalNuevoProducto } from '../components/ModalNuevoProducto';
 
-// ── Íconos locales ─────────────────────────────────────────
+// ── Íconos ───────────────────────────────────────────────
 const IconX = ({ className = 'w-4 h-4' }) => (
   <svg className={className} fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
     <path d="M18 6 6 18M6 6l12 12" />
   </svg>
 );
-
 const IconClock = () => (
   <svg className="w-3 h-3 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
     <path d="M12 8v4l3 3m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
   </svg>
 );
+const IconEdit = () => (
+  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+    <path d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125" />
+  </svg>
+);
 
-// ── DrawerContent (Panel lateral sin margen/rotación) ───────
-const DrawerContent = ({ productoSel, onDeselect }) => {
+// ── DrawerContent ────────────────────────────────────────
+const DrawerContent = ({ productoSel, onDeselect, onEditar }) => {
   if (!productoSel) return (
     <div className="flex-1 flex flex-col items-center justify-center p-6 text-center gap-2.5 py-10">
       <div className="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center">
@@ -33,6 +37,7 @@ const DrawerContent = ({ productoSel, onDeselect }) => {
   return (
     <div className="flex flex-col h-full">
       <div className="p-4 flex flex-col gap-5 flex-1">
+
         {/* Miniatura + nombre */}
         <div className="flex items-start gap-3">
           {productoSel.imagen && (
@@ -51,18 +56,16 @@ const DrawerContent = ({ productoSel, onDeselect }) => {
           </div>
         </div>
 
-        {/* Detalles del Producto (Stock y Categoría) */}
+        {/* Stock + Categoría */}
         <div className="grid grid-cols-2 gap-2">
           <div className="bg-slate-50 p-2.5 rounded-xl border border-slate-100">
-            <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider block mb-0.5">
-              Stock Actual
+            <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider block mb-0.5">Stock Actual</span>
+            <span className="text-sm font-extrabold text-slate-800">
+              {productoSel.stock} <span className="text-[10px] font-medium text-slate-500">unidades</span>
             </span>
-            <span className="text-sm font-extrabold text-slate-800">{productoSel.stock} <span className="text-[10px] font-medium text-slate-500">unidades</span></span>
           </div>
           <div className="bg-slate-50 p-2.5 rounded-xl border border-slate-100">
-            <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider block mb-0.5">
-              Categoría
-            </span>
+            <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider block mb-0.5">Categoría</span>
             <span className="text-sm font-bold text-slate-700 truncate block">
               {productoSel.categoria || 'N/A'}
             </span>
@@ -72,9 +75,7 @@ const DrawerContent = ({ productoSel, onDeselect }) => {
         {/* Precios */}
         <div className="grid grid-cols-2 gap-2">
           <div className="bg-slate-50 p-3 rounded-xl border border-slate-100">
-            <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider block mb-1">
-              Precio Compra
-            </span>
+            <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Precio Compra</span>
             <div className="flex items-baseline gap-0.5">
               <span className="text-[10px] text-slate-400 font-medium">$</span>
               <span className="text-lg font-black text-slate-700 tracking-tight">
@@ -83,9 +84,7 @@ const DrawerContent = ({ productoSel, onDeselect }) => {
             </div>
           </div>
           <div className="bg-[#135bec]/5 p-3 rounded-xl border border-[#135bec]/10">
-            <span className="text-[9px] font-bold text-[#135bec]/70 uppercase tracking-wider block mb-1">
-              Precio Venta
-            </span>
+            <span className="text-[9px] font-bold text-[#135bec]/70 uppercase tracking-wider block mb-1">Precio Venta</span>
             <div className="flex items-baseline gap-0.5">
               <span className="text-[10px] text-[#135bec] font-medium">$</span>
               <span className="text-xl font-black text-[#135bec] tracking-tighter leading-tight">
@@ -95,39 +94,47 @@ const DrawerContent = ({ productoSel, onDeselect }) => {
           </div>
         </div>
 
+        {/* Botón Editar → abre modal con datos pre-cargados */}
         <button
-          className="w-full bg-[#135bec] text-white font-bold py-2.5 rounded-xl text-xs transition-all hover:bg-[#135bec]/90 active:scale-[0.98] uppercase tracking-wider mt-2"
+          onClick={onEditar}
+          className="w-full bg-[#135bec] text-white font-bold py-2.5 rounded-xl text-xs transition-all hover:bg-[#135bec]/90 active:scale-[0.98] uppercase tracking-wider mt-2 flex items-center justify-center gap-2"
           style={{ boxShadow: '0 4px 14px -4px rgba(19,91,236,0.4)' }}
         >
+          <IconEdit />
           Editar Producto
         </button>
       </div>
 
-      {/* Footer del panel */}
+      {/* Footer */}
       <div className="px-4 py-3 bg-slate-50 border-t border-slate-100">
-        <div className="flex justify-between items-center text-slate-400">
-          <div className="flex items-center gap-1.5">
-            <IconClock />
-            <p className="text-[10px] font-medium">Proveedor: {productoSel.proveedor || 'Sin asignar'}</p>
-          </div>
+        <div className="flex items-center gap-1.5 text-slate-400">
+          <IconClock />
+          <p className="text-[10px] font-medium">
+            Proveedor: {productoSel.proveedor || 'Sin asignar'}
+          </p>
         </div>
       </div>
     </div>
   );
 };
 
-// ── Página principal ─────────────────────────────────────
+// ── Página principal ──────────────────────────────────────
 export const InventarioPage = () => {
-  const [productos, setProductos] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [categoriaActiva, setCategoriaActiva] = useState('Todos');
-  const [marcaActiva, setMarcaActiva] = useState('Todas');
-  const [productoSel, setProductoSel] = useState(null);
-  const [showModal, setShowModal] = useState(false);
-  const [panelOpen, setPanelOpen] = useState(false);
+  const [productos,        setProductos]        = useState([]);
+  const [loading,          setLoading]          = useState(true);
+  const [categoriaActiva,  setCategoriaActiva]  = useState('Todos');
+  const [marcaActiva,      setMarcaActiva]      = useState('Todas');
+  const [productoSel,      setProductoSel]      = useState(null);
+  const [panelOpen,        setPanelOpen]        = useState(false);
+
+  // null  → modal cerrado
+  // false → modal crear
+  // obj   → modal editar con ese producto
+  const [modalProducto, setModalProducto] = useState(null);
+  const modalAbierto = modalProducto !== null;
 
   useEffect(() => {
-    fetch("/api/inventory/products")
+    fetch('/api/inventory/products')
       .then(res => res.json())
       .then(res => {
         if (res.success && res.data) {
@@ -139,18 +146,23 @@ export const InventarioPage = () => {
   }, []);
 
   const categorias = ['Todos', ...new Set(productos.map(p => p.categoria).filter(Boolean))];
-  const marcas = ['Todas', ...new Set(productos.map(p => p.proveedor).filter(Boolean))];
+  const marcas     = ['Todas', ...new Set(productos.map(p => p.proveedor).filter(Boolean))];
 
   const productosFiltrados = productos.filter(p => {
     const passCategoria = categoriaActiva === 'Todos' || p.categoria === categoriaActiva;
-    const passMarca = marcaActiva === 'Todas' || p.proveedor === marcaActiva;
+    const passMarca     = marcaActiva === 'Todas'    || p.proveedor  === marcaActiva;
     return passCategoria && passMarca;
   });
 
-  const handleGuardar = (p) => {
-    // Al guardar un producto nuevo, lo agregamos a la lista y lo seleccionamos
-    setProductos(prev => [p, ...prev]);
-    setProductoSel(p);
+  // ── Guardar: crea o actualiza según modo ──────────────
+  const handleGuardar = (productoActualizado) => {
+    setProductos(prev => {
+      const existe = prev.some(p => p.id_producto === productoActualizado.id_producto);
+      return existe
+        ? prev.map(p => p.id_producto === productoActualizado.id_producto ? productoActualizado : p)
+        : [productoActualizado, ...prev];
+    });
+    setProductoSel(productoActualizado);
   };
 
   const seleccionar = (p) => {
@@ -158,12 +170,18 @@ export const InventarioPage = () => {
     setPanelOpen(true);
   };
 
+  // Abre modal en modo edición con el producto seleccionado
+  const abrirEdicion = () => {
+    if (productoSel) setModalProducto(productoSel);
+  };
+
   return (
     <>
-      {/* ── Modal separado como componente ── */}
-      {showModal && (
+      {/* ── Modal crear / editar ── */}
+      {modalAbierto && (
         <ModalNuevoProducto
-          onClose={() => setShowModal(false)}
+          productoEditar={modalProducto === false ? null : modalProducto}
+          onClose={() => setModalProducto(null)}
           onGuardar={handleGuardar}
         />
       )}
@@ -178,16 +196,14 @@ export const InventarioPage = () => {
           <div className="relative w-80 max-w-full bg-white h-full shadow-2xl flex flex-col overflow-y-auto">
             <div className="px-4 py-3 border-b border-slate-100 flex justify-between items-center">
               <h2 className="font-bold text-xs text-slate-700 uppercase tracking-widest">Detalles</h2>
-              <button
-                onClick={() => setPanelOpen(false)}
-                className="text-slate-300 hover:text-slate-500 transition-colors"
-              >
+              <button onClick={() => setPanelOpen(false)} className="text-slate-300 hover:text-slate-500 transition-colors">
                 <IconX className="w-3.5 h-3.5" />
               </button>
             </div>
             <DrawerContent
               productoSel={productoSel}
               onDeselect={() => { setProductoSel(null); setPanelOpen(false); }}
+              onEditar={() => { setPanelOpen(false); abrirEdicion(); }}
             />
           </div>
         </div>
@@ -196,8 +212,8 @@ export const InventarioPage = () => {
       <div className="flex gap-5 items-start">
         {/* ── Columna principal ── */}
         <div className="flex-1 flex flex-col gap-4 min-w-0">
-          
-          {/* Filtros categoría + contador */}
+
+          {/* Filtros categoría */}
           <div className="flex items-center justify-between gap-3 flex-wrap">
             <div className="flex gap-1.5 flex-wrap">
               {categorias.map(cat => (
@@ -218,22 +234,12 @@ export const InventarioPage = () => {
               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest hidden sm:block">
                 {productos.length} productos
               </span>
-              <button className="p-1.5 rounded-lg hover:bg-slate-100 transition-colors">
-                <svg className="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                  <rect x="3" y="3" width="7" height="7" rx="1" />
-                  <rect x="14" y="3" width="7" height="7" rx="1" />
-                  <rect x="3" y="14" width="7" height="7" rx="1" />
-                  <rect x="14" y="14" width="7" height="7" rx="1" />
-                </svg>
-              </button>
             </div>
           </div>
 
-          {/* Filtros marca */}
+          {/* Filtros proveedor */}
           <div className="flex items-center gap-2 pb-2.5 border-b border-slate-100 overflow-x-auto">
-            <span className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] flex-shrink-0">
-              Proveedor
-            </span>
+            <span className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] flex-shrink-0">Proveedor</span>
             {marcas.map(marca => (
               <button
                 key={marca}
@@ -274,20 +280,14 @@ export const InventarioPage = () => {
                       </div>
                     )}
                   </div>
-                  <h3 className="font-bold text-slate-900 text-xs mb-0.5 leading-tight line-clamp-2">
-                    {p.nombre}
-                  </h3>
+                  <h3 className="font-bold text-slate-900 text-xs mb-0.5 leading-tight line-clamp-2">{p.nombre}</h3>
                   <div className="flex justify-between items-center">
                     <p className="text-[10px] text-slate-400">
                       Stock: <span className={`font-semibold ${p.stockColor}`}>{p.stock}</span>
                     </p>
-                    {productoSel?.id_producto === p.id_producto ? (
+                    {productoSel?.id_producto === p.id_producto && (
                       <svg className="w-3.5 h-3.5 text-[#135bec]" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
                         <path d="m4.5 12.75 6 6 9-13.5" />
-                      </svg>
-                    ) : (
-                      <svg className="w-3.5 h-3.5 text-slate-300 opacity-0 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
-                        <path d="M7 17 17 7M7 7h10v10" />
                       </svg>
                     )}
                   </div>
@@ -298,25 +298,26 @@ export const InventarioPage = () => {
         </div>
 
         {/* ── Panel lateral desktop ── */}
-        <aside className="w-72 hidden lg:flex flex-col bg-white border border-slate-100 rounded-2xl shadow-md overflow-hidden self-start sticky top-20 flex-shrink-0" style={{ height: 'calc(100vh - 120px)' }}>
+        <aside
+          className="w-72 hidden lg:flex flex-col bg-white border border-slate-100 rounded-2xl shadow-md overflow-hidden self-start sticky top-20 flex-shrink-0"
+          style={{ height: 'calc(100vh - 120px)' }}
+        >
           <div className="px-4 py-3 border-b border-slate-100 flex justify-between items-center">
             <h2 className="font-bold text-xs text-slate-700 uppercase tracking-widest">Detalles</h2>
-            <button
-              onClick={() => setProductoSel(null)}
-              className="text-slate-300 hover:text-slate-500 transition-colors"
-            >
+            <button onClick={() => setProductoSel(null)} className="text-slate-300 hover:text-slate-500 transition-colors">
               <IconX className="w-3.5 h-3.5" />
             </button>
           </div>
           <DrawerContent
             productoSel={productoSel}
             onDeselect={() => setProductoSel(null)}
+            onEditar={abrirEdicion}
           />
         </aside>
 
-        {/* ── FAB ── */}
+        {/* ── FAB crear ── */}
         <button
-          onClick={() => setShowModal(true)}
+          onClick={() => setModalProducto(false)}
           className="fixed bottom-5 right-5 w-12 h-12 bg-[#135bec] text-white rounded-full flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-30"
           style={{ boxShadow: '0 6px 24px -4px rgba(19,91,236,0.55)' }}
           title="Agregar producto"
