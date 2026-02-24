@@ -1,0 +1,11 @@
+model DetalleVenta {
+  id_detalle               Int      @id @default(autoincrement())
+  id_venta                 Int
+  id_producto              Int
+  cantidad                 Int
+  precio_unitario_aplicado Decimal  @db.Decimal(10, 2)
+  venta                    Venta    @relation(fields: [id_venta], references: [id_venta], onDelete: Cascade)
+  producto                 Producto @relation(fields: [id_producto], references: [id_producto])
+
+  @@map("detalle_venta")
+}

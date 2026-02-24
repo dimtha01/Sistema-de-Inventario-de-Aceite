@@ -1,0 +1,7 @@
+model TipoMovimiento {
+  id_tipo_mov Int                   @id @default(autoincrement())
+  nombre_tipo String                @db.VarChar(50)
+  movimientos HistorialMovimiento[]
+
+  @@map("tipos_movimiento")
+}

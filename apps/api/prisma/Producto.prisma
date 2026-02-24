@@ -1,0 +1,16 @@
+model Producto {
+  id_producto         Int                   @id @default(autoincrement())
+  id_categoria        Int
+  id_proveedor        Int
+  nombre_repuesto     String                @db.VarChar(150)
+  url_imagen          String?               @db.VarChar(255)
+  stock_actual        Int                   @default(0)
+  stock_minimo_alerta Int                   @default(5)
+  categoria           Categoria             @relation(fields: [id_categoria], references: [id_categoria])
+  proveedor           Proveedor             @relation(fields: [id_proveedor], references: [id_proveedor])
+  precio              PrecioProducto?
+  detalles_venta      DetalleVenta[]
+  movimientos         HistorialMovimiento[]
+
+  @@map("productos")
+}

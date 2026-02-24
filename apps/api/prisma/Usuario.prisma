@@ -1,0 +1,13 @@
+model Usuario {
+  id_usuario    Int                   @id @default(autoincrement())
+  id_rol        Int
+  nombre        String                @db.VarChar(100)
+  email         String                @unique @db.VarChar(100)
+  password_hash String                @db.VarChar(255)
+  avatar_url    String?               @db.VarChar(255)
+  rol           RolUsuario            @relation(fields: [id_rol], references: [id_rol])
+  ventas        Venta[]
+  movimientos   HistorialMovimiento[]
+
+  @@map("usuarios")
+}

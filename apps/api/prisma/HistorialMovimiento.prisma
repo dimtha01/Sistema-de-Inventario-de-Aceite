@@ -1,0 +1,14 @@
+model HistorialMovimiento {
+  id_movimiento   Int            @id @default(autoincrement())
+  id_producto     Int
+  id_usuario      Int
+  id_tipo_mov     Int
+  cantidad        Int
+  origen_destino  String?        @db.VarChar(100)
+  fecha_hora      DateTime       @default(now())
+  producto        Producto       @relation(fields: [id_producto], references: [id_producto])
+  usuario         Usuario        @relation(fields: [id_usuario], references: [id_usuario])
+  tipo_movimiento TipoMovimiento @relation(fields: [id_tipo_mov], references: [id_tipo_mov])
+
+  @@map("historial_movimientos")
+}

@@ -1,0 +1,9 @@
+model AbonoCredito {
+  id_abono      Int      @id @default(autoincrement())
+  id_venta      Int
+  monto_abonado Decimal  @db.Decimal(10, 2)
+  fecha_pago    DateTime @default(now())
+  venta         Venta    @relation(fields: [id_venta], references: [id_venta], onDelete: Cascade)
+
+  @@map("abonos_credito")
+}

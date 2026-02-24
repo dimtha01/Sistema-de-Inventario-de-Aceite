@@ -5,6 +5,8 @@ const navLinks = [
     { to: '/inventario', label: 'Inventario' },
     { to: '/clientes', label: 'Clientes' },
     { to: '/proveedores', label: 'Proveedores' },
+    { to: '/categorias', label: 'Categorias' },
+    { to: '/historial', label: 'Historial' },
 ];
 
 export const Header = () => {

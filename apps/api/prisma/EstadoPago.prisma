@@ -1,0 +1,7 @@
+model EstadoPago {
+  id_estado_pago Int     @id @default(autoincrement())
+  nombre_estado  String  @db.VarChar(50)
+  ventas         Venta[]
+
+  @@map("estados_pago")
+}

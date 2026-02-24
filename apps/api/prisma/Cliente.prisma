@@ -1,0 +1,12 @@
+model Cliente {
+  id_cliente      Int      @id @default(autoincrement())
+  nombre String   @db.VarChar(150)
+  apellido String   @db.VarChar(150)
+  telefono String   @db.VarChar(150)
+  es_premium      Boolean  @default(false)
+  limite_credito  Decimal  @default(0.00) @db.Decimal(10, 2)
+  fecha_registro  DateTime @default(now())
+  ventas          Venta[]
+
+  @@map("clientes")
+}

@@ -3,8 +3,10 @@ import { MainLayout } from '../layout/MainLayout';
 import { LoginPage } from '../pages/LoginPage';
 import { DashboardPage } from '../pages/DashboardPage';
 import { InventarioPage } from '../pages/InventarioPage';
-// import { ClientesPage } from '../pages/ClientesPage';
-// import { ProveedoresPage } from '../pages/ProveedoresPage';
+import { ClientesPage } from '../pages/ClientesPage';
+import { ProveedoresPage } from '../pages/ProveedoresPage';
+import { HistorialPage } from '../pages/HistorialPage';
+import { CategoriasPage } from '../pages/CategoriasPage';
 
 export const router = createBrowserRouter([
     {
@@ -13,7 +15,7 @@ export const router = createBrowserRouter([
         children: [
             {
                 index: true,
-                element: <LoginPage />, 
+                element: <LoginPage />,
             },
             {
                 path: 'dashboard',
@@ -23,14 +25,22 @@ export const router = createBrowserRouter([
                 path: 'inventario',
                 element: <InventarioPage />,
             },
-            // {
-            //     path: 'clientes',
-            //     element: <ClientesPage />,
-            // },
-            // {
-            //     path: 'proveedores',
-            //     element: <ProveedoresPage />,
-            // },
+            {
+                path: 'clientes',
+                element: <ClientesPage />,
+            },
+            {
+                path: 'proveedores',
+                element: <ProveedoresPage />,
+            },
+            {
+                path: 'historial',
+                element: <HistorialPage />,
+            },
+            {
+                path: 'categorias',
+                element: <CategoriasPage />,
+            },
         ],
     },
 ]);

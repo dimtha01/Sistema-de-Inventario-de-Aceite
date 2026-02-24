@@ -1,0 +1,7 @@
+model Categoria {
+  id_categoria     Int        @id @default(autoincrement())
+  nombre_categoria String     @db.VarChar(100)
+  productos        Producto[]
+
+  @@map("categorias")
+}

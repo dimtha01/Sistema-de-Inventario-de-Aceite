@@ -1,0 +1,8 @@
+model PrecioProducto {
+  id_producto   Int      @id
+  precio_compra Decimal  @db.Decimal(10, 2)
+  precio_venta  Decimal  @db.Decimal(10, 2)
+  producto      Producto @relation(fields: [id_producto], references: [id_producto], onDelete: Cascade)
+
+  @@map("precios_producto")
+}

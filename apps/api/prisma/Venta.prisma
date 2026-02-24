@@ -1,0 +1,15 @@
+model Venta {
+  id_venta       Int            @id @default(autoincrement())
+  id_cliente     Int
+  id_usuario     Int
+  id_estado_pago Int
+  fecha_venta    DateTime       @default(now())
+  monto_total    Decimal        @db.Decimal(10, 2)
+  cliente        Cliente        @relation(fields: [id_cliente], references: [id_cliente])
+  usuario        Usuario        @relation(fields: [id_usuario], references: [id_usuario])
+  estado_pago    EstadoPago     @relation(fields: [id_estado_pago], references: [id_estado_pago])
+  detalles       DetalleVenta[]
+  abonos         AbonoCredito[]
+
+  @@map("ventas")
+}

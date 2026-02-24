@@ -314,20 +314,6 @@ export const InventarioPage = () => {
               </div>
             ))}
           </div>
-
-          {/* Proveedores */}
-          <section className="border-t border-slate-100 pt-5 mt-1">
-            <p className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-300 mb-3 text-center">
-              Proveedores Certificados
-            </p>
-            <div className="flex flex-wrap items-center justify-center gap-3 opacity-40 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-700">
-              {proveedores.map(prov => (
-                <div key={prov} className="h-6 px-3 bg-slate-200/60 rounded flex items-center justify-center font-black text-slate-500 text-[10px] tracking-wider">
-                  {prov}
-                </div>
-              ))}
-            </div>
-          </section>
         </div>
 
         {/* ── Panel lateral desktop ── */}
