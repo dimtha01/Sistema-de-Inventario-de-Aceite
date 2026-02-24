@@ -1,11 +1,20 @@
 import express from "express";
 import authRoutes from "./routes/auth.routes.js";
+import inventoryRoutes from "./routes/inventory.routes.js";
+import path from "path";
+import { fileURLToPath } from "url";
 // import { errorHandler } from "./middlewares/errorHandler.js";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 app.use(express.json());
 
 app.use("/api", authRoutes);
+app.use("/api/inventory", inventoryRoutes);
+
+app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 
 // app.use(errorHandler);
 export default app;
