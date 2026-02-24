@@ -48,7 +48,6 @@ export type HistorialMovimientoMinAggregateOutputType = {
   id_usuario: number | null
   id_tipo_mov: number | null
   cantidad: number | null
-  origen_destino: string | null
   fecha_hora: Date | null
 }
 
@@ -58,7 +57,6 @@ export type HistorialMovimientoMaxAggregateOutputType = {
   id_usuario: number | null
   id_tipo_mov: number | null
   cantidad: number | null
-  origen_destino: string | null
   fecha_hora: Date | null
 }
 
@@ -68,7 +66,6 @@ export type HistorialMovimientoCountAggregateOutputType = {
   id_usuario: number
   id_tipo_mov: number
   cantidad: number
-  origen_destino: number
   fecha_hora: number
   _all: number
 }
@@ -96,7 +93,6 @@ export type HistorialMovimientoMinAggregateInputType = {
   id_usuario?: true
   id_tipo_mov?: true
   cantidad?: true
-  origen_destino?: true
   fecha_hora?: true
 }
 
@@ -106,7 +102,6 @@ export type HistorialMovimientoMaxAggregateInputType = {
   id_usuario?: true
   id_tipo_mov?: true
   cantidad?: true
-  origen_destino?: true
   fecha_hora?: true
 }
 
@@ -116,7 +111,6 @@ export type HistorialMovimientoCountAggregateInputType = {
   id_usuario?: true
   id_tipo_mov?: true
   cantidad?: true
-  origen_destino?: true
   fecha_hora?: true
   _all?: true
 }
@@ -213,7 +207,6 @@ export type HistorialMovimientoGroupByOutputType = {
   id_usuario: number
   id_tipo_mov: number
   cantidad: number
-  origen_destino: string | null
   fecha_hora: Date
   _count: HistorialMovimientoCountAggregateOutputType | null
   _avg: HistorialMovimientoAvgAggregateOutputType | null
@@ -246,7 +239,6 @@ export type HistorialMovimientoWhereInput = {
   id_usuario?: Prisma.IntFilter<"HistorialMovimiento"> | number
   id_tipo_mov?: Prisma.IntFilter<"HistorialMovimiento"> | number
   cantidad?: Prisma.IntFilter<"HistorialMovimiento"> | number
-  origen_destino?: Prisma.StringNullableFilter<"HistorialMovimiento"> | string | null
   fecha_hora?: Prisma.DateTimeFilter<"HistorialMovimiento"> | Date | string
   producto?: Prisma.XOR<Prisma.ProductoScalarRelationFilter, Prisma.ProductoWhereInput>
   usuario?: Prisma.XOR<Prisma.UsuarioScalarRelationFilter, Prisma.UsuarioWhereInput>
@@ -259,7 +251,6 @@ export type HistorialMovimientoOrderByWithRelationInput = {
   id_usuario?: Prisma.SortOrder
   id_tipo_mov?: Prisma.SortOrder
   cantidad?: Prisma.SortOrder
-  origen_destino?: Prisma.SortOrderInput | Prisma.SortOrder
   fecha_hora?: Prisma.SortOrder
   producto?: Prisma.ProductoOrderByWithRelationInput
   usuario?: Prisma.UsuarioOrderByWithRelationInput
@@ -275,7 +266,6 @@ export type HistorialMovimientoWhereUniqueInput = Prisma.AtLeast<{
   id_usuario?: Prisma.IntFilter<"HistorialMovimiento"> | number
   id_tipo_mov?: Prisma.IntFilter<"HistorialMovimiento"> | number
   cantidad?: Prisma.IntFilter<"HistorialMovimiento"> | number
-  origen_destino?: Prisma.StringNullableFilter<"HistorialMovimiento"> | string | null
   fecha_hora?: Prisma.DateTimeFilter<"HistorialMovimiento"> | Date | string
   producto?: Prisma.XOR<Prisma.ProductoScalarRelationFilter, Prisma.ProductoWhereInput>
   usuario?: Prisma.XOR<Prisma.UsuarioScalarRelationFilter, Prisma.UsuarioWhereInput>
@@ -288,7 +278,6 @@ export type HistorialMovimientoOrderByWithAggregationInput = {
   id_usuario?: Prisma.SortOrder
   id_tipo_mov?: Prisma.SortOrder
   cantidad?: Prisma.SortOrder
-  origen_destino?: Prisma.SortOrderInput | Prisma.SortOrder
   fecha_hora?: Prisma.SortOrder
   _count?: Prisma.HistorialMovimientoCountOrderByAggregateInput
   _avg?: Prisma.HistorialMovimientoAvgOrderByAggregateInput
@@ -306,13 +295,11 @@ export type HistorialMovimientoScalarWhereWithAggregatesInput = {
   id_usuario?: Prisma.IntWithAggregatesFilter<"HistorialMovimiento"> | number
   id_tipo_mov?: Prisma.IntWithAggregatesFilter<"HistorialMovimiento"> | number
   cantidad?: Prisma.IntWithAggregatesFilter<"HistorialMovimiento"> | number
-  origen_destino?: Prisma.StringNullableWithAggregatesFilter<"HistorialMovimiento"> | string | null
   fecha_hora?: Prisma.DateTimeWithAggregatesFilter<"HistorialMovimiento"> | Date | string
 }
 
 export type HistorialMovimientoCreateInput = {
   cantidad: number
-  origen_destino?: string | null
   fecha_hora?: Date | string
   producto: Prisma.ProductoCreateNestedOneWithoutMovimientosInput
   usuario: Prisma.UsuarioCreateNestedOneWithoutMovimientosInput
@@ -325,13 +312,11 @@ export type HistorialMovimientoUncheckedCreateInput = {
   id_usuario: number
   id_tipo_mov: number
   cantidad: number
-  origen_destino?: string | null
   fecha_hora?: Date | string
 }
 
 export type HistorialMovimientoUpdateInput = {
   cantidad?: Prisma.IntFieldUpdateOperationsInput | number
-  origen_destino?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fecha_hora?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   producto?: Prisma.ProductoUpdateOneRequiredWithoutMovimientosNestedInput
   usuario?: Prisma.UsuarioUpdateOneRequiredWithoutMovimientosNestedInput
@@ -344,7 +329,6 @@ export type HistorialMovimientoUncheckedUpdateInput = {
   id_usuario?: Prisma.IntFieldUpdateOperationsInput | number
   id_tipo_mov?: Prisma.IntFieldUpdateOperationsInput | number
   cantidad?: Prisma.IntFieldUpdateOperationsInput | number
-  origen_destino?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fecha_hora?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -354,13 +338,11 @@ export type HistorialMovimientoCreateManyInput = {
   id_usuario: number
   id_tipo_mov: number
   cantidad: number
-  origen_destino?: string | null
   fecha_hora?: Date | string
 }
 
 export type HistorialMovimientoUpdateManyMutationInput = {
   cantidad?: Prisma.IntFieldUpdateOperationsInput | number
-  origen_destino?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fecha_hora?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -370,18 +352,7 @@ export type HistorialMovimientoUncheckedUpdateManyInput = {
   id_usuario?: Prisma.IntFieldUpdateOperationsInput | number
   id_tipo_mov?: Prisma.IntFieldUpdateOperationsInput | number
   cantidad?: Prisma.IntFieldUpdateOperationsInput | number
-  origen_destino?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fecha_hora?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type HistorialMovimientoListRelationFilter = {
-  every?: Prisma.HistorialMovimientoWhereInput
-  some?: Prisma.HistorialMovimientoWhereInput
-  none?: Prisma.HistorialMovimientoWhereInput
-}
-
-export type HistorialMovimientoOrderByRelationAggregateInput = {
-  _count?: Prisma.SortOrder
 }
 
 export type HistorialMovimientoCountOrderByAggregateInput = {
@@ -390,7 +361,6 @@ export type HistorialMovimientoCountOrderByAggregateInput = {
   id_usuario?: Prisma.SortOrder
   id_tipo_mov?: Prisma.SortOrder
   cantidad?: Prisma.SortOrder
-  origen_destino?: Prisma.SortOrder
   fecha_hora?: Prisma.SortOrder
 }
 
@@ -408,7 +378,6 @@ export type HistorialMovimientoMaxOrderByAggregateInput = {
   id_usuario?: Prisma.SortOrder
   id_tipo_mov?: Prisma.SortOrder
   cantidad?: Prisma.SortOrder
-  origen_destino?: Prisma.SortOrder
   fecha_hora?: Prisma.SortOrder
 }
 
@@ -418,7 +387,6 @@ export type HistorialMovimientoMinOrderByAggregateInput = {
   id_usuario?: Prisma.SortOrder
   id_tipo_mov?: Prisma.SortOrder
   cantidad?: Prisma.SortOrder
-  origen_destino?: Prisma.SortOrder
   fecha_hora?: Prisma.SortOrder
 }
 
@@ -428,6 +396,58 @@ export type HistorialMovimientoSumOrderByAggregateInput = {
   id_usuario?: Prisma.SortOrder
   id_tipo_mov?: Prisma.SortOrder
   cantidad?: Prisma.SortOrder
+}
+
+export type HistorialMovimientoListRelationFilter = {
+  every?: Prisma.HistorialMovimientoWhereInput
+  some?: Prisma.HistorialMovimientoWhereInput
+  none?: Prisma.HistorialMovimientoWhereInput
+}
+
+export type HistorialMovimientoOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
+}
+
+export type HistorialMovimientoCreateNestedManyWithoutProductoInput = {
+  create?: Prisma.XOR<Prisma.HistorialMovimientoCreateWithoutProductoInput, Prisma.HistorialMovimientoUncheckedCreateWithoutProductoInput> | Prisma.HistorialMovimientoCreateWithoutProductoInput[] | Prisma.HistorialMovimientoUncheckedCreateWithoutProductoInput[]
+  connectOrCreate?: Prisma.HistorialMovimientoCreateOrConnectWithoutProductoInput | Prisma.HistorialMovimientoCreateOrConnectWithoutProductoInput[]
+  createMany?: Prisma.HistorialMovimientoCreateManyProductoInputEnvelope
+  connect?: Prisma.HistorialMovimientoWhereUniqueInput | Prisma.HistorialMovimientoWhereUniqueInput[]
+}
+
+export type HistorialMovimientoUncheckedCreateNestedManyWithoutProductoInput = {
+  create?: Prisma.XOR<Prisma.HistorialMovimientoCreateWithoutProductoInput, Prisma.HistorialMovimientoUncheckedCreateWithoutProductoInput> | Prisma.HistorialMovimientoCreateWithoutProductoInput[] | Prisma.HistorialMovimientoUncheckedCreateWithoutProductoInput[]
+  connectOrCreate?: Prisma.HistorialMovimientoCreateOrConnectWithoutProductoInput | Prisma.HistorialMovimientoCreateOrConnectWithoutProductoInput[]
+  createMany?: Prisma.HistorialMovimientoCreateManyProductoInputEnvelope
+  connect?: Prisma.HistorialMovimientoWhereUniqueInput | Prisma.HistorialMovimientoWhereUniqueInput[]
+}
+
+export type HistorialMovimientoUpdateManyWithoutProductoNestedInput = {
+  create?: Prisma.XOR<Prisma.HistorialMovimientoCreateWithoutProductoInput, Prisma.HistorialMovimientoUncheckedCreateWithoutProductoInput> | Prisma.HistorialMovimientoCreateWithoutProductoInput[] | Prisma.HistorialMovimientoUncheckedCreateWithoutProductoInput[]
+  connectOrCreate?: Prisma.HistorialMovimientoCreateOrConnectWithoutProductoInput | Prisma.HistorialMovimientoCreateOrConnectWithoutProductoInput[]
+  upsert?: Prisma.HistorialMovimientoUpsertWithWhereUniqueWithoutProductoInput | Prisma.HistorialMovimientoUpsertWithWhereUniqueWithoutProductoInput[]
+  createMany?: Prisma.HistorialMovimientoCreateManyProductoInputEnvelope
+  set?: Prisma.HistorialMovimientoWhereUniqueInput | Prisma.HistorialMovimientoWhereUniqueInput[]
+  disconnect?: Prisma.HistorialMovimientoWhereUniqueInput | Prisma.HistorialMovimientoWhereUniqueInput[]
+  delete?: Prisma.HistorialMovimientoWhereUniqueInput | Prisma.HistorialMovimientoWhereUniqueInput[]
+  connect?: Prisma.HistorialMovimientoWhereUniqueInput | Prisma.HistorialMovimientoWhereUniqueInput[]
+  update?: Prisma.HistorialMovimientoUpdateWithWhereUniqueWithoutProductoInput | Prisma.HistorialMovimientoUpdateWithWhereUniqueWithoutProductoInput[]
+  updateMany?: Prisma.HistorialMovimientoUpdateManyWithWhereWithoutProductoInput | Prisma.HistorialMovimientoUpdateManyWithWhereWithoutProductoInput[]
+  deleteMany?: Prisma.HistorialMovimientoScalarWhereInput | Prisma.HistorialMovimientoScalarWhereInput[]
+}
+
+export type HistorialMovimientoUncheckedUpdateManyWithoutProductoNestedInput = {
+  create?: Prisma.XOR<Prisma.HistorialMovimientoCreateWithoutProductoInput, Prisma.HistorialMovimientoUncheckedCreateWithoutProductoInput> | Prisma.HistorialMovimientoCreateWithoutProductoInput[] | Prisma.HistorialMovimientoUncheckedCreateWithoutProductoInput[]
+  connectOrCreate?: Prisma.HistorialMovimientoCreateOrConnectWithoutProductoInput | Prisma.HistorialMovimientoCreateOrConnectWithoutProductoInput[]
+  upsert?: Prisma.HistorialMovimientoUpsertWithWhereUniqueWithoutProductoInput | Prisma.HistorialMovimientoUpsertWithWhereUniqueWithoutProductoInput[]
+  createMany?: Prisma.HistorialMovimientoCreateManyProductoInputEnvelope
+  set?: Prisma.HistorialMovimientoWhereUniqueInput | Prisma.HistorialMovimientoWhereUniqueInput[]
+  disconnect?: Prisma.HistorialMovimientoWhereUniqueInput | Prisma.HistorialMovimientoWhereUniqueInput[]
+  delete?: Prisma.HistorialMovimientoWhereUniqueInput | Prisma.HistorialMovimientoWhereUniqueInput[]
+  connect?: Prisma.HistorialMovimientoWhereUniqueInput | Prisma.HistorialMovimientoWhereUniqueInput[]
+  update?: Prisma.HistorialMovimientoUpdateWithWhereUniqueWithoutProductoInput | Prisma.HistorialMovimientoUpdateWithWhereUniqueWithoutProductoInput[]
+  updateMany?: Prisma.HistorialMovimientoUpdateManyWithWhereWithoutProductoInput | Prisma.HistorialMovimientoUpdateManyWithWhereWithoutProductoInput[]
+  deleteMany?: Prisma.HistorialMovimientoScalarWhereInput | Prisma.HistorialMovimientoScalarWhereInput[]
 }
 
 export type HistorialMovimientoCreateNestedManyWithoutTipo_movimientoInput = {
@@ -514,150 +534,8 @@ export type HistorialMovimientoUncheckedUpdateManyWithoutUsuarioNestedInput = {
   deleteMany?: Prisma.HistorialMovimientoScalarWhereInput | Prisma.HistorialMovimientoScalarWhereInput[]
 }
 
-export type HistorialMovimientoCreateNestedManyWithoutProductoInput = {
-  create?: Prisma.XOR<Prisma.HistorialMovimientoCreateWithoutProductoInput, Prisma.HistorialMovimientoUncheckedCreateWithoutProductoInput> | Prisma.HistorialMovimientoCreateWithoutProductoInput[] | Prisma.HistorialMovimientoUncheckedCreateWithoutProductoInput[]
-  connectOrCreate?: Prisma.HistorialMovimientoCreateOrConnectWithoutProductoInput | Prisma.HistorialMovimientoCreateOrConnectWithoutProductoInput[]
-  createMany?: Prisma.HistorialMovimientoCreateManyProductoInputEnvelope
-  connect?: Prisma.HistorialMovimientoWhereUniqueInput | Prisma.HistorialMovimientoWhereUniqueInput[]
-}
-
-export type HistorialMovimientoUncheckedCreateNestedManyWithoutProductoInput = {
-  create?: Prisma.XOR<Prisma.HistorialMovimientoCreateWithoutProductoInput, Prisma.HistorialMovimientoUncheckedCreateWithoutProductoInput> | Prisma.HistorialMovimientoCreateWithoutProductoInput[] | Prisma.HistorialMovimientoUncheckedCreateWithoutProductoInput[]
-  connectOrCreate?: Prisma.HistorialMovimientoCreateOrConnectWithoutProductoInput | Prisma.HistorialMovimientoCreateOrConnectWithoutProductoInput[]
-  createMany?: Prisma.HistorialMovimientoCreateManyProductoInputEnvelope
-  connect?: Prisma.HistorialMovimientoWhereUniqueInput | Prisma.HistorialMovimientoWhereUniqueInput[]
-}
-
-export type HistorialMovimientoUpdateManyWithoutProductoNestedInput = {
-  create?: Prisma.XOR<Prisma.HistorialMovimientoCreateWithoutProductoInput, Prisma.HistorialMovimientoUncheckedCreateWithoutProductoInput> | Prisma.HistorialMovimientoCreateWithoutProductoInput[] | Prisma.HistorialMovimientoUncheckedCreateWithoutProductoInput[]
-  connectOrCreate?: Prisma.HistorialMovimientoCreateOrConnectWithoutProductoInput | Prisma.HistorialMovimientoCreateOrConnectWithoutProductoInput[]
-  upsert?: Prisma.HistorialMovimientoUpsertWithWhereUniqueWithoutProductoInput | Prisma.HistorialMovimientoUpsertWithWhereUniqueWithoutProductoInput[]
-  createMany?: Prisma.HistorialMovimientoCreateManyProductoInputEnvelope
-  set?: Prisma.HistorialMovimientoWhereUniqueInput | Prisma.HistorialMovimientoWhereUniqueInput[]
-  disconnect?: Prisma.HistorialMovimientoWhereUniqueInput | Prisma.HistorialMovimientoWhereUniqueInput[]
-  delete?: Prisma.HistorialMovimientoWhereUniqueInput | Prisma.HistorialMovimientoWhereUniqueInput[]
-  connect?: Prisma.HistorialMovimientoWhereUniqueInput | Prisma.HistorialMovimientoWhereUniqueInput[]
-  update?: Prisma.HistorialMovimientoUpdateWithWhereUniqueWithoutProductoInput | Prisma.HistorialMovimientoUpdateWithWhereUniqueWithoutProductoInput[]
-  updateMany?: Prisma.HistorialMovimientoUpdateManyWithWhereWithoutProductoInput | Prisma.HistorialMovimientoUpdateManyWithWhereWithoutProductoInput[]
-  deleteMany?: Prisma.HistorialMovimientoScalarWhereInput | Prisma.HistorialMovimientoScalarWhereInput[]
-}
-
-export type HistorialMovimientoUncheckedUpdateManyWithoutProductoNestedInput = {
-  create?: Prisma.XOR<Prisma.HistorialMovimientoCreateWithoutProductoInput, Prisma.HistorialMovimientoUncheckedCreateWithoutProductoInput> | Prisma.HistorialMovimientoCreateWithoutProductoInput[] | Prisma.HistorialMovimientoUncheckedCreateWithoutProductoInput[]
-  connectOrCreate?: Prisma.HistorialMovimientoCreateOrConnectWithoutProductoInput | Prisma.HistorialMovimientoCreateOrConnectWithoutProductoInput[]
-  upsert?: Prisma.HistorialMovimientoUpsertWithWhereUniqueWithoutProductoInput | Prisma.HistorialMovimientoUpsertWithWhereUniqueWithoutProductoInput[]
-  createMany?: Prisma.HistorialMovimientoCreateManyProductoInputEnvelope
-  set?: Prisma.HistorialMovimientoWhereUniqueInput | Prisma.HistorialMovimientoWhereUniqueInput[]
-  disconnect?: Prisma.HistorialMovimientoWhereUniqueInput | Prisma.HistorialMovimientoWhereUniqueInput[]
-  delete?: Prisma.HistorialMovimientoWhereUniqueInput | Prisma.HistorialMovimientoWhereUniqueInput[]
-  connect?: Prisma.HistorialMovimientoWhereUniqueInput | Prisma.HistorialMovimientoWhereUniqueInput[]
-  update?: Prisma.HistorialMovimientoUpdateWithWhereUniqueWithoutProductoInput | Prisma.HistorialMovimientoUpdateWithWhereUniqueWithoutProductoInput[]
-  updateMany?: Prisma.HistorialMovimientoUpdateManyWithWhereWithoutProductoInput | Prisma.HistorialMovimientoUpdateManyWithWhereWithoutProductoInput[]
-  deleteMany?: Prisma.HistorialMovimientoScalarWhereInput | Prisma.HistorialMovimientoScalarWhereInput[]
-}
-
-export type HistorialMovimientoCreateWithoutTipo_movimientoInput = {
-  cantidad: number
-  origen_destino?: string | null
-  fecha_hora?: Date | string
-  producto: Prisma.ProductoCreateNestedOneWithoutMovimientosInput
-  usuario: Prisma.UsuarioCreateNestedOneWithoutMovimientosInput
-}
-
-export type HistorialMovimientoUncheckedCreateWithoutTipo_movimientoInput = {
-  id_movimiento?: number
-  id_producto: number
-  id_usuario: number
-  cantidad: number
-  origen_destino?: string | null
-  fecha_hora?: Date | string
-}
-
-export type HistorialMovimientoCreateOrConnectWithoutTipo_movimientoInput = {
-  where: Prisma.HistorialMovimientoWhereUniqueInput
-  create: Prisma.XOR<Prisma.HistorialMovimientoCreateWithoutTipo_movimientoInput, Prisma.HistorialMovimientoUncheckedCreateWithoutTipo_movimientoInput>
-}
-
-export type HistorialMovimientoCreateManyTipo_movimientoInputEnvelope = {
-  data: Prisma.HistorialMovimientoCreateManyTipo_movimientoInput | Prisma.HistorialMovimientoCreateManyTipo_movimientoInput[]
-  skipDuplicates?: boolean
-}
-
-export type HistorialMovimientoUpsertWithWhereUniqueWithoutTipo_movimientoInput = {
-  where: Prisma.HistorialMovimientoWhereUniqueInput
-  update: Prisma.XOR<Prisma.HistorialMovimientoUpdateWithoutTipo_movimientoInput, Prisma.HistorialMovimientoUncheckedUpdateWithoutTipo_movimientoInput>
-  create: Prisma.XOR<Prisma.HistorialMovimientoCreateWithoutTipo_movimientoInput, Prisma.HistorialMovimientoUncheckedCreateWithoutTipo_movimientoInput>
-}
-
-export type HistorialMovimientoUpdateWithWhereUniqueWithoutTipo_movimientoInput = {
-  where: Prisma.HistorialMovimientoWhereUniqueInput
-  data: Prisma.XOR<Prisma.HistorialMovimientoUpdateWithoutTipo_movimientoInput, Prisma.HistorialMovimientoUncheckedUpdateWithoutTipo_movimientoInput>
-}
-
-export type HistorialMovimientoUpdateManyWithWhereWithoutTipo_movimientoInput = {
-  where: Prisma.HistorialMovimientoScalarWhereInput
-  data: Prisma.XOR<Prisma.HistorialMovimientoUpdateManyMutationInput, Prisma.HistorialMovimientoUncheckedUpdateManyWithoutTipo_movimientoInput>
-}
-
-export type HistorialMovimientoScalarWhereInput = {
-  AND?: Prisma.HistorialMovimientoScalarWhereInput | Prisma.HistorialMovimientoScalarWhereInput[]
-  OR?: Prisma.HistorialMovimientoScalarWhereInput[]
-  NOT?: Prisma.HistorialMovimientoScalarWhereInput | Prisma.HistorialMovimientoScalarWhereInput[]
-  id_movimiento?: Prisma.IntFilter<"HistorialMovimiento"> | number
-  id_producto?: Prisma.IntFilter<"HistorialMovimiento"> | number
-  id_usuario?: Prisma.IntFilter<"HistorialMovimiento"> | number
-  id_tipo_mov?: Prisma.IntFilter<"HistorialMovimiento"> | number
-  cantidad?: Prisma.IntFilter<"HistorialMovimiento"> | number
-  origen_destino?: Prisma.StringNullableFilter<"HistorialMovimiento"> | string | null
-  fecha_hora?: Prisma.DateTimeFilter<"HistorialMovimiento"> | Date | string
-}
-
-export type HistorialMovimientoCreateWithoutUsuarioInput = {
-  cantidad: number
-  origen_destino?: string | null
-  fecha_hora?: Date | string
-  producto: Prisma.ProductoCreateNestedOneWithoutMovimientosInput
-  tipo_movimiento: Prisma.TipoMovimientoCreateNestedOneWithoutMovimientosInput
-}
-
-export type HistorialMovimientoUncheckedCreateWithoutUsuarioInput = {
-  id_movimiento?: number
-  id_producto: number
-  id_tipo_mov: number
-  cantidad: number
-  origen_destino?: string | null
-  fecha_hora?: Date | string
-}
-
-export type HistorialMovimientoCreateOrConnectWithoutUsuarioInput = {
-  where: Prisma.HistorialMovimientoWhereUniqueInput
-  create: Prisma.XOR<Prisma.HistorialMovimientoCreateWithoutUsuarioInput, Prisma.HistorialMovimientoUncheckedCreateWithoutUsuarioInput>
-}
-
-export type HistorialMovimientoCreateManyUsuarioInputEnvelope = {
-  data: Prisma.HistorialMovimientoCreateManyUsuarioInput | Prisma.HistorialMovimientoCreateManyUsuarioInput[]
-  skipDuplicates?: boolean
-}
-
-export type HistorialMovimientoUpsertWithWhereUniqueWithoutUsuarioInput = {
-  where: Prisma.HistorialMovimientoWhereUniqueInput
-  update: Prisma.XOR<Prisma.HistorialMovimientoUpdateWithoutUsuarioInput, Prisma.HistorialMovimientoUncheckedUpdateWithoutUsuarioInput>
-  create: Prisma.XOR<Prisma.HistorialMovimientoCreateWithoutUsuarioInput, Prisma.HistorialMovimientoUncheckedCreateWithoutUsuarioInput>
-}
-
-export type HistorialMovimientoUpdateWithWhereUniqueWithoutUsuarioInput = {
-  where: Prisma.HistorialMovimientoWhereUniqueInput
-  data: Prisma.XOR<Prisma.HistorialMovimientoUpdateWithoutUsuarioInput, Prisma.HistorialMovimientoUncheckedUpdateWithoutUsuarioInput>
-}
-
-export type HistorialMovimientoUpdateManyWithWhereWithoutUsuarioInput = {
-  where: Prisma.HistorialMovimientoScalarWhereInput
-  data: Prisma.XOR<Prisma.HistorialMovimientoUpdateManyMutationInput, Prisma.HistorialMovimientoUncheckedUpdateManyWithoutUsuarioInput>
-}
-
 export type HistorialMovimientoCreateWithoutProductoInput = {
   cantidad: number
-  origen_destino?: string | null
   fecha_hora?: Date | string
   usuario: Prisma.UsuarioCreateNestedOneWithoutMovimientosInput
   tipo_movimiento: Prisma.TipoMovimientoCreateNestedOneWithoutMovimientosInput
@@ -668,7 +546,6 @@ export type HistorialMovimientoUncheckedCreateWithoutProductoInput = {
   id_usuario: number
   id_tipo_mov: number
   cantidad: number
-  origen_destino?: string | null
   fecha_hora?: Date | string
 }
 
@@ -698,74 +575,98 @@ export type HistorialMovimientoUpdateManyWithWhereWithoutProductoInput = {
   data: Prisma.XOR<Prisma.HistorialMovimientoUpdateManyMutationInput, Prisma.HistorialMovimientoUncheckedUpdateManyWithoutProductoInput>
 }
 
-export type HistorialMovimientoCreateManyTipo_movimientoInput = {
+export type HistorialMovimientoScalarWhereInput = {
+  AND?: Prisma.HistorialMovimientoScalarWhereInput | Prisma.HistorialMovimientoScalarWhereInput[]
+  OR?: Prisma.HistorialMovimientoScalarWhereInput[]
+  NOT?: Prisma.HistorialMovimientoScalarWhereInput | Prisma.HistorialMovimientoScalarWhereInput[]
+  id_movimiento?: Prisma.IntFilter<"HistorialMovimiento"> | number
+  id_producto?: Prisma.IntFilter<"HistorialMovimiento"> | number
+  id_usuario?: Prisma.IntFilter<"HistorialMovimiento"> | number
+  id_tipo_mov?: Prisma.IntFilter<"HistorialMovimiento"> | number
+  cantidad?: Prisma.IntFilter<"HistorialMovimiento"> | number
+  fecha_hora?: Prisma.DateTimeFilter<"HistorialMovimiento"> | Date | string
+}
+
+export type HistorialMovimientoCreateWithoutTipo_movimientoInput = {
+  cantidad: number
+  fecha_hora?: Date | string
+  producto: Prisma.ProductoCreateNestedOneWithoutMovimientosInput
+  usuario: Prisma.UsuarioCreateNestedOneWithoutMovimientosInput
+}
+
+export type HistorialMovimientoUncheckedCreateWithoutTipo_movimientoInput = {
   id_movimiento?: number
   id_producto: number
   id_usuario: number
   cantidad: number
-  origen_destino?: string | null
   fecha_hora?: Date | string
 }
 
-export type HistorialMovimientoUpdateWithoutTipo_movimientoInput = {
-  cantidad?: Prisma.IntFieldUpdateOperationsInput | number
-  origen_destino?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  fecha_hora?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  producto?: Prisma.ProductoUpdateOneRequiredWithoutMovimientosNestedInput
-  usuario?: Prisma.UsuarioUpdateOneRequiredWithoutMovimientosNestedInput
+export type HistorialMovimientoCreateOrConnectWithoutTipo_movimientoInput = {
+  where: Prisma.HistorialMovimientoWhereUniqueInput
+  create: Prisma.XOR<Prisma.HistorialMovimientoCreateWithoutTipo_movimientoInput, Prisma.HistorialMovimientoUncheckedCreateWithoutTipo_movimientoInput>
 }
 
-export type HistorialMovimientoUncheckedUpdateWithoutTipo_movimientoInput = {
-  id_movimiento?: Prisma.IntFieldUpdateOperationsInput | number
-  id_producto?: Prisma.IntFieldUpdateOperationsInput | number
-  id_usuario?: Prisma.IntFieldUpdateOperationsInput | number
-  cantidad?: Prisma.IntFieldUpdateOperationsInput | number
-  origen_destino?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  fecha_hora?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+export type HistorialMovimientoCreateManyTipo_movimientoInputEnvelope = {
+  data: Prisma.HistorialMovimientoCreateManyTipo_movimientoInput | Prisma.HistorialMovimientoCreateManyTipo_movimientoInput[]
+  skipDuplicates?: boolean
 }
 
-export type HistorialMovimientoUncheckedUpdateManyWithoutTipo_movimientoInput = {
-  id_movimiento?: Prisma.IntFieldUpdateOperationsInput | number
-  id_producto?: Prisma.IntFieldUpdateOperationsInput | number
-  id_usuario?: Prisma.IntFieldUpdateOperationsInput | number
-  cantidad?: Prisma.IntFieldUpdateOperationsInput | number
-  origen_destino?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  fecha_hora?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+export type HistorialMovimientoUpsertWithWhereUniqueWithoutTipo_movimientoInput = {
+  where: Prisma.HistorialMovimientoWhereUniqueInput
+  update: Prisma.XOR<Prisma.HistorialMovimientoUpdateWithoutTipo_movimientoInput, Prisma.HistorialMovimientoUncheckedUpdateWithoutTipo_movimientoInput>
+  create: Prisma.XOR<Prisma.HistorialMovimientoCreateWithoutTipo_movimientoInput, Prisma.HistorialMovimientoUncheckedCreateWithoutTipo_movimientoInput>
 }
 
-export type HistorialMovimientoCreateManyUsuarioInput = {
+export type HistorialMovimientoUpdateWithWhereUniqueWithoutTipo_movimientoInput = {
+  where: Prisma.HistorialMovimientoWhereUniqueInput
+  data: Prisma.XOR<Prisma.HistorialMovimientoUpdateWithoutTipo_movimientoInput, Prisma.HistorialMovimientoUncheckedUpdateWithoutTipo_movimientoInput>
+}
+
+export type HistorialMovimientoUpdateManyWithWhereWithoutTipo_movimientoInput = {
+  where: Prisma.HistorialMovimientoScalarWhereInput
+  data: Prisma.XOR<Prisma.HistorialMovimientoUpdateManyMutationInput, Prisma.HistorialMovimientoUncheckedUpdateManyWithoutTipo_movimientoInput>
+}
+
+export type HistorialMovimientoCreateWithoutUsuarioInput = {
+  cantidad: number
+  fecha_hora?: Date | string
+  producto: Prisma.ProductoCreateNestedOneWithoutMovimientosInput
+  tipo_movimiento: Prisma.TipoMovimientoCreateNestedOneWithoutMovimientosInput
+}
+
+export type HistorialMovimientoUncheckedCreateWithoutUsuarioInput = {
   id_movimiento?: number
   id_producto: number
   id_tipo_mov: number
   cantidad: number
-  origen_destino?: string | null
   fecha_hora?: Date | string
 }
 
-export type HistorialMovimientoUpdateWithoutUsuarioInput = {
-  cantidad?: Prisma.IntFieldUpdateOperationsInput | number
-  origen_destino?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  fecha_hora?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  producto?: Prisma.ProductoUpdateOneRequiredWithoutMovimientosNestedInput
-  tipo_movimiento?: Prisma.TipoMovimientoUpdateOneRequiredWithoutMovimientosNestedInput
+export type HistorialMovimientoCreateOrConnectWithoutUsuarioInput = {
+  where: Prisma.HistorialMovimientoWhereUniqueInput
+  create: Prisma.XOR<Prisma.HistorialMovimientoCreateWithoutUsuarioInput, Prisma.HistorialMovimientoUncheckedCreateWithoutUsuarioInput>
 }
 
-export type HistorialMovimientoUncheckedUpdateWithoutUsuarioInput = {
-  id_movimiento?: Prisma.IntFieldUpdateOperationsInput | number
-  id_producto?: Prisma.IntFieldUpdateOperationsInput | number
-  id_tipo_mov?: Prisma.IntFieldUpdateOperationsInput | number
-  cantidad?: Prisma.IntFieldUpdateOperationsInput | number
-  origen_destino?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  fecha_hora?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+export type HistorialMovimientoCreateManyUsuarioInputEnvelope = {
+  data: Prisma.HistorialMovimientoCreateManyUsuarioInput | Prisma.HistorialMovimientoCreateManyUsuarioInput[]
+  skipDuplicates?: boolean
 }
 
-export type HistorialMovimientoUncheckedUpdateManyWithoutUsuarioInput = {
-  id_movimiento?: Prisma.IntFieldUpdateOperationsInput | number
-  id_producto?: Prisma.IntFieldUpdateOperationsInput | number
-  id_tipo_mov?: Prisma.IntFieldUpdateOperationsInput | number
-  cantidad?: Prisma.IntFieldUpdateOperationsInput | number
-  origen_destino?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  fecha_hora?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+export type HistorialMovimientoUpsertWithWhereUniqueWithoutUsuarioInput = {
+  where: Prisma.HistorialMovimientoWhereUniqueInput
+  update: Prisma.XOR<Prisma.HistorialMovimientoUpdateWithoutUsuarioInput, Prisma.HistorialMovimientoUncheckedUpdateWithoutUsuarioInput>
+  create: Prisma.XOR<Prisma.HistorialMovimientoCreateWithoutUsuarioInput, Prisma.HistorialMovimientoUncheckedCreateWithoutUsuarioInput>
+}
+
+export type HistorialMovimientoUpdateWithWhereUniqueWithoutUsuarioInput = {
+  where: Prisma.HistorialMovimientoWhereUniqueInput
+  data: Prisma.XOR<Prisma.HistorialMovimientoUpdateWithoutUsuarioInput, Prisma.HistorialMovimientoUncheckedUpdateWithoutUsuarioInput>
+}
+
+export type HistorialMovimientoUpdateManyWithWhereWithoutUsuarioInput = {
+  where: Prisma.HistorialMovimientoScalarWhereInput
+  data: Prisma.XOR<Prisma.HistorialMovimientoUpdateManyMutationInput, Prisma.HistorialMovimientoUncheckedUpdateManyWithoutUsuarioInput>
 }
 
 export type HistorialMovimientoCreateManyProductoInput = {
@@ -773,13 +674,11 @@ export type HistorialMovimientoCreateManyProductoInput = {
   id_usuario: number
   id_tipo_mov: number
   cantidad: number
-  origen_destino?: string | null
   fecha_hora?: Date | string
 }
 
 export type HistorialMovimientoUpdateWithoutProductoInput = {
   cantidad?: Prisma.IntFieldUpdateOperationsInput | number
-  origen_destino?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fecha_hora?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   usuario?: Prisma.UsuarioUpdateOneRequiredWithoutMovimientosNestedInput
   tipo_movimiento?: Prisma.TipoMovimientoUpdateOneRequiredWithoutMovimientosNestedInput
@@ -790,7 +689,6 @@ export type HistorialMovimientoUncheckedUpdateWithoutProductoInput = {
   id_usuario?: Prisma.IntFieldUpdateOperationsInput | number
   id_tipo_mov?: Prisma.IntFieldUpdateOperationsInput | number
   cantidad?: Prisma.IntFieldUpdateOperationsInput | number
-  origen_destino?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fecha_hora?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -799,7 +697,68 @@ export type HistorialMovimientoUncheckedUpdateManyWithoutProductoInput = {
   id_usuario?: Prisma.IntFieldUpdateOperationsInput | number
   id_tipo_mov?: Prisma.IntFieldUpdateOperationsInput | number
   cantidad?: Prisma.IntFieldUpdateOperationsInput | number
-  origen_destino?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fecha_hora?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type HistorialMovimientoCreateManyTipo_movimientoInput = {
+  id_movimiento?: number
+  id_producto: number
+  id_usuario: number
+  cantidad: number
+  fecha_hora?: Date | string
+}
+
+export type HistorialMovimientoUpdateWithoutTipo_movimientoInput = {
+  cantidad?: Prisma.IntFieldUpdateOperationsInput | number
+  fecha_hora?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  producto?: Prisma.ProductoUpdateOneRequiredWithoutMovimientosNestedInput
+  usuario?: Prisma.UsuarioUpdateOneRequiredWithoutMovimientosNestedInput
+}
+
+export type HistorialMovimientoUncheckedUpdateWithoutTipo_movimientoInput = {
+  id_movimiento?: Prisma.IntFieldUpdateOperationsInput | number
+  id_producto?: Prisma.IntFieldUpdateOperationsInput | number
+  id_usuario?: Prisma.IntFieldUpdateOperationsInput | number
+  cantidad?: Prisma.IntFieldUpdateOperationsInput | number
+  fecha_hora?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type HistorialMovimientoUncheckedUpdateManyWithoutTipo_movimientoInput = {
+  id_movimiento?: Prisma.IntFieldUpdateOperationsInput | number
+  id_producto?: Prisma.IntFieldUpdateOperationsInput | number
+  id_usuario?: Prisma.IntFieldUpdateOperationsInput | number
+  cantidad?: Prisma.IntFieldUpdateOperationsInput | number
+  fecha_hora?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type HistorialMovimientoCreateManyUsuarioInput = {
+  id_movimiento?: number
+  id_producto: number
+  id_tipo_mov: number
+  cantidad: number
+  fecha_hora?: Date | string
+}
+
+export type HistorialMovimientoUpdateWithoutUsuarioInput = {
+  cantidad?: Prisma.IntFieldUpdateOperationsInput | number
+  fecha_hora?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  producto?: Prisma.ProductoUpdateOneRequiredWithoutMovimientosNestedInput
+  tipo_movimiento?: Prisma.TipoMovimientoUpdateOneRequiredWithoutMovimientosNestedInput
+}
+
+export type HistorialMovimientoUncheckedUpdateWithoutUsuarioInput = {
+  id_movimiento?: Prisma.IntFieldUpdateOperationsInput | number
+  id_producto?: Prisma.IntFieldUpdateOperationsInput | number
+  id_tipo_mov?: Prisma.IntFieldUpdateOperationsInput | number
+  cantidad?: Prisma.IntFieldUpdateOperationsInput | number
+  fecha_hora?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type HistorialMovimientoUncheckedUpdateManyWithoutUsuarioInput = {
+  id_movimiento?: Prisma.IntFieldUpdateOperationsInput | number
+  id_producto?: Prisma.IntFieldUpdateOperationsInput | number
+  id_tipo_mov?: Prisma.IntFieldUpdateOperationsInput | number
+  cantidad?: Prisma.IntFieldUpdateOperationsInput | number
   fecha_hora?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -811,7 +770,6 @@ export type HistorialMovimientoSelect<ExtArgs extends runtime.Types.Extensions.I
   id_usuario?: boolean
   id_tipo_mov?: boolean
   cantidad?: boolean
-  origen_destino?: boolean
   fecha_hora?: boolean
   producto?: boolean | Prisma.ProductoDefaultArgs<ExtArgs>
   usuario?: boolean | Prisma.UsuarioDefaultArgs<ExtArgs>
@@ -824,7 +782,6 @@ export type HistorialMovimientoSelectCreateManyAndReturn<ExtArgs extends runtime
   id_usuario?: boolean
   id_tipo_mov?: boolean
   cantidad?: boolean
-  origen_destino?: boolean
   fecha_hora?: boolean
   producto?: boolean | Prisma.ProductoDefaultArgs<ExtArgs>
   usuario?: boolean | Prisma.UsuarioDefaultArgs<ExtArgs>
@@ -837,7 +794,6 @@ export type HistorialMovimientoSelectUpdateManyAndReturn<ExtArgs extends runtime
   id_usuario?: boolean
   id_tipo_mov?: boolean
   cantidad?: boolean
-  origen_destino?: boolean
   fecha_hora?: boolean
   producto?: boolean | Prisma.ProductoDefaultArgs<ExtArgs>
   usuario?: boolean | Prisma.UsuarioDefaultArgs<ExtArgs>
@@ -850,11 +806,10 @@ export type HistorialMovimientoSelectScalar = {
   id_usuario?: boolean
   id_tipo_mov?: boolean
   cantidad?: boolean
-  origen_destino?: boolean
   fecha_hora?: boolean
 }
 
-export type HistorialMovimientoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id_movimiento" | "id_producto" | "id_usuario" | "id_tipo_mov" | "cantidad" | "origen_destino" | "fecha_hora", ExtArgs["result"]["historialMovimiento"]>
+export type HistorialMovimientoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id_movimiento" | "id_producto" | "id_usuario" | "id_tipo_mov" | "cantidad" | "fecha_hora", ExtArgs["result"]["historialMovimiento"]>
 export type HistorialMovimientoInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   producto?: boolean | Prisma.ProductoDefaultArgs<ExtArgs>
   usuario?: boolean | Prisma.UsuarioDefaultArgs<ExtArgs>
@@ -884,7 +839,6 @@ export type $HistorialMovimientoPayload<ExtArgs extends runtime.Types.Extensions
     id_usuario: number
     id_tipo_mov: number
     cantidad: number
-    origen_destino: string | null
     fecha_hora: Date
   }, ExtArgs["result"]["historialMovimiento"]>
   composites: {}
@@ -1317,7 +1271,6 @@ export interface HistorialMovimientoFieldRefs {
   readonly id_usuario: Prisma.FieldRef<"HistorialMovimiento", 'Int'>
   readonly id_tipo_mov: Prisma.FieldRef<"HistorialMovimiento", 'Int'>
   readonly cantidad: Prisma.FieldRef<"HistorialMovimiento", 'Int'>
-  readonly origen_destino: Prisma.FieldRef<"HistorialMovimiento", 'String'>
   readonly fecha_hora: Prisma.FieldRef<"HistorialMovimiento", 'DateTime'>
 }
     

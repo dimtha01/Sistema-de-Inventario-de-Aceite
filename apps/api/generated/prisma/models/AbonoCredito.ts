@@ -305,16 +305,6 @@ export type AbonoCreditoUncheckedUpdateManyInput = {
   fecha_pago?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type AbonoCreditoListRelationFilter = {
-  every?: Prisma.AbonoCreditoWhereInput
-  some?: Prisma.AbonoCreditoWhereInput
-  none?: Prisma.AbonoCreditoWhereInput
-}
-
-export type AbonoCreditoOrderByRelationAggregateInput = {
-  _count?: Prisma.SortOrder
-}
-
 export type AbonoCreditoCountOrderByAggregateInput = {
   id_abono?: Prisma.SortOrder
   id_venta?: Prisma.SortOrder
@@ -346,6 +336,36 @@ export type AbonoCreditoSumOrderByAggregateInput = {
   id_abono?: Prisma.SortOrder
   id_venta?: Prisma.SortOrder
   monto_abonado?: Prisma.SortOrder
+}
+
+export type AbonoCreditoListRelationFilter = {
+  every?: Prisma.AbonoCreditoWhereInput
+  some?: Prisma.AbonoCreditoWhereInput
+  none?: Prisma.AbonoCreditoWhereInput
+}
+
+export type AbonoCreditoOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
+}
+
+export type DecimalFieldUpdateOperationsInput = {
+  set?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  increment?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  decrement?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  multiply?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  divide?: runtime.Decimal | runtime.DecimalJsLike | number | string
+}
+
+export type DateTimeFieldUpdateOperationsInput = {
+  set?: Date | string
+}
+
+export type IntFieldUpdateOperationsInput = {
+  set?: number
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
 }
 
 export type AbonoCreditoCreateNestedManyWithoutVentaInput = {

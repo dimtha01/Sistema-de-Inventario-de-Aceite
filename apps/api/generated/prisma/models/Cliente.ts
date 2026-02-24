@@ -38,27 +38,27 @@ export type ClienteSumAggregateOutputType = {
 
 export type ClienteMinAggregateOutputType = {
   id_cliente: number | null
-  nombre_completo: string | null
-  ubicacion: string | null
-  es_premium: boolean | null
+  nombre: string | null
+  apellido: string | null
+  telefono: string | null
   limite_credito: runtime.Decimal | null
   fecha_registro: Date | null
 }
 
 export type ClienteMaxAggregateOutputType = {
   id_cliente: number | null
-  nombre_completo: string | null
-  ubicacion: string | null
-  es_premium: boolean | null
+  nombre: string | null
+  apellido: string | null
+  telefono: string | null
   limite_credito: runtime.Decimal | null
   fecha_registro: Date | null
 }
 
 export type ClienteCountAggregateOutputType = {
   id_cliente: number
-  nombre_completo: number
-  ubicacion: number
-  es_premium: number
+  nombre: number
+  apellido: number
+  telefono: number
   limite_credito: number
   fecha_registro: number
   _all: number
@@ -77,27 +77,27 @@ export type ClienteSumAggregateInputType = {
 
 export type ClienteMinAggregateInputType = {
   id_cliente?: true
-  nombre_completo?: true
-  ubicacion?: true
-  es_premium?: true
+  nombre?: true
+  apellido?: true
+  telefono?: true
   limite_credito?: true
   fecha_registro?: true
 }
 
 export type ClienteMaxAggregateInputType = {
   id_cliente?: true
-  nombre_completo?: true
-  ubicacion?: true
-  es_premium?: true
+  nombre?: true
+  apellido?: true
+  telefono?: true
   limite_credito?: true
   fecha_registro?: true
 }
 
 export type ClienteCountAggregateInputType = {
   id_cliente?: true
-  nombre_completo?: true
-  ubicacion?: true
-  es_premium?: true
+  nombre?: true
+  apellido?: true
+  telefono?: true
   limite_credito?: true
   fecha_registro?: true
   _all?: true
@@ -191,9 +191,9 @@ export type ClienteGroupByArgs<ExtArgs extends runtime.Types.Extensions.Internal
 
 export type ClienteGroupByOutputType = {
   id_cliente: number
-  nombre_completo: string
-  ubicacion: string | null
-  es_premium: boolean
+  nombre: string
+  apellido: string
+  telefono: string
   limite_credito: runtime.Decimal
   fecha_registro: Date
   _count: ClienteCountAggregateOutputType | null
@@ -223,9 +223,9 @@ export type ClienteWhereInput = {
   OR?: Prisma.ClienteWhereInput[]
   NOT?: Prisma.ClienteWhereInput | Prisma.ClienteWhereInput[]
   id_cliente?: Prisma.IntFilter<"Cliente"> | number
-  nombre_completo?: Prisma.StringFilter<"Cliente"> | string
-  ubicacion?: Prisma.StringNullableFilter<"Cliente"> | string | null
-  es_premium?: Prisma.BoolFilter<"Cliente"> | boolean
+  nombre?: Prisma.StringFilter<"Cliente"> | string
+  apellido?: Prisma.StringFilter<"Cliente"> | string
+  telefono?: Prisma.StringFilter<"Cliente"> | string
   limite_credito?: Prisma.DecimalFilter<"Cliente"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   fecha_registro?: Prisma.DateTimeFilter<"Cliente"> | Date | string
   ventas?: Prisma.VentaListRelationFilter
@@ -233,9 +233,9 @@ export type ClienteWhereInput = {
 
 export type ClienteOrderByWithRelationInput = {
   id_cliente?: Prisma.SortOrder
-  nombre_completo?: Prisma.SortOrder
-  ubicacion?: Prisma.SortOrderInput | Prisma.SortOrder
-  es_premium?: Prisma.SortOrder
+  nombre?: Prisma.SortOrder
+  apellido?: Prisma.SortOrder
+  telefono?: Prisma.SortOrder
   limite_credito?: Prisma.SortOrder
   fecha_registro?: Prisma.SortOrder
   ventas?: Prisma.VentaOrderByRelationAggregateInput
@@ -246,9 +246,9 @@ export type ClienteWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.ClienteWhereInput | Prisma.ClienteWhereInput[]
   OR?: Prisma.ClienteWhereInput[]
   NOT?: Prisma.ClienteWhereInput | Prisma.ClienteWhereInput[]
-  nombre_completo?: Prisma.StringFilter<"Cliente"> | string
-  ubicacion?: Prisma.StringNullableFilter<"Cliente"> | string | null
-  es_premium?: Prisma.BoolFilter<"Cliente"> | boolean
+  nombre?: Prisma.StringFilter<"Cliente"> | string
+  apellido?: Prisma.StringFilter<"Cliente"> | string
+  telefono?: Prisma.StringFilter<"Cliente"> | string
   limite_credito?: Prisma.DecimalFilter<"Cliente"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   fecha_registro?: Prisma.DateTimeFilter<"Cliente"> | Date | string
   ventas?: Prisma.VentaListRelationFilter
@@ -256,9 +256,9 @@ export type ClienteWhereUniqueInput = Prisma.AtLeast<{
 
 export type ClienteOrderByWithAggregationInput = {
   id_cliente?: Prisma.SortOrder
-  nombre_completo?: Prisma.SortOrder
-  ubicacion?: Prisma.SortOrderInput | Prisma.SortOrder
-  es_premium?: Prisma.SortOrder
+  nombre?: Prisma.SortOrder
+  apellido?: Prisma.SortOrder
+  telefono?: Prisma.SortOrder
   limite_credito?: Prisma.SortOrder
   fecha_registro?: Prisma.SortOrder
   _count?: Prisma.ClienteCountOrderByAggregateInput
@@ -273,17 +273,17 @@ export type ClienteScalarWhereWithAggregatesInput = {
   OR?: Prisma.ClienteScalarWhereWithAggregatesInput[]
   NOT?: Prisma.ClienteScalarWhereWithAggregatesInput | Prisma.ClienteScalarWhereWithAggregatesInput[]
   id_cliente?: Prisma.IntWithAggregatesFilter<"Cliente"> | number
-  nombre_completo?: Prisma.StringWithAggregatesFilter<"Cliente"> | string
-  ubicacion?: Prisma.StringNullableWithAggregatesFilter<"Cliente"> | string | null
-  es_premium?: Prisma.BoolWithAggregatesFilter<"Cliente"> | boolean
+  nombre?: Prisma.StringWithAggregatesFilter<"Cliente"> | string
+  apellido?: Prisma.StringWithAggregatesFilter<"Cliente"> | string
+  telefono?: Prisma.StringWithAggregatesFilter<"Cliente"> | string
   limite_credito?: Prisma.DecimalWithAggregatesFilter<"Cliente"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   fecha_registro?: Prisma.DateTimeWithAggregatesFilter<"Cliente"> | Date | string
 }
 
 export type ClienteCreateInput = {
-  nombre_completo: string
-  ubicacion?: string | null
-  es_premium?: boolean
+  nombre: string
+  apellido: string
+  telefono: string
   limite_credito?: runtime.Decimal | runtime.DecimalJsLike | number | string
   fecha_registro?: Date | string
   ventas?: Prisma.VentaCreateNestedManyWithoutClienteInput
@@ -291,18 +291,18 @@ export type ClienteCreateInput = {
 
 export type ClienteUncheckedCreateInput = {
   id_cliente?: number
-  nombre_completo: string
-  ubicacion?: string | null
-  es_premium?: boolean
+  nombre: string
+  apellido: string
+  telefono: string
   limite_credito?: runtime.Decimal | runtime.DecimalJsLike | number | string
   fecha_registro?: Date | string
   ventas?: Prisma.VentaUncheckedCreateNestedManyWithoutClienteInput
 }
 
 export type ClienteUpdateInput = {
-  nombre_completo?: Prisma.StringFieldUpdateOperationsInput | string
-  ubicacion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  es_premium?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  nombre?: Prisma.StringFieldUpdateOperationsInput | string
+  apellido?: Prisma.StringFieldUpdateOperationsInput | string
+  telefono?: Prisma.StringFieldUpdateOperationsInput | string
   limite_credito?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   fecha_registro?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ventas?: Prisma.VentaUpdateManyWithoutClienteNestedInput
@@ -310,9 +310,9 @@ export type ClienteUpdateInput = {
 
 export type ClienteUncheckedUpdateInput = {
   id_cliente?: Prisma.IntFieldUpdateOperationsInput | number
-  nombre_completo?: Prisma.StringFieldUpdateOperationsInput | string
-  ubicacion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  es_premium?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  nombre?: Prisma.StringFieldUpdateOperationsInput | string
+  apellido?: Prisma.StringFieldUpdateOperationsInput | string
+  telefono?: Prisma.StringFieldUpdateOperationsInput | string
   limite_credito?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   fecha_registro?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ventas?: Prisma.VentaUncheckedUpdateManyWithoutClienteNestedInput
@@ -320,35 +320,35 @@ export type ClienteUncheckedUpdateInput = {
 
 export type ClienteCreateManyInput = {
   id_cliente?: number
-  nombre_completo: string
-  ubicacion?: string | null
-  es_premium?: boolean
+  nombre: string
+  apellido: string
+  telefono: string
   limite_credito?: runtime.Decimal | runtime.DecimalJsLike | number | string
   fecha_registro?: Date | string
 }
 
 export type ClienteUpdateManyMutationInput = {
-  nombre_completo?: Prisma.StringFieldUpdateOperationsInput | string
-  ubicacion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  es_premium?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  nombre?: Prisma.StringFieldUpdateOperationsInput | string
+  apellido?: Prisma.StringFieldUpdateOperationsInput | string
+  telefono?: Prisma.StringFieldUpdateOperationsInput | string
   limite_credito?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   fecha_registro?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ClienteUncheckedUpdateManyInput = {
   id_cliente?: Prisma.IntFieldUpdateOperationsInput | number
-  nombre_completo?: Prisma.StringFieldUpdateOperationsInput | string
-  ubicacion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  es_premium?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  nombre?: Prisma.StringFieldUpdateOperationsInput | string
+  apellido?: Prisma.StringFieldUpdateOperationsInput | string
+  telefono?: Prisma.StringFieldUpdateOperationsInput | string
   limite_credito?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   fecha_registro?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ClienteCountOrderByAggregateInput = {
   id_cliente?: Prisma.SortOrder
-  nombre_completo?: Prisma.SortOrder
-  ubicacion?: Prisma.SortOrder
-  es_premium?: Prisma.SortOrder
+  nombre?: Prisma.SortOrder
+  apellido?: Prisma.SortOrder
+  telefono?: Prisma.SortOrder
   limite_credito?: Prisma.SortOrder
   fecha_registro?: Prisma.SortOrder
 }
@@ -360,18 +360,18 @@ export type ClienteAvgOrderByAggregateInput = {
 
 export type ClienteMaxOrderByAggregateInput = {
   id_cliente?: Prisma.SortOrder
-  nombre_completo?: Prisma.SortOrder
-  ubicacion?: Prisma.SortOrder
-  es_premium?: Prisma.SortOrder
+  nombre?: Prisma.SortOrder
+  apellido?: Prisma.SortOrder
+  telefono?: Prisma.SortOrder
   limite_credito?: Prisma.SortOrder
   fecha_registro?: Prisma.SortOrder
 }
 
 export type ClienteMinOrderByAggregateInput = {
   id_cliente?: Prisma.SortOrder
-  nombre_completo?: Prisma.SortOrder
-  ubicacion?: Prisma.SortOrder
-  es_premium?: Prisma.SortOrder
+  nombre?: Prisma.SortOrder
+  apellido?: Prisma.SortOrder
+  telefono?: Prisma.SortOrder
   limite_credito?: Prisma.SortOrder
   fecha_registro?: Prisma.SortOrder
 }
@@ -384,22 +384,6 @@ export type ClienteSumOrderByAggregateInput = {
 export type ClienteScalarRelationFilter = {
   is?: Prisma.ClienteWhereInput
   isNot?: Prisma.ClienteWhereInput
-}
-
-export type BoolFieldUpdateOperationsInput = {
-  set?: boolean
-}
-
-export type DecimalFieldUpdateOperationsInput = {
-  set?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  increment?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  decrement?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  multiply?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  divide?: runtime.Decimal | runtime.DecimalJsLike | number | string
-}
-
-export type DateTimeFieldUpdateOperationsInput = {
-  set?: Date | string
 }
 
 export type ClienteCreateNestedOneWithoutVentasInput = {
@@ -417,18 +401,18 @@ export type ClienteUpdateOneRequiredWithoutVentasNestedInput = {
 }
 
 export type ClienteCreateWithoutVentasInput = {
-  nombre_completo: string
-  ubicacion?: string | null
-  es_premium?: boolean
+  nombre: string
+  apellido: string
+  telefono: string
   limite_credito?: runtime.Decimal | runtime.DecimalJsLike | number | string
   fecha_registro?: Date | string
 }
 
 export type ClienteUncheckedCreateWithoutVentasInput = {
   id_cliente?: number
-  nombre_completo: string
-  ubicacion?: string | null
-  es_premium?: boolean
+  nombre: string
+  apellido: string
+  telefono: string
   limite_credito?: runtime.Decimal | runtime.DecimalJsLike | number | string
   fecha_registro?: Date | string
 }
@@ -450,18 +434,18 @@ export type ClienteUpdateToOneWithWhereWithoutVentasInput = {
 }
 
 export type ClienteUpdateWithoutVentasInput = {
-  nombre_completo?: Prisma.StringFieldUpdateOperationsInput | string
-  ubicacion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  es_premium?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  nombre?: Prisma.StringFieldUpdateOperationsInput | string
+  apellido?: Prisma.StringFieldUpdateOperationsInput | string
+  telefono?: Prisma.StringFieldUpdateOperationsInput | string
   limite_credito?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   fecha_registro?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ClienteUncheckedUpdateWithoutVentasInput = {
   id_cliente?: Prisma.IntFieldUpdateOperationsInput | number
-  nombre_completo?: Prisma.StringFieldUpdateOperationsInput | string
-  ubicacion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  es_premium?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  nombre?: Prisma.StringFieldUpdateOperationsInput | string
+  apellido?: Prisma.StringFieldUpdateOperationsInput | string
+  telefono?: Prisma.StringFieldUpdateOperationsInput | string
   limite_credito?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   fecha_registro?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -499,9 +483,9 @@ export type ClienteCountOutputTypeCountVentasArgs<ExtArgs extends runtime.Types.
 
 export type ClienteSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id_cliente?: boolean
-  nombre_completo?: boolean
-  ubicacion?: boolean
-  es_premium?: boolean
+  nombre?: boolean
+  apellido?: boolean
+  telefono?: boolean
   limite_credito?: boolean
   fecha_registro?: boolean
   ventas?: boolean | Prisma.Cliente$ventasArgs<ExtArgs>
@@ -510,32 +494,32 @@ export type ClienteSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
 
 export type ClienteSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id_cliente?: boolean
-  nombre_completo?: boolean
-  ubicacion?: boolean
-  es_premium?: boolean
+  nombre?: boolean
+  apellido?: boolean
+  telefono?: boolean
   limite_credito?: boolean
   fecha_registro?: boolean
 }, ExtArgs["result"]["cliente"]>
 
 export type ClienteSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id_cliente?: boolean
-  nombre_completo?: boolean
-  ubicacion?: boolean
-  es_premium?: boolean
+  nombre?: boolean
+  apellido?: boolean
+  telefono?: boolean
   limite_credito?: boolean
   fecha_registro?: boolean
 }, ExtArgs["result"]["cliente"]>
 
 export type ClienteSelectScalar = {
   id_cliente?: boolean
-  nombre_completo?: boolean
-  ubicacion?: boolean
-  es_premium?: boolean
+  nombre?: boolean
+  apellido?: boolean
+  telefono?: boolean
   limite_credito?: boolean
   fecha_registro?: boolean
 }
 
-export type ClienteOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id_cliente" | "nombre_completo" | "ubicacion" | "es_premium" | "limite_credito" | "fecha_registro", ExtArgs["result"]["cliente"]>
+export type ClienteOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id_cliente" | "nombre" | "apellido" | "telefono" | "limite_credito" | "fecha_registro", ExtArgs["result"]["cliente"]>
 export type ClienteInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   ventas?: boolean | Prisma.Cliente$ventasArgs<ExtArgs>
   _count?: boolean | Prisma.ClienteCountOutputTypeDefaultArgs<ExtArgs>
@@ -550,9 +534,9 @@ export type $ClientePayload<ExtArgs extends runtime.Types.Extensions.InternalArg
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id_cliente: number
-    nombre_completo: string
-    ubicacion: string | null
-    es_premium: boolean
+    nombre: string
+    apellido: string
+    telefono: string
     limite_credito: runtime.Decimal
     fecha_registro: Date
   }, ExtArgs["result"]["cliente"]>
@@ -980,9 +964,9 @@ export interface Prisma__ClienteClient<T, Null = never, ExtArgs extends runtime.
  */
 export interface ClienteFieldRefs {
   readonly id_cliente: Prisma.FieldRef<"Cliente", 'Int'>
-  readonly nombre_completo: Prisma.FieldRef<"Cliente", 'String'>
-  readonly ubicacion: Prisma.FieldRef<"Cliente", 'String'>
-  readonly es_premium: Prisma.FieldRef<"Cliente", 'Boolean'>
+  readonly nombre: Prisma.FieldRef<"Cliente", 'String'>
+  readonly apellido: Prisma.FieldRef<"Cliente", 'String'>
+  readonly telefono: Prisma.FieldRef<"Cliente", 'String'>
   readonly limite_credito: Prisma.FieldRef<"Cliente", 'Decimal'>
   readonly fecha_registro: Prisma.FieldRef<"Cliente", 'DateTime'>
 }

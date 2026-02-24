@@ -37,25 +37,22 @@ export type ProveedorSumAggregateOutputType = {
 export type ProveedorMinAggregateOutputType = {
   id_proveedor: number | null
   nombre_empresa: string | null
-  pais_origen: string | null
-  categoria_socio: string | null
-  url_logo: string | null
+  direccion: string | null
+  telefono: string | null
 }
 
 export type ProveedorMaxAggregateOutputType = {
   id_proveedor: number | null
   nombre_empresa: string | null
-  pais_origen: string | null
-  categoria_socio: string | null
-  url_logo: string | null
+  direccion: string | null
+  telefono: string | null
 }
 
 export type ProveedorCountAggregateOutputType = {
   id_proveedor: number
   nombre_empresa: number
-  pais_origen: number
-  categoria_socio: number
-  url_logo: number
+  direccion: number
+  telefono: number
   _all: number
 }
 
@@ -71,25 +68,22 @@ export type ProveedorSumAggregateInputType = {
 export type ProveedorMinAggregateInputType = {
   id_proveedor?: true
   nombre_empresa?: true
-  pais_origen?: true
-  categoria_socio?: true
-  url_logo?: true
+  direccion?: true
+  telefono?: true
 }
 
 export type ProveedorMaxAggregateInputType = {
   id_proveedor?: true
   nombre_empresa?: true
-  pais_origen?: true
-  categoria_socio?: true
-  url_logo?: true
+  direccion?: true
+  telefono?: true
 }
 
 export type ProveedorCountAggregateInputType = {
   id_proveedor?: true
   nombre_empresa?: true
-  pais_origen?: true
-  categoria_socio?: true
-  url_logo?: true
+  direccion?: true
+  telefono?: true
   _all?: true
 }
 
@@ -182,9 +176,8 @@ export type ProveedorGroupByArgs<ExtArgs extends runtime.Types.Extensions.Intern
 export type ProveedorGroupByOutputType = {
   id_proveedor: number
   nombre_empresa: string
-  pais_origen: string | null
-  categoria_socio: string | null
-  url_logo: string | null
+  direccion: string | null
+  telefono: string | null
   _count: ProveedorCountAggregateOutputType | null
   _avg: ProveedorAvgAggregateOutputType | null
   _sum: ProveedorSumAggregateOutputType | null
@@ -213,18 +206,16 @@ export type ProveedorWhereInput = {
   NOT?: Prisma.ProveedorWhereInput | Prisma.ProveedorWhereInput[]
   id_proveedor?: Prisma.IntFilter<"Proveedor"> | number
   nombre_empresa?: Prisma.StringFilter<"Proveedor"> | string
-  pais_origen?: Prisma.StringNullableFilter<"Proveedor"> | string | null
-  categoria_socio?: Prisma.StringNullableFilter<"Proveedor"> | string | null
-  url_logo?: Prisma.StringNullableFilter<"Proveedor"> | string | null
+  direccion?: Prisma.StringNullableFilter<"Proveedor"> | string | null
+  telefono?: Prisma.StringNullableFilter<"Proveedor"> | string | null
   productos?: Prisma.ProductoListRelationFilter
 }
 
 export type ProveedorOrderByWithRelationInput = {
   id_proveedor?: Prisma.SortOrder
   nombre_empresa?: Prisma.SortOrder
-  pais_origen?: Prisma.SortOrderInput | Prisma.SortOrder
-  categoria_socio?: Prisma.SortOrderInput | Prisma.SortOrder
-  url_logo?: Prisma.SortOrderInput | Prisma.SortOrder
+  direccion?: Prisma.SortOrderInput | Prisma.SortOrder
+  telefono?: Prisma.SortOrderInput | Prisma.SortOrder
   productos?: Prisma.ProductoOrderByRelationAggregateInput
 }
 
@@ -234,18 +225,16 @@ export type ProveedorWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.ProveedorWhereInput[]
   NOT?: Prisma.ProveedorWhereInput | Prisma.ProveedorWhereInput[]
   nombre_empresa?: Prisma.StringFilter<"Proveedor"> | string
-  pais_origen?: Prisma.StringNullableFilter<"Proveedor"> | string | null
-  categoria_socio?: Prisma.StringNullableFilter<"Proveedor"> | string | null
-  url_logo?: Prisma.StringNullableFilter<"Proveedor"> | string | null
+  direccion?: Prisma.StringNullableFilter<"Proveedor"> | string | null
+  telefono?: Prisma.StringNullableFilter<"Proveedor"> | string | null
   productos?: Prisma.ProductoListRelationFilter
 }, "id_proveedor">
 
 export type ProveedorOrderByWithAggregationInput = {
   id_proveedor?: Prisma.SortOrder
   nombre_empresa?: Prisma.SortOrder
-  pais_origen?: Prisma.SortOrderInput | Prisma.SortOrder
-  categoria_socio?: Prisma.SortOrderInput | Prisma.SortOrder
-  url_logo?: Prisma.SortOrderInput | Prisma.SortOrder
+  direccion?: Prisma.SortOrderInput | Prisma.SortOrder
+  telefono?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.ProveedorCountOrderByAggregateInput
   _avg?: Prisma.ProveedorAvgOrderByAggregateInput
   _max?: Prisma.ProveedorMaxOrderByAggregateInput
@@ -259,74 +248,70 @@ export type ProveedorScalarWhereWithAggregatesInput = {
   NOT?: Prisma.ProveedorScalarWhereWithAggregatesInput | Prisma.ProveedorScalarWhereWithAggregatesInput[]
   id_proveedor?: Prisma.IntWithAggregatesFilter<"Proveedor"> | number
   nombre_empresa?: Prisma.StringWithAggregatesFilter<"Proveedor"> | string
-  pais_origen?: Prisma.StringNullableWithAggregatesFilter<"Proveedor"> | string | null
-  categoria_socio?: Prisma.StringNullableWithAggregatesFilter<"Proveedor"> | string | null
-  url_logo?: Prisma.StringNullableWithAggregatesFilter<"Proveedor"> | string | null
+  direccion?: Prisma.StringNullableWithAggregatesFilter<"Proveedor"> | string | null
+  telefono?: Prisma.StringNullableWithAggregatesFilter<"Proveedor"> | string | null
 }
 
 export type ProveedorCreateInput = {
   nombre_empresa: string
-  pais_origen?: string | null
-  categoria_socio?: string | null
-  url_logo?: string | null
+  direccion?: string | null
+  telefono?: string | null
   productos?: Prisma.ProductoCreateNestedManyWithoutProveedorInput
 }
 
 export type ProveedorUncheckedCreateInput = {
   id_proveedor?: number
   nombre_empresa: string
-  pais_origen?: string | null
-  categoria_socio?: string | null
-  url_logo?: string | null
+  direccion?: string | null
+  telefono?: string | null
   productos?: Prisma.ProductoUncheckedCreateNestedManyWithoutProveedorInput
 }
 
 export type ProveedorUpdateInput = {
   nombre_empresa?: Prisma.StringFieldUpdateOperationsInput | string
-  pais_origen?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  categoria_socio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  url_logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  direccion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  telefono?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   productos?: Prisma.ProductoUpdateManyWithoutProveedorNestedInput
 }
 
 export type ProveedorUncheckedUpdateInput = {
   id_proveedor?: Prisma.IntFieldUpdateOperationsInput | number
   nombre_empresa?: Prisma.StringFieldUpdateOperationsInput | string
-  pais_origen?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  categoria_socio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  url_logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  direccion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  telefono?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   productos?: Prisma.ProductoUncheckedUpdateManyWithoutProveedorNestedInput
 }
 
 export type ProveedorCreateManyInput = {
   id_proveedor?: number
   nombre_empresa: string
-  pais_origen?: string | null
-  categoria_socio?: string | null
-  url_logo?: string | null
+  direccion?: string | null
+  telefono?: string | null
 }
 
 export type ProveedorUpdateManyMutationInput = {
   nombre_empresa?: Prisma.StringFieldUpdateOperationsInput | string
-  pais_origen?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  categoria_socio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  url_logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  direccion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  telefono?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type ProveedorUncheckedUpdateManyInput = {
   id_proveedor?: Prisma.IntFieldUpdateOperationsInput | number
   nombre_empresa?: Prisma.StringFieldUpdateOperationsInput | string
-  pais_origen?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  categoria_socio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  url_logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  direccion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  telefono?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type ProveedorScalarRelationFilter = {
+  is?: Prisma.ProveedorWhereInput
+  isNot?: Prisma.ProveedorWhereInput
 }
 
 export type ProveedorCountOrderByAggregateInput = {
   id_proveedor?: Prisma.SortOrder
   nombre_empresa?: Prisma.SortOrder
-  pais_origen?: Prisma.SortOrder
-  categoria_socio?: Prisma.SortOrder
-  url_logo?: Prisma.SortOrder
+  direccion?: Prisma.SortOrder
+  telefono?: Prisma.SortOrder
 }
 
 export type ProveedorAvgOrderByAggregateInput = {
@@ -336,26 +321,19 @@ export type ProveedorAvgOrderByAggregateInput = {
 export type ProveedorMaxOrderByAggregateInput = {
   id_proveedor?: Prisma.SortOrder
   nombre_empresa?: Prisma.SortOrder
-  pais_origen?: Prisma.SortOrder
-  categoria_socio?: Prisma.SortOrder
-  url_logo?: Prisma.SortOrder
+  direccion?: Prisma.SortOrder
+  telefono?: Prisma.SortOrder
 }
 
 export type ProveedorMinOrderByAggregateInput = {
   id_proveedor?: Prisma.SortOrder
   nombre_empresa?: Prisma.SortOrder
-  pais_origen?: Prisma.SortOrder
-  categoria_socio?: Prisma.SortOrder
-  url_logo?: Prisma.SortOrder
+  direccion?: Prisma.SortOrder
+  telefono?: Prisma.SortOrder
 }
 
 export type ProveedorSumOrderByAggregateInput = {
   id_proveedor?: Prisma.SortOrder
-}
-
-export type ProveedorScalarRelationFilter = {
-  is?: Prisma.ProveedorWhereInput
-  isNot?: Prisma.ProveedorWhereInput
 }
 
 export type ProveedorCreateNestedOneWithoutProductosInput = {
@@ -374,17 +352,15 @@ export type ProveedorUpdateOneRequiredWithoutProductosNestedInput = {
 
 export type ProveedorCreateWithoutProductosInput = {
   nombre_empresa: string
-  pais_origen?: string | null
-  categoria_socio?: string | null
-  url_logo?: string | null
+  direccion?: string | null
+  telefono?: string | null
 }
 
 export type ProveedorUncheckedCreateWithoutProductosInput = {
   id_proveedor?: number
   nombre_empresa: string
-  pais_origen?: string | null
-  categoria_socio?: string | null
-  url_logo?: string | null
+  direccion?: string | null
+  telefono?: string | null
 }
 
 export type ProveedorCreateOrConnectWithoutProductosInput = {
@@ -405,17 +381,15 @@ export type ProveedorUpdateToOneWithWhereWithoutProductosInput = {
 
 export type ProveedorUpdateWithoutProductosInput = {
   nombre_empresa?: Prisma.StringFieldUpdateOperationsInput | string
-  pais_origen?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  categoria_socio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  url_logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  direccion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  telefono?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type ProveedorUncheckedUpdateWithoutProductosInput = {
   id_proveedor?: Prisma.IntFieldUpdateOperationsInput | number
   nombre_empresa?: Prisma.StringFieldUpdateOperationsInput | string
-  pais_origen?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  categoria_socio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  url_logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  direccion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  telefono?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 
@@ -452,9 +426,8 @@ export type ProveedorCountOutputTypeCountProductosArgs<ExtArgs extends runtime.T
 export type ProveedorSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id_proveedor?: boolean
   nombre_empresa?: boolean
-  pais_origen?: boolean
-  categoria_socio?: boolean
-  url_logo?: boolean
+  direccion?: boolean
+  telefono?: boolean
   productos?: boolean | Prisma.Proveedor$productosArgs<ExtArgs>
   _count?: boolean | Prisma.ProveedorCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["proveedor"]>
@@ -462,28 +435,25 @@ export type ProveedorSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
 export type ProveedorSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id_proveedor?: boolean
   nombre_empresa?: boolean
-  pais_origen?: boolean
-  categoria_socio?: boolean
-  url_logo?: boolean
+  direccion?: boolean
+  telefono?: boolean
 }, ExtArgs["result"]["proveedor"]>
 
 export type ProveedorSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id_proveedor?: boolean
   nombre_empresa?: boolean
-  pais_origen?: boolean
-  categoria_socio?: boolean
-  url_logo?: boolean
+  direccion?: boolean
+  telefono?: boolean
 }, ExtArgs["result"]["proveedor"]>
 
 export type ProveedorSelectScalar = {
   id_proveedor?: boolean
   nombre_empresa?: boolean
-  pais_origen?: boolean
-  categoria_socio?: boolean
-  url_logo?: boolean
+  direccion?: boolean
+  telefono?: boolean
 }
 
-export type ProveedorOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id_proveedor" | "nombre_empresa" | "pais_origen" | "categoria_socio" | "url_logo", ExtArgs["result"]["proveedor"]>
+export type ProveedorOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id_proveedor" | "nombre_empresa" | "direccion" | "telefono", ExtArgs["result"]["proveedor"]>
 export type ProveedorInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   productos?: boolean | Prisma.Proveedor$productosArgs<ExtArgs>
   _count?: boolean | Prisma.ProveedorCountOutputTypeDefaultArgs<ExtArgs>
@@ -499,9 +469,8 @@ export type $ProveedorPayload<ExtArgs extends runtime.Types.Extensions.InternalA
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id_proveedor: number
     nombre_empresa: string
-    pais_origen: string | null
-    categoria_socio: string | null
-    url_logo: string | null
+    direccion: string | null
+    telefono: string | null
   }, ExtArgs["result"]["proveedor"]>
   composites: {}
 }
@@ -928,9 +897,8 @@ export interface Prisma__ProveedorClient<T, Null = never, ExtArgs extends runtim
 export interface ProveedorFieldRefs {
   readonly id_proveedor: Prisma.FieldRef<"Proveedor", 'Int'>
   readonly nombre_empresa: Prisma.FieldRef<"Proveedor", 'String'>
-  readonly pais_origen: Prisma.FieldRef<"Proveedor", 'String'>
-  readonly categoria_socio: Prisma.FieldRef<"Proveedor", 'String'>
-  readonly url_logo: Prisma.FieldRef<"Proveedor", 'String'>
+  readonly direccion: Prisma.FieldRef<"Proveedor", 'String'>
+  readonly telefono: Prisma.FieldRef<"Proveedor", 'String'>
 }
     
 

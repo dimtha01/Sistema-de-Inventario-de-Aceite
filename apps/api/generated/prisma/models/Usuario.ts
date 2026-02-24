@@ -40,27 +40,27 @@ export type UsuarioMinAggregateOutputType = {
   id_usuario: number | null
   id_rol: number | null
   nombre: string | null
+  apellido: string | null
   email: string | null
   password_hash: string | null
-  avatar_url: string | null
 }
 
 export type UsuarioMaxAggregateOutputType = {
   id_usuario: number | null
   id_rol: number | null
   nombre: string | null
+  apellido: string | null
   email: string | null
   password_hash: string | null
-  avatar_url: string | null
 }
 
 export type UsuarioCountAggregateOutputType = {
   id_usuario: number
   id_rol: number
   nombre: number
+  apellido: number
   email: number
   password_hash: number
-  avatar_url: number
   _all: number
 }
 
@@ -79,27 +79,27 @@ export type UsuarioMinAggregateInputType = {
   id_usuario?: true
   id_rol?: true
   nombre?: true
+  apellido?: true
   email?: true
   password_hash?: true
-  avatar_url?: true
 }
 
 export type UsuarioMaxAggregateInputType = {
   id_usuario?: true
   id_rol?: true
   nombre?: true
+  apellido?: true
   email?: true
   password_hash?: true
-  avatar_url?: true
 }
 
 export type UsuarioCountAggregateInputType = {
   id_usuario?: true
   id_rol?: true
   nombre?: true
+  apellido?: true
   email?: true
   password_hash?: true
-  avatar_url?: true
   _all?: true
 }
 
@@ -193,9 +193,9 @@ export type UsuarioGroupByOutputType = {
   id_usuario: number
   id_rol: number
   nombre: string
+  apellido: string
   email: string
   password_hash: string
-  avatar_url: string | null
   _count: UsuarioCountAggregateOutputType | null
   _avg: UsuarioAvgAggregateOutputType | null
   _sum: UsuarioSumAggregateOutputType | null
@@ -225,9 +225,9 @@ export type UsuarioWhereInput = {
   id_usuario?: Prisma.IntFilter<"Usuario"> | number
   id_rol?: Prisma.IntFilter<"Usuario"> | number
   nombre?: Prisma.StringFilter<"Usuario"> | string
+  apellido?: Prisma.StringFilter<"Usuario"> | string
   email?: Prisma.StringFilter<"Usuario"> | string
   password_hash?: Prisma.StringFilter<"Usuario"> | string
-  avatar_url?: Prisma.StringNullableFilter<"Usuario"> | string | null
   rol?: Prisma.XOR<Prisma.RolUsuarioScalarRelationFilter, Prisma.RolUsuarioWhereInput>
   ventas?: Prisma.VentaListRelationFilter
   movimientos?: Prisma.HistorialMovimientoListRelationFilter
@@ -237,9 +237,9 @@ export type UsuarioOrderByWithRelationInput = {
   id_usuario?: Prisma.SortOrder
   id_rol?: Prisma.SortOrder
   nombre?: Prisma.SortOrder
+  apellido?: Prisma.SortOrder
   email?: Prisma.SortOrder
   password_hash?: Prisma.SortOrder
-  avatar_url?: Prisma.SortOrderInput | Prisma.SortOrder
   rol?: Prisma.RolUsuarioOrderByWithRelationInput
   ventas?: Prisma.VentaOrderByRelationAggregateInput
   movimientos?: Prisma.HistorialMovimientoOrderByRelationAggregateInput
@@ -253,8 +253,8 @@ export type UsuarioWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.UsuarioWhereInput | Prisma.UsuarioWhereInput[]
   id_rol?: Prisma.IntFilter<"Usuario"> | number
   nombre?: Prisma.StringFilter<"Usuario"> | string
+  apellido?: Prisma.StringFilter<"Usuario"> | string
   password_hash?: Prisma.StringFilter<"Usuario"> | string
-  avatar_url?: Prisma.StringNullableFilter<"Usuario"> | string | null
   rol?: Prisma.XOR<Prisma.RolUsuarioScalarRelationFilter, Prisma.RolUsuarioWhereInput>
   ventas?: Prisma.VentaListRelationFilter
   movimientos?: Prisma.HistorialMovimientoListRelationFilter
@@ -264,9 +264,9 @@ export type UsuarioOrderByWithAggregationInput = {
   id_usuario?: Prisma.SortOrder
   id_rol?: Prisma.SortOrder
   nombre?: Prisma.SortOrder
+  apellido?: Prisma.SortOrder
   email?: Prisma.SortOrder
   password_hash?: Prisma.SortOrder
-  avatar_url?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.UsuarioCountOrderByAggregateInput
   _avg?: Prisma.UsuarioAvgOrderByAggregateInput
   _max?: Prisma.UsuarioMaxOrderByAggregateInput
@@ -281,16 +281,16 @@ export type UsuarioScalarWhereWithAggregatesInput = {
   id_usuario?: Prisma.IntWithAggregatesFilter<"Usuario"> | number
   id_rol?: Prisma.IntWithAggregatesFilter<"Usuario"> | number
   nombre?: Prisma.StringWithAggregatesFilter<"Usuario"> | string
+  apellido?: Prisma.StringWithAggregatesFilter<"Usuario"> | string
   email?: Prisma.StringWithAggregatesFilter<"Usuario"> | string
   password_hash?: Prisma.StringWithAggregatesFilter<"Usuario"> | string
-  avatar_url?: Prisma.StringNullableWithAggregatesFilter<"Usuario"> | string | null
 }
 
 export type UsuarioCreateInput = {
   nombre: string
+  apellido: string
   email: string
   password_hash: string
-  avatar_url?: string | null
   rol: Prisma.RolUsuarioCreateNestedOneWithoutUsuariosInput
   ventas?: Prisma.VentaCreateNestedManyWithoutUsuarioInput
   movimientos?: Prisma.HistorialMovimientoCreateNestedManyWithoutUsuarioInput
@@ -300,18 +300,18 @@ export type UsuarioUncheckedCreateInput = {
   id_usuario?: number
   id_rol: number
   nombre: string
+  apellido: string
   email: string
   password_hash: string
-  avatar_url?: string | null
   ventas?: Prisma.VentaUncheckedCreateNestedManyWithoutUsuarioInput
   movimientos?: Prisma.HistorialMovimientoUncheckedCreateNestedManyWithoutUsuarioInput
 }
 
 export type UsuarioUpdateInput = {
   nombre?: Prisma.StringFieldUpdateOperationsInput | string
+  apellido?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password_hash?: Prisma.StringFieldUpdateOperationsInput | string
-  avatar_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rol?: Prisma.RolUsuarioUpdateOneRequiredWithoutUsuariosNestedInput
   ventas?: Prisma.VentaUpdateManyWithoutUsuarioNestedInput
   movimientos?: Prisma.HistorialMovimientoUpdateManyWithoutUsuarioNestedInput
@@ -321,9 +321,9 @@ export type UsuarioUncheckedUpdateInput = {
   id_usuario?: Prisma.IntFieldUpdateOperationsInput | number
   id_rol?: Prisma.IntFieldUpdateOperationsInput | number
   nombre?: Prisma.StringFieldUpdateOperationsInput | string
+  apellido?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password_hash?: Prisma.StringFieldUpdateOperationsInput | string
-  avatar_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ventas?: Prisma.VentaUncheckedUpdateManyWithoutUsuarioNestedInput
   movimientos?: Prisma.HistorialMovimientoUncheckedUpdateManyWithoutUsuarioNestedInput
 }
@@ -332,25 +332,30 @@ export type UsuarioCreateManyInput = {
   id_usuario?: number
   id_rol: number
   nombre: string
+  apellido: string
   email: string
   password_hash: string
-  avatar_url?: string | null
 }
 
 export type UsuarioUpdateManyMutationInput = {
   nombre?: Prisma.StringFieldUpdateOperationsInput | string
+  apellido?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password_hash?: Prisma.StringFieldUpdateOperationsInput | string
-  avatar_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type UsuarioUncheckedUpdateManyInput = {
   id_usuario?: Prisma.IntFieldUpdateOperationsInput | number
   id_rol?: Prisma.IntFieldUpdateOperationsInput | number
   nombre?: Prisma.StringFieldUpdateOperationsInput | string
+  apellido?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password_hash?: Prisma.StringFieldUpdateOperationsInput | string
-  avatar_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type UsuarioScalarRelationFilter = {
+  is?: Prisma.UsuarioWhereInput
+  isNot?: Prisma.UsuarioWhereInput
 }
 
 export type UsuarioListRelationFilter = {
@@ -367,9 +372,9 @@ export type UsuarioCountOrderByAggregateInput = {
   id_usuario?: Prisma.SortOrder
   id_rol?: Prisma.SortOrder
   nombre?: Prisma.SortOrder
+  apellido?: Prisma.SortOrder
   email?: Prisma.SortOrder
   password_hash?: Prisma.SortOrder
-  avatar_url?: Prisma.SortOrder
 }
 
 export type UsuarioAvgOrderByAggregateInput = {
@@ -381,18 +386,18 @@ export type UsuarioMaxOrderByAggregateInput = {
   id_usuario?: Prisma.SortOrder
   id_rol?: Prisma.SortOrder
   nombre?: Prisma.SortOrder
+  apellido?: Prisma.SortOrder
   email?: Prisma.SortOrder
   password_hash?: Prisma.SortOrder
-  avatar_url?: Prisma.SortOrder
 }
 
 export type UsuarioMinOrderByAggregateInput = {
   id_usuario?: Prisma.SortOrder
   id_rol?: Prisma.SortOrder
   nombre?: Prisma.SortOrder
+  apellido?: Prisma.SortOrder
   email?: Prisma.SortOrder
   password_hash?: Prisma.SortOrder
-  avatar_url?: Prisma.SortOrder
 }
 
 export type UsuarioSumOrderByAggregateInput = {
@@ -400,9 +405,18 @@ export type UsuarioSumOrderByAggregateInput = {
   id_rol?: Prisma.SortOrder
 }
 
-export type UsuarioScalarRelationFilter = {
-  is?: Prisma.UsuarioWhereInput
-  isNot?: Prisma.UsuarioWhereInput
+export type UsuarioCreateNestedOneWithoutMovimientosInput = {
+  create?: Prisma.XOR<Prisma.UsuarioCreateWithoutMovimientosInput, Prisma.UsuarioUncheckedCreateWithoutMovimientosInput>
+  connectOrCreate?: Prisma.UsuarioCreateOrConnectWithoutMovimientosInput
+  connect?: Prisma.UsuarioWhereUniqueInput
+}
+
+export type UsuarioUpdateOneRequiredWithoutMovimientosNestedInput = {
+  create?: Prisma.XOR<Prisma.UsuarioCreateWithoutMovimientosInput, Prisma.UsuarioUncheckedCreateWithoutMovimientosInput>
+  connectOrCreate?: Prisma.UsuarioCreateOrConnectWithoutMovimientosInput
+  upsert?: Prisma.UsuarioUpsertWithoutMovimientosInput
+  connect?: Prisma.UsuarioWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UsuarioUpdateToOneWithWhereWithoutMovimientosInput, Prisma.UsuarioUpdateWithoutMovimientosInput>, Prisma.UsuarioUncheckedUpdateWithoutMovimientosInput>
 }
 
 export type UsuarioCreateNestedManyWithoutRolInput = {
@@ -447,10 +461,6 @@ export type UsuarioUncheckedUpdateManyWithoutRolNestedInput = {
   deleteMany?: Prisma.UsuarioScalarWhereInput | Prisma.UsuarioScalarWhereInput[]
 }
 
-export type NullableStringFieldUpdateOperationsInput = {
-  set?: string | null
-}
-
 export type UsuarioCreateNestedOneWithoutVentasInput = {
   create?: Prisma.XOR<Prisma.UsuarioCreateWithoutVentasInput, Prisma.UsuarioUncheckedCreateWithoutVentasInput>
   connectOrCreate?: Prisma.UsuarioCreateOrConnectWithoutVentasInput
@@ -465,25 +475,65 @@ export type UsuarioUpdateOneRequiredWithoutVentasNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UsuarioUpdateToOneWithWhereWithoutVentasInput, Prisma.UsuarioUpdateWithoutVentasInput>, Prisma.UsuarioUncheckedUpdateWithoutVentasInput>
 }
 
-export type UsuarioCreateNestedOneWithoutMovimientosInput = {
-  create?: Prisma.XOR<Prisma.UsuarioCreateWithoutMovimientosInput, Prisma.UsuarioUncheckedCreateWithoutMovimientosInput>
-  connectOrCreate?: Prisma.UsuarioCreateOrConnectWithoutMovimientosInput
-  connect?: Prisma.UsuarioWhereUniqueInput
+export type UsuarioCreateWithoutMovimientosInput = {
+  nombre: string
+  apellido: string
+  email: string
+  password_hash: string
+  rol: Prisma.RolUsuarioCreateNestedOneWithoutUsuariosInput
+  ventas?: Prisma.VentaCreateNestedManyWithoutUsuarioInput
 }
 
-export type UsuarioUpdateOneRequiredWithoutMovimientosNestedInput = {
-  create?: Prisma.XOR<Prisma.UsuarioCreateWithoutMovimientosInput, Prisma.UsuarioUncheckedCreateWithoutMovimientosInput>
-  connectOrCreate?: Prisma.UsuarioCreateOrConnectWithoutMovimientosInput
-  upsert?: Prisma.UsuarioUpsertWithoutMovimientosInput
-  connect?: Prisma.UsuarioWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UsuarioUpdateToOneWithWhereWithoutMovimientosInput, Prisma.UsuarioUpdateWithoutMovimientosInput>, Prisma.UsuarioUncheckedUpdateWithoutMovimientosInput>
+export type UsuarioUncheckedCreateWithoutMovimientosInput = {
+  id_usuario?: number
+  id_rol: number
+  nombre: string
+  apellido: string
+  email: string
+  password_hash: string
+  ventas?: Prisma.VentaUncheckedCreateNestedManyWithoutUsuarioInput
+}
+
+export type UsuarioCreateOrConnectWithoutMovimientosInput = {
+  where: Prisma.UsuarioWhereUniqueInput
+  create: Prisma.XOR<Prisma.UsuarioCreateWithoutMovimientosInput, Prisma.UsuarioUncheckedCreateWithoutMovimientosInput>
+}
+
+export type UsuarioUpsertWithoutMovimientosInput = {
+  update: Prisma.XOR<Prisma.UsuarioUpdateWithoutMovimientosInput, Prisma.UsuarioUncheckedUpdateWithoutMovimientosInput>
+  create: Prisma.XOR<Prisma.UsuarioCreateWithoutMovimientosInput, Prisma.UsuarioUncheckedCreateWithoutMovimientosInput>
+  where?: Prisma.UsuarioWhereInput
+}
+
+export type UsuarioUpdateToOneWithWhereWithoutMovimientosInput = {
+  where?: Prisma.UsuarioWhereInput
+  data: Prisma.XOR<Prisma.UsuarioUpdateWithoutMovimientosInput, Prisma.UsuarioUncheckedUpdateWithoutMovimientosInput>
+}
+
+export type UsuarioUpdateWithoutMovimientosInput = {
+  nombre?: Prisma.StringFieldUpdateOperationsInput | string
+  apellido?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password_hash?: Prisma.StringFieldUpdateOperationsInput | string
+  rol?: Prisma.RolUsuarioUpdateOneRequiredWithoutUsuariosNestedInput
+  ventas?: Prisma.VentaUpdateManyWithoutUsuarioNestedInput
+}
+
+export type UsuarioUncheckedUpdateWithoutMovimientosInput = {
+  id_usuario?: Prisma.IntFieldUpdateOperationsInput | number
+  id_rol?: Prisma.IntFieldUpdateOperationsInput | number
+  nombre?: Prisma.StringFieldUpdateOperationsInput | string
+  apellido?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password_hash?: Prisma.StringFieldUpdateOperationsInput | string
+  ventas?: Prisma.VentaUncheckedUpdateManyWithoutUsuarioNestedInput
 }
 
 export type UsuarioCreateWithoutRolInput = {
   nombre: string
+  apellido: string
   email: string
   password_hash: string
-  avatar_url?: string | null
   ventas?: Prisma.VentaCreateNestedManyWithoutUsuarioInput
   movimientos?: Prisma.HistorialMovimientoCreateNestedManyWithoutUsuarioInput
 }
@@ -491,9 +541,9 @@ export type UsuarioCreateWithoutRolInput = {
 export type UsuarioUncheckedCreateWithoutRolInput = {
   id_usuario?: number
   nombre: string
+  apellido: string
   email: string
   password_hash: string
-  avatar_url?: string | null
   ventas?: Prisma.VentaUncheckedCreateNestedManyWithoutUsuarioInput
   movimientos?: Prisma.HistorialMovimientoUncheckedCreateNestedManyWithoutUsuarioInput
 }
@@ -531,16 +581,16 @@ export type UsuarioScalarWhereInput = {
   id_usuario?: Prisma.IntFilter<"Usuario"> | number
   id_rol?: Prisma.IntFilter<"Usuario"> | number
   nombre?: Prisma.StringFilter<"Usuario"> | string
+  apellido?: Prisma.StringFilter<"Usuario"> | string
   email?: Prisma.StringFilter<"Usuario"> | string
   password_hash?: Prisma.StringFilter<"Usuario"> | string
-  avatar_url?: Prisma.StringNullableFilter<"Usuario"> | string | null
 }
 
 export type UsuarioCreateWithoutVentasInput = {
   nombre: string
+  apellido: string
   email: string
   password_hash: string
-  avatar_url?: string | null
   rol: Prisma.RolUsuarioCreateNestedOneWithoutUsuariosInput
   movimientos?: Prisma.HistorialMovimientoCreateNestedManyWithoutUsuarioInput
 }
@@ -549,9 +599,9 @@ export type UsuarioUncheckedCreateWithoutVentasInput = {
   id_usuario?: number
   id_rol: number
   nombre: string
+  apellido: string
   email: string
   password_hash: string
-  avatar_url?: string | null
   movimientos?: Prisma.HistorialMovimientoUncheckedCreateNestedManyWithoutUsuarioInput
 }
 
@@ -573,9 +623,9 @@ export type UsuarioUpdateToOneWithWhereWithoutVentasInput = {
 
 export type UsuarioUpdateWithoutVentasInput = {
   nombre?: Prisma.StringFieldUpdateOperationsInput | string
+  apellido?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password_hash?: Prisma.StringFieldUpdateOperationsInput | string
-  avatar_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rol?: Prisma.RolUsuarioUpdateOneRequiredWithoutUsuariosNestedInput
   movimientos?: Prisma.HistorialMovimientoUpdateManyWithoutUsuarioNestedInput
 }
@@ -584,79 +634,25 @@ export type UsuarioUncheckedUpdateWithoutVentasInput = {
   id_usuario?: Prisma.IntFieldUpdateOperationsInput | number
   id_rol?: Prisma.IntFieldUpdateOperationsInput | number
   nombre?: Prisma.StringFieldUpdateOperationsInput | string
+  apellido?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password_hash?: Prisma.StringFieldUpdateOperationsInput | string
-  avatar_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   movimientos?: Prisma.HistorialMovimientoUncheckedUpdateManyWithoutUsuarioNestedInput
-}
-
-export type UsuarioCreateWithoutMovimientosInput = {
-  nombre: string
-  email: string
-  password_hash: string
-  avatar_url?: string | null
-  rol: Prisma.RolUsuarioCreateNestedOneWithoutUsuariosInput
-  ventas?: Prisma.VentaCreateNestedManyWithoutUsuarioInput
-}
-
-export type UsuarioUncheckedCreateWithoutMovimientosInput = {
-  id_usuario?: number
-  id_rol: number
-  nombre: string
-  email: string
-  password_hash: string
-  avatar_url?: string | null
-  ventas?: Prisma.VentaUncheckedCreateNestedManyWithoutUsuarioInput
-}
-
-export type UsuarioCreateOrConnectWithoutMovimientosInput = {
-  where: Prisma.UsuarioWhereUniqueInput
-  create: Prisma.XOR<Prisma.UsuarioCreateWithoutMovimientosInput, Prisma.UsuarioUncheckedCreateWithoutMovimientosInput>
-}
-
-export type UsuarioUpsertWithoutMovimientosInput = {
-  update: Prisma.XOR<Prisma.UsuarioUpdateWithoutMovimientosInput, Prisma.UsuarioUncheckedUpdateWithoutMovimientosInput>
-  create: Prisma.XOR<Prisma.UsuarioCreateWithoutMovimientosInput, Prisma.UsuarioUncheckedCreateWithoutMovimientosInput>
-  where?: Prisma.UsuarioWhereInput
-}
-
-export type UsuarioUpdateToOneWithWhereWithoutMovimientosInput = {
-  where?: Prisma.UsuarioWhereInput
-  data: Prisma.XOR<Prisma.UsuarioUpdateWithoutMovimientosInput, Prisma.UsuarioUncheckedUpdateWithoutMovimientosInput>
-}
-
-export type UsuarioUpdateWithoutMovimientosInput = {
-  nombre?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  password_hash?: Prisma.StringFieldUpdateOperationsInput | string
-  avatar_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  rol?: Prisma.RolUsuarioUpdateOneRequiredWithoutUsuariosNestedInput
-  ventas?: Prisma.VentaUpdateManyWithoutUsuarioNestedInput
-}
-
-export type UsuarioUncheckedUpdateWithoutMovimientosInput = {
-  id_usuario?: Prisma.IntFieldUpdateOperationsInput | number
-  id_rol?: Prisma.IntFieldUpdateOperationsInput | number
-  nombre?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  password_hash?: Prisma.StringFieldUpdateOperationsInput | string
-  avatar_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  ventas?: Prisma.VentaUncheckedUpdateManyWithoutUsuarioNestedInput
 }
 
 export type UsuarioCreateManyRolInput = {
   id_usuario?: number
   nombre: string
+  apellido: string
   email: string
   password_hash: string
-  avatar_url?: string | null
 }
 
 export type UsuarioUpdateWithoutRolInput = {
   nombre?: Prisma.StringFieldUpdateOperationsInput | string
+  apellido?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password_hash?: Prisma.StringFieldUpdateOperationsInput | string
-  avatar_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ventas?: Prisma.VentaUpdateManyWithoutUsuarioNestedInput
   movimientos?: Prisma.HistorialMovimientoUpdateManyWithoutUsuarioNestedInput
 }
@@ -664,9 +660,9 @@ export type UsuarioUpdateWithoutRolInput = {
 export type UsuarioUncheckedUpdateWithoutRolInput = {
   id_usuario?: Prisma.IntFieldUpdateOperationsInput | number
   nombre?: Prisma.StringFieldUpdateOperationsInput | string
+  apellido?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password_hash?: Prisma.StringFieldUpdateOperationsInput | string
-  avatar_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ventas?: Prisma.VentaUncheckedUpdateManyWithoutUsuarioNestedInput
   movimientos?: Prisma.HistorialMovimientoUncheckedUpdateManyWithoutUsuarioNestedInput
 }
@@ -674,9 +670,9 @@ export type UsuarioUncheckedUpdateWithoutRolInput = {
 export type UsuarioUncheckedUpdateManyWithoutRolInput = {
   id_usuario?: Prisma.IntFieldUpdateOperationsInput | number
   nombre?: Prisma.StringFieldUpdateOperationsInput | string
+  apellido?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password_hash?: Prisma.StringFieldUpdateOperationsInput | string
-  avatar_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 
@@ -723,9 +719,9 @@ export type UsuarioSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   id_usuario?: boolean
   id_rol?: boolean
   nombre?: boolean
+  apellido?: boolean
   email?: boolean
   password_hash?: boolean
-  avatar_url?: boolean
   rol?: boolean | Prisma.RolUsuarioDefaultArgs<ExtArgs>
   ventas?: boolean | Prisma.Usuario$ventasArgs<ExtArgs>
   movimientos?: boolean | Prisma.Usuario$movimientosArgs<ExtArgs>
@@ -736,9 +732,9 @@ export type UsuarioSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   id_usuario?: boolean
   id_rol?: boolean
   nombre?: boolean
+  apellido?: boolean
   email?: boolean
   password_hash?: boolean
-  avatar_url?: boolean
   rol?: boolean | Prisma.RolUsuarioDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["usuario"]>
 
@@ -746,9 +742,9 @@ export type UsuarioSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   id_usuario?: boolean
   id_rol?: boolean
   nombre?: boolean
+  apellido?: boolean
   email?: boolean
   password_hash?: boolean
-  avatar_url?: boolean
   rol?: boolean | Prisma.RolUsuarioDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["usuario"]>
 
@@ -756,12 +752,12 @@ export type UsuarioSelectScalar = {
   id_usuario?: boolean
   id_rol?: boolean
   nombre?: boolean
+  apellido?: boolean
   email?: boolean
   password_hash?: boolean
-  avatar_url?: boolean
 }
 
-export type UsuarioOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id_usuario" | "id_rol" | "nombre" | "email" | "password_hash" | "avatar_url", ExtArgs["result"]["usuario"]>
+export type UsuarioOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id_usuario" | "id_rol" | "nombre" | "apellido" | "email" | "password_hash", ExtArgs["result"]["usuario"]>
 export type UsuarioInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   rol?: boolean | Prisma.RolUsuarioDefaultArgs<ExtArgs>
   ventas?: boolean | Prisma.Usuario$ventasArgs<ExtArgs>
@@ -786,9 +782,9 @@ export type $UsuarioPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     id_usuario: number
     id_rol: number
     nombre: string
+    apellido: string
     email: string
     password_hash: string
-    avatar_url: string | null
   }, ExtArgs["result"]["usuario"]>
   composites: {}
 }
@@ -1218,9 +1214,9 @@ export interface UsuarioFieldRefs {
   readonly id_usuario: Prisma.FieldRef<"Usuario", 'Int'>
   readonly id_rol: Prisma.FieldRef<"Usuario", 'Int'>
   readonly nombre: Prisma.FieldRef<"Usuario", 'String'>
+  readonly apellido: Prisma.FieldRef<"Usuario", 'String'>
   readonly email: Prisma.FieldRef<"Usuario", 'String'>
   readonly password_hash: Prisma.FieldRef<"Usuario", 'String'>
-  readonly avatar_url: Prisma.FieldRef<"Usuario", 'String'>
 }
     
 

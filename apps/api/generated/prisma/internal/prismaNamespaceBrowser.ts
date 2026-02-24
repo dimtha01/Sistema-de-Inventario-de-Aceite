@@ -51,19 +51,19 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
-  RolUsuario: 'RolUsuario',
-  Categoria: 'Categoria',
-  TipoMovimiento: 'TipoMovimiento',
-  EstadoPago: 'EstadoPago',
-  Usuario: 'Usuario',
-  Proveedor: 'Proveedor',
-  Cliente: 'Cliente',
-  Producto: 'Producto',
-  PrecioProducto: 'PrecioProducto',
-  Venta: 'Venta',
-  DetalleVenta: 'DetalleVenta',
   AbonoCredito: 'AbonoCredito',
-  HistorialMovimiento: 'HistorialMovimiento'
+  Categoria: 'Categoria',
+  Cliente: 'Cliente',
+  DetalleVenta: 'DetalleVenta',
+  EstadoPago: 'EstadoPago',
+  HistorialMovimiento: 'HistorialMovimiento',
+  PrecioProducto: 'PrecioProducto',
+  Producto: 'Producto',
+  Proveedor: 'Proveedor',
+  RolUsuario: 'RolUsuario',
+  TipoMovimiento: 'TipoMovimiento',
+  Usuario: 'Usuario',
+  Venta: 'Venta'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -82,12 +82,14 @@ export const TransactionIsolationLevel = runtime.makeStrictEnum({
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
-export const RolUsuarioScalarFieldEnum = {
-  id_rol: 'id_rol',
-  nombre_rol: 'nombre_rol'
+export const AbonoCreditoScalarFieldEnum = {
+  id_abono: 'id_abono',
+  id_venta: 'id_venta',
+  monto_abonado: 'monto_abonado',
+  fecha_pago: 'fecha_pago'
 } as const
 
-export type RolUsuarioScalarFieldEnum = (typeof RolUsuarioScalarFieldEnum)[keyof typeof RolUsuarioScalarFieldEnum]
+export type AbonoCreditoScalarFieldEnum = (typeof AbonoCreditoScalarFieldEnum)[keyof typeof AbonoCreditoScalarFieldEnum]
 
 
 export const CategoriaScalarFieldEnum = {
@@ -98,12 +100,27 @@ export const CategoriaScalarFieldEnum = {
 export type CategoriaScalarFieldEnum = (typeof CategoriaScalarFieldEnum)[keyof typeof CategoriaScalarFieldEnum]
 
 
-export const TipoMovimientoScalarFieldEnum = {
-  id_tipo_mov: 'id_tipo_mov',
-  nombre_tipo: 'nombre_tipo'
+export const ClienteScalarFieldEnum = {
+  id_cliente: 'id_cliente',
+  nombre: 'nombre',
+  apellido: 'apellido',
+  telefono: 'telefono',
+  limite_credito: 'limite_credito',
+  fecha_registro: 'fecha_registro'
 } as const
 
-export type TipoMovimientoScalarFieldEnum = (typeof TipoMovimientoScalarFieldEnum)[keyof typeof TipoMovimientoScalarFieldEnum]
+export type ClienteScalarFieldEnum = (typeof ClienteScalarFieldEnum)[keyof typeof ClienteScalarFieldEnum]
+
+
+export const DetalleVentaScalarFieldEnum = {
+  id_detalle: 'id_detalle',
+  id_venta: 'id_venta',
+  id_producto: 'id_producto',
+  cantidad: 'cantidad',
+  precio_unitario_aplicado: 'precio_unitario_aplicado'
+} as const
+
+export type DetalleVentaScalarFieldEnum = (typeof DetalleVentaScalarFieldEnum)[keyof typeof DetalleVentaScalarFieldEnum]
 
 
 export const EstadoPagoScalarFieldEnum = {
@@ -114,39 +131,25 @@ export const EstadoPagoScalarFieldEnum = {
 export type EstadoPagoScalarFieldEnum = (typeof EstadoPagoScalarFieldEnum)[keyof typeof EstadoPagoScalarFieldEnum]
 
 
-export const UsuarioScalarFieldEnum = {
+export const HistorialMovimientoScalarFieldEnum = {
+  id_movimiento: 'id_movimiento',
+  id_producto: 'id_producto',
   id_usuario: 'id_usuario',
-  id_rol: 'id_rol',
-  nombre: 'nombre',
-  email: 'email',
-  password_hash: 'password_hash',
-  avatar_url: 'avatar_url'
+  id_tipo_mov: 'id_tipo_mov',
+  cantidad: 'cantidad',
+  fecha_hora: 'fecha_hora'
 } as const
 
-export type UsuarioScalarFieldEnum = (typeof UsuarioScalarFieldEnum)[keyof typeof UsuarioScalarFieldEnum]
+export type HistorialMovimientoScalarFieldEnum = (typeof HistorialMovimientoScalarFieldEnum)[keyof typeof HistorialMovimientoScalarFieldEnum]
 
 
-export const ProveedorScalarFieldEnum = {
-  id_proveedor: 'id_proveedor',
-  nombre_empresa: 'nombre_empresa',
-  pais_origen: 'pais_origen',
-  categoria_socio: 'categoria_socio',
-  url_logo: 'url_logo'
+export const PrecioProductoScalarFieldEnum = {
+  id_producto: 'id_producto',
+  precio_compra: 'precio_compra',
+  precio_venta: 'precio_venta'
 } as const
 
-export type ProveedorScalarFieldEnum = (typeof ProveedorScalarFieldEnum)[keyof typeof ProveedorScalarFieldEnum]
-
-
-export const ClienteScalarFieldEnum = {
-  id_cliente: 'id_cliente',
-  nombre_completo: 'nombre_completo',
-  ubicacion: 'ubicacion',
-  es_premium: 'es_premium',
-  limite_credito: 'limite_credito',
-  fecha_registro: 'fecha_registro'
-} as const
-
-export type ClienteScalarFieldEnum = (typeof ClienteScalarFieldEnum)[keyof typeof ClienteScalarFieldEnum]
+export type PrecioProductoScalarFieldEnum = (typeof PrecioProductoScalarFieldEnum)[keyof typeof PrecioProductoScalarFieldEnum]
 
 
 export const ProductoScalarFieldEnum = {
@@ -162,13 +165,42 @@ export const ProductoScalarFieldEnum = {
 export type ProductoScalarFieldEnum = (typeof ProductoScalarFieldEnum)[keyof typeof ProductoScalarFieldEnum]
 
 
-export const PrecioProductoScalarFieldEnum = {
-  id_producto: 'id_producto',
-  precio_compra: 'precio_compra',
-  precio_venta: 'precio_venta'
+export const ProveedorScalarFieldEnum = {
+  id_proveedor: 'id_proveedor',
+  nombre_empresa: 'nombre_empresa',
+  direccion: 'direccion',
+  telefono: 'telefono'
 } as const
 
-export type PrecioProductoScalarFieldEnum = (typeof PrecioProductoScalarFieldEnum)[keyof typeof PrecioProductoScalarFieldEnum]
+export type ProveedorScalarFieldEnum = (typeof ProveedorScalarFieldEnum)[keyof typeof ProveedorScalarFieldEnum]
+
+
+export const RolUsuarioScalarFieldEnum = {
+  id_rol: 'id_rol',
+  nombre_rol: 'nombre_rol'
+} as const
+
+export type RolUsuarioScalarFieldEnum = (typeof RolUsuarioScalarFieldEnum)[keyof typeof RolUsuarioScalarFieldEnum]
+
+
+export const TipoMovimientoScalarFieldEnum = {
+  id_tipo_mov: 'id_tipo_mov',
+  nombre_tipo: 'nombre_tipo'
+} as const
+
+export type TipoMovimientoScalarFieldEnum = (typeof TipoMovimientoScalarFieldEnum)[keyof typeof TipoMovimientoScalarFieldEnum]
+
+
+export const UsuarioScalarFieldEnum = {
+  id_usuario: 'id_usuario',
+  id_rol: 'id_rol',
+  nombre: 'nombre',
+  apellido: 'apellido',
+  email: 'email',
+  password_hash: 'password_hash'
+} as const
+
+export type UsuarioScalarFieldEnum = (typeof UsuarioScalarFieldEnum)[keyof typeof UsuarioScalarFieldEnum]
 
 
 export const VentaScalarFieldEnum = {
@@ -181,40 +213,6 @@ export const VentaScalarFieldEnum = {
 } as const
 
 export type VentaScalarFieldEnum = (typeof VentaScalarFieldEnum)[keyof typeof VentaScalarFieldEnum]
-
-
-export const DetalleVentaScalarFieldEnum = {
-  id_detalle: 'id_detalle',
-  id_venta: 'id_venta',
-  id_producto: 'id_producto',
-  cantidad: 'cantidad',
-  precio_unitario_aplicado: 'precio_unitario_aplicado'
-} as const
-
-export type DetalleVentaScalarFieldEnum = (typeof DetalleVentaScalarFieldEnum)[keyof typeof DetalleVentaScalarFieldEnum]
-
-
-export const AbonoCreditoScalarFieldEnum = {
-  id_abono: 'id_abono',
-  id_venta: 'id_venta',
-  monto_abonado: 'monto_abonado',
-  fecha_pago: 'fecha_pago'
-} as const
-
-export type AbonoCreditoScalarFieldEnum = (typeof AbonoCreditoScalarFieldEnum)[keyof typeof AbonoCreditoScalarFieldEnum]
-
-
-export const HistorialMovimientoScalarFieldEnum = {
-  id_movimiento: 'id_movimiento',
-  id_producto: 'id_producto',
-  id_usuario: 'id_usuario',
-  id_tipo_mov: 'id_tipo_mov',
-  cantidad: 'cantidad',
-  origen_destino: 'origen_destino',
-  fecha_hora: 'fecha_hora'
-} as const
-
-export type HistorialMovimientoScalarFieldEnum = (typeof HistorialMovimientoScalarFieldEnum)[keyof typeof HistorialMovimientoScalarFieldEnum]
 
 
 export const SortOrder = {

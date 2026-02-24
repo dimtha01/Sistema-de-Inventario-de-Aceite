@@ -369,6 +369,11 @@ export type VentaUncheckedUpdateManyInput = {
   monto_total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
 }
 
+export type VentaScalarRelationFilter = {
+  is?: Prisma.VentaWhereInput
+  isNot?: Prisma.VentaWhereInput
+}
+
 export type VentaListRelationFilter = {
   every?: Prisma.VentaWhereInput
   some?: Prisma.VentaWhereInput
@@ -422,9 +427,74 @@ export type VentaSumOrderByAggregateInput = {
   monto_total?: Prisma.SortOrder
 }
 
-export type VentaScalarRelationFilter = {
-  is?: Prisma.VentaWhereInput
-  isNot?: Prisma.VentaWhereInput
+export type VentaCreateNestedOneWithoutAbonosInput = {
+  create?: Prisma.XOR<Prisma.VentaCreateWithoutAbonosInput, Prisma.VentaUncheckedCreateWithoutAbonosInput>
+  connectOrCreate?: Prisma.VentaCreateOrConnectWithoutAbonosInput
+  connect?: Prisma.VentaWhereUniqueInput
+}
+
+export type VentaUpdateOneRequiredWithoutAbonosNestedInput = {
+  create?: Prisma.XOR<Prisma.VentaCreateWithoutAbonosInput, Prisma.VentaUncheckedCreateWithoutAbonosInput>
+  connectOrCreate?: Prisma.VentaCreateOrConnectWithoutAbonosInput
+  upsert?: Prisma.VentaUpsertWithoutAbonosInput
+  connect?: Prisma.VentaWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.VentaUpdateToOneWithWhereWithoutAbonosInput, Prisma.VentaUpdateWithoutAbonosInput>, Prisma.VentaUncheckedUpdateWithoutAbonosInput>
+}
+
+export type VentaCreateNestedManyWithoutClienteInput = {
+  create?: Prisma.XOR<Prisma.VentaCreateWithoutClienteInput, Prisma.VentaUncheckedCreateWithoutClienteInput> | Prisma.VentaCreateWithoutClienteInput[] | Prisma.VentaUncheckedCreateWithoutClienteInput[]
+  connectOrCreate?: Prisma.VentaCreateOrConnectWithoutClienteInput | Prisma.VentaCreateOrConnectWithoutClienteInput[]
+  createMany?: Prisma.VentaCreateManyClienteInputEnvelope
+  connect?: Prisma.VentaWhereUniqueInput | Prisma.VentaWhereUniqueInput[]
+}
+
+export type VentaUncheckedCreateNestedManyWithoutClienteInput = {
+  create?: Prisma.XOR<Prisma.VentaCreateWithoutClienteInput, Prisma.VentaUncheckedCreateWithoutClienteInput> | Prisma.VentaCreateWithoutClienteInput[] | Prisma.VentaUncheckedCreateWithoutClienteInput[]
+  connectOrCreate?: Prisma.VentaCreateOrConnectWithoutClienteInput | Prisma.VentaCreateOrConnectWithoutClienteInput[]
+  createMany?: Prisma.VentaCreateManyClienteInputEnvelope
+  connect?: Prisma.VentaWhereUniqueInput | Prisma.VentaWhereUniqueInput[]
+}
+
+export type VentaUpdateManyWithoutClienteNestedInput = {
+  create?: Prisma.XOR<Prisma.VentaCreateWithoutClienteInput, Prisma.VentaUncheckedCreateWithoutClienteInput> | Prisma.VentaCreateWithoutClienteInput[] | Prisma.VentaUncheckedCreateWithoutClienteInput[]
+  connectOrCreate?: Prisma.VentaCreateOrConnectWithoutClienteInput | Prisma.VentaCreateOrConnectWithoutClienteInput[]
+  upsert?: Prisma.VentaUpsertWithWhereUniqueWithoutClienteInput | Prisma.VentaUpsertWithWhereUniqueWithoutClienteInput[]
+  createMany?: Prisma.VentaCreateManyClienteInputEnvelope
+  set?: Prisma.VentaWhereUniqueInput | Prisma.VentaWhereUniqueInput[]
+  disconnect?: Prisma.VentaWhereUniqueInput | Prisma.VentaWhereUniqueInput[]
+  delete?: Prisma.VentaWhereUniqueInput | Prisma.VentaWhereUniqueInput[]
+  connect?: Prisma.VentaWhereUniqueInput | Prisma.VentaWhereUniqueInput[]
+  update?: Prisma.VentaUpdateWithWhereUniqueWithoutClienteInput | Prisma.VentaUpdateWithWhereUniqueWithoutClienteInput[]
+  updateMany?: Prisma.VentaUpdateManyWithWhereWithoutClienteInput | Prisma.VentaUpdateManyWithWhereWithoutClienteInput[]
+  deleteMany?: Prisma.VentaScalarWhereInput | Prisma.VentaScalarWhereInput[]
+}
+
+export type VentaUncheckedUpdateManyWithoutClienteNestedInput = {
+  create?: Prisma.XOR<Prisma.VentaCreateWithoutClienteInput, Prisma.VentaUncheckedCreateWithoutClienteInput> | Prisma.VentaCreateWithoutClienteInput[] | Prisma.VentaUncheckedCreateWithoutClienteInput[]
+  connectOrCreate?: Prisma.VentaCreateOrConnectWithoutClienteInput | Prisma.VentaCreateOrConnectWithoutClienteInput[]
+  upsert?: Prisma.VentaUpsertWithWhereUniqueWithoutClienteInput | Prisma.VentaUpsertWithWhereUniqueWithoutClienteInput[]
+  createMany?: Prisma.VentaCreateManyClienteInputEnvelope
+  set?: Prisma.VentaWhereUniqueInput | Prisma.VentaWhereUniqueInput[]
+  disconnect?: Prisma.VentaWhereUniqueInput | Prisma.VentaWhereUniqueInput[]
+  delete?: Prisma.VentaWhereUniqueInput | Prisma.VentaWhereUniqueInput[]
+  connect?: Prisma.VentaWhereUniqueInput | Prisma.VentaWhereUniqueInput[]
+  update?: Prisma.VentaUpdateWithWhereUniqueWithoutClienteInput | Prisma.VentaUpdateWithWhereUniqueWithoutClienteInput[]
+  updateMany?: Prisma.VentaUpdateManyWithWhereWithoutClienteInput | Prisma.VentaUpdateManyWithWhereWithoutClienteInput[]
+  deleteMany?: Prisma.VentaScalarWhereInput | Prisma.VentaScalarWhereInput[]
+}
+
+export type VentaCreateNestedOneWithoutDetallesInput = {
+  create?: Prisma.XOR<Prisma.VentaCreateWithoutDetallesInput, Prisma.VentaUncheckedCreateWithoutDetallesInput>
+  connectOrCreate?: Prisma.VentaCreateOrConnectWithoutDetallesInput
+  connect?: Prisma.VentaWhereUniqueInput
+}
+
+export type VentaUpdateOneRequiredWithoutDetallesNestedInput = {
+  create?: Prisma.XOR<Prisma.VentaCreateWithoutDetallesInput, Prisma.VentaUncheckedCreateWithoutDetallesInput>
+  connectOrCreate?: Prisma.VentaCreateOrConnectWithoutDetallesInput
+  upsert?: Prisma.VentaUpsertWithoutDetallesInput
+  connect?: Prisma.VentaWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.VentaUpdateToOneWithWhereWithoutDetallesInput, Prisma.VentaUpdateWithoutDetallesInput>, Prisma.VentaUncheckedUpdateWithoutDetallesInput>
 }
 
 export type VentaCreateNestedManyWithoutEstado_pagoInput = {
@@ -511,176 +581,58 @@ export type VentaUncheckedUpdateManyWithoutUsuarioNestedInput = {
   deleteMany?: Prisma.VentaScalarWhereInput | Prisma.VentaScalarWhereInput[]
 }
 
-export type VentaCreateNestedManyWithoutClienteInput = {
-  create?: Prisma.XOR<Prisma.VentaCreateWithoutClienteInput, Prisma.VentaUncheckedCreateWithoutClienteInput> | Prisma.VentaCreateWithoutClienteInput[] | Prisma.VentaUncheckedCreateWithoutClienteInput[]
-  connectOrCreate?: Prisma.VentaCreateOrConnectWithoutClienteInput | Prisma.VentaCreateOrConnectWithoutClienteInput[]
-  createMany?: Prisma.VentaCreateManyClienteInputEnvelope
-  connect?: Prisma.VentaWhereUniqueInput | Prisma.VentaWhereUniqueInput[]
-}
-
-export type VentaUncheckedCreateNestedManyWithoutClienteInput = {
-  create?: Prisma.XOR<Prisma.VentaCreateWithoutClienteInput, Prisma.VentaUncheckedCreateWithoutClienteInput> | Prisma.VentaCreateWithoutClienteInput[] | Prisma.VentaUncheckedCreateWithoutClienteInput[]
-  connectOrCreate?: Prisma.VentaCreateOrConnectWithoutClienteInput | Prisma.VentaCreateOrConnectWithoutClienteInput[]
-  createMany?: Prisma.VentaCreateManyClienteInputEnvelope
-  connect?: Prisma.VentaWhereUniqueInput | Prisma.VentaWhereUniqueInput[]
-}
-
-export type VentaUpdateManyWithoutClienteNestedInput = {
-  create?: Prisma.XOR<Prisma.VentaCreateWithoutClienteInput, Prisma.VentaUncheckedCreateWithoutClienteInput> | Prisma.VentaCreateWithoutClienteInput[] | Prisma.VentaUncheckedCreateWithoutClienteInput[]
-  connectOrCreate?: Prisma.VentaCreateOrConnectWithoutClienteInput | Prisma.VentaCreateOrConnectWithoutClienteInput[]
-  upsert?: Prisma.VentaUpsertWithWhereUniqueWithoutClienteInput | Prisma.VentaUpsertWithWhereUniqueWithoutClienteInput[]
-  createMany?: Prisma.VentaCreateManyClienteInputEnvelope
-  set?: Prisma.VentaWhereUniqueInput | Prisma.VentaWhereUniqueInput[]
-  disconnect?: Prisma.VentaWhereUniqueInput | Prisma.VentaWhereUniqueInput[]
-  delete?: Prisma.VentaWhereUniqueInput | Prisma.VentaWhereUniqueInput[]
-  connect?: Prisma.VentaWhereUniqueInput | Prisma.VentaWhereUniqueInput[]
-  update?: Prisma.VentaUpdateWithWhereUniqueWithoutClienteInput | Prisma.VentaUpdateWithWhereUniqueWithoutClienteInput[]
-  updateMany?: Prisma.VentaUpdateManyWithWhereWithoutClienteInput | Prisma.VentaUpdateManyWithWhereWithoutClienteInput[]
-  deleteMany?: Prisma.VentaScalarWhereInput | Prisma.VentaScalarWhereInput[]
-}
-
-export type VentaUncheckedUpdateManyWithoutClienteNestedInput = {
-  create?: Prisma.XOR<Prisma.VentaCreateWithoutClienteInput, Prisma.VentaUncheckedCreateWithoutClienteInput> | Prisma.VentaCreateWithoutClienteInput[] | Prisma.VentaUncheckedCreateWithoutClienteInput[]
-  connectOrCreate?: Prisma.VentaCreateOrConnectWithoutClienteInput | Prisma.VentaCreateOrConnectWithoutClienteInput[]
-  upsert?: Prisma.VentaUpsertWithWhereUniqueWithoutClienteInput | Prisma.VentaUpsertWithWhereUniqueWithoutClienteInput[]
-  createMany?: Prisma.VentaCreateManyClienteInputEnvelope
-  set?: Prisma.VentaWhereUniqueInput | Prisma.VentaWhereUniqueInput[]
-  disconnect?: Prisma.VentaWhereUniqueInput | Prisma.VentaWhereUniqueInput[]
-  delete?: Prisma.VentaWhereUniqueInput | Prisma.VentaWhereUniqueInput[]
-  connect?: Prisma.VentaWhereUniqueInput | Prisma.VentaWhereUniqueInput[]
-  update?: Prisma.VentaUpdateWithWhereUniqueWithoutClienteInput | Prisma.VentaUpdateWithWhereUniqueWithoutClienteInput[]
-  updateMany?: Prisma.VentaUpdateManyWithWhereWithoutClienteInput | Prisma.VentaUpdateManyWithWhereWithoutClienteInput[]
-  deleteMany?: Prisma.VentaScalarWhereInput | Prisma.VentaScalarWhereInput[]
-}
-
-export type VentaCreateNestedOneWithoutDetallesInput = {
-  create?: Prisma.XOR<Prisma.VentaCreateWithoutDetallesInput, Prisma.VentaUncheckedCreateWithoutDetallesInput>
-  connectOrCreate?: Prisma.VentaCreateOrConnectWithoutDetallesInput
-  connect?: Prisma.VentaWhereUniqueInput
-}
-
-export type VentaUpdateOneRequiredWithoutDetallesNestedInput = {
-  create?: Prisma.XOR<Prisma.VentaCreateWithoutDetallesInput, Prisma.VentaUncheckedCreateWithoutDetallesInput>
-  connectOrCreate?: Prisma.VentaCreateOrConnectWithoutDetallesInput
-  upsert?: Prisma.VentaUpsertWithoutDetallesInput
-  connect?: Prisma.VentaWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.VentaUpdateToOneWithWhereWithoutDetallesInput, Prisma.VentaUpdateWithoutDetallesInput>, Prisma.VentaUncheckedUpdateWithoutDetallesInput>
-}
-
-export type VentaCreateNestedOneWithoutAbonosInput = {
-  create?: Prisma.XOR<Prisma.VentaCreateWithoutAbonosInput, Prisma.VentaUncheckedCreateWithoutAbonosInput>
-  connectOrCreate?: Prisma.VentaCreateOrConnectWithoutAbonosInput
-  connect?: Prisma.VentaWhereUniqueInput
-}
-
-export type VentaUpdateOneRequiredWithoutAbonosNestedInput = {
-  create?: Prisma.XOR<Prisma.VentaCreateWithoutAbonosInput, Prisma.VentaUncheckedCreateWithoutAbonosInput>
-  connectOrCreate?: Prisma.VentaCreateOrConnectWithoutAbonosInput
-  upsert?: Prisma.VentaUpsertWithoutAbonosInput
-  connect?: Prisma.VentaWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.VentaUpdateToOneWithWhereWithoutAbonosInput, Prisma.VentaUpdateWithoutAbonosInput>, Prisma.VentaUncheckedUpdateWithoutAbonosInput>
-}
-
-export type VentaCreateWithoutEstado_pagoInput = {
+export type VentaCreateWithoutAbonosInput = {
   fecha_venta?: Date | string
   monto_total: runtime.Decimal | runtime.DecimalJsLike | number | string
   cliente: Prisma.ClienteCreateNestedOneWithoutVentasInput
   usuario: Prisma.UsuarioCreateNestedOneWithoutVentasInput
+  estado_pago: Prisma.EstadoPagoCreateNestedOneWithoutVentasInput
   detalles?: Prisma.DetalleVentaCreateNestedManyWithoutVentaInput
-  abonos?: Prisma.AbonoCreditoCreateNestedManyWithoutVentaInput
 }
 
-export type VentaUncheckedCreateWithoutEstado_pagoInput = {
+export type VentaUncheckedCreateWithoutAbonosInput = {
   id_venta?: number
   id_cliente: number
   id_usuario: number
-  fecha_venta?: Date | string
-  monto_total: runtime.Decimal | runtime.DecimalJsLike | number | string
-  detalles?: Prisma.DetalleVentaUncheckedCreateNestedManyWithoutVentaInput
-  abonos?: Prisma.AbonoCreditoUncheckedCreateNestedManyWithoutVentaInput
-}
-
-export type VentaCreateOrConnectWithoutEstado_pagoInput = {
-  where: Prisma.VentaWhereUniqueInput
-  create: Prisma.XOR<Prisma.VentaCreateWithoutEstado_pagoInput, Prisma.VentaUncheckedCreateWithoutEstado_pagoInput>
-}
-
-export type VentaCreateManyEstado_pagoInputEnvelope = {
-  data: Prisma.VentaCreateManyEstado_pagoInput | Prisma.VentaCreateManyEstado_pagoInput[]
-  skipDuplicates?: boolean
-}
-
-export type VentaUpsertWithWhereUniqueWithoutEstado_pagoInput = {
-  where: Prisma.VentaWhereUniqueInput
-  update: Prisma.XOR<Prisma.VentaUpdateWithoutEstado_pagoInput, Prisma.VentaUncheckedUpdateWithoutEstado_pagoInput>
-  create: Prisma.XOR<Prisma.VentaCreateWithoutEstado_pagoInput, Prisma.VentaUncheckedCreateWithoutEstado_pagoInput>
-}
-
-export type VentaUpdateWithWhereUniqueWithoutEstado_pagoInput = {
-  where: Prisma.VentaWhereUniqueInput
-  data: Prisma.XOR<Prisma.VentaUpdateWithoutEstado_pagoInput, Prisma.VentaUncheckedUpdateWithoutEstado_pagoInput>
-}
-
-export type VentaUpdateManyWithWhereWithoutEstado_pagoInput = {
-  where: Prisma.VentaScalarWhereInput
-  data: Prisma.XOR<Prisma.VentaUpdateManyMutationInput, Prisma.VentaUncheckedUpdateManyWithoutEstado_pagoInput>
-}
-
-export type VentaScalarWhereInput = {
-  AND?: Prisma.VentaScalarWhereInput | Prisma.VentaScalarWhereInput[]
-  OR?: Prisma.VentaScalarWhereInput[]
-  NOT?: Prisma.VentaScalarWhereInput | Prisma.VentaScalarWhereInput[]
-  id_venta?: Prisma.IntFilter<"Venta"> | number
-  id_cliente?: Prisma.IntFilter<"Venta"> | number
-  id_usuario?: Prisma.IntFilter<"Venta"> | number
-  id_estado_pago?: Prisma.IntFilter<"Venta"> | number
-  fecha_venta?: Prisma.DateTimeFilter<"Venta"> | Date | string
-  monto_total?: Prisma.DecimalFilter<"Venta"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-}
-
-export type VentaCreateWithoutUsuarioInput = {
-  fecha_venta?: Date | string
-  monto_total: runtime.Decimal | runtime.DecimalJsLike | number | string
-  cliente: Prisma.ClienteCreateNestedOneWithoutVentasInput
-  estado_pago: Prisma.EstadoPagoCreateNestedOneWithoutVentasInput
-  detalles?: Prisma.DetalleVentaCreateNestedManyWithoutVentaInput
-  abonos?: Prisma.AbonoCreditoCreateNestedManyWithoutVentaInput
-}
-
-export type VentaUncheckedCreateWithoutUsuarioInput = {
-  id_venta?: number
-  id_cliente: number
   id_estado_pago: number
   fecha_venta?: Date | string
   monto_total: runtime.Decimal | runtime.DecimalJsLike | number | string
   detalles?: Prisma.DetalleVentaUncheckedCreateNestedManyWithoutVentaInput
-  abonos?: Prisma.AbonoCreditoUncheckedCreateNestedManyWithoutVentaInput
 }
 
-export type VentaCreateOrConnectWithoutUsuarioInput = {
+export type VentaCreateOrConnectWithoutAbonosInput = {
   where: Prisma.VentaWhereUniqueInput
-  create: Prisma.XOR<Prisma.VentaCreateWithoutUsuarioInput, Prisma.VentaUncheckedCreateWithoutUsuarioInput>
+  create: Prisma.XOR<Prisma.VentaCreateWithoutAbonosInput, Prisma.VentaUncheckedCreateWithoutAbonosInput>
 }
 
-export type VentaCreateManyUsuarioInputEnvelope = {
-  data: Prisma.VentaCreateManyUsuarioInput | Prisma.VentaCreateManyUsuarioInput[]
-  skipDuplicates?: boolean
+export type VentaUpsertWithoutAbonosInput = {
+  update: Prisma.XOR<Prisma.VentaUpdateWithoutAbonosInput, Prisma.VentaUncheckedUpdateWithoutAbonosInput>
+  create: Prisma.XOR<Prisma.VentaCreateWithoutAbonosInput, Prisma.VentaUncheckedCreateWithoutAbonosInput>
+  where?: Prisma.VentaWhereInput
 }
 
-export type VentaUpsertWithWhereUniqueWithoutUsuarioInput = {
-  where: Prisma.VentaWhereUniqueInput
-  update: Prisma.XOR<Prisma.VentaUpdateWithoutUsuarioInput, Prisma.VentaUncheckedUpdateWithoutUsuarioInput>
-  create: Prisma.XOR<Prisma.VentaCreateWithoutUsuarioInput, Prisma.VentaUncheckedCreateWithoutUsuarioInput>
+export type VentaUpdateToOneWithWhereWithoutAbonosInput = {
+  where?: Prisma.VentaWhereInput
+  data: Prisma.XOR<Prisma.VentaUpdateWithoutAbonosInput, Prisma.VentaUncheckedUpdateWithoutAbonosInput>
 }
 
-export type VentaUpdateWithWhereUniqueWithoutUsuarioInput = {
-  where: Prisma.VentaWhereUniqueInput
-  data: Prisma.XOR<Prisma.VentaUpdateWithoutUsuarioInput, Prisma.VentaUncheckedUpdateWithoutUsuarioInput>
+export type VentaUpdateWithoutAbonosInput = {
+  fecha_venta?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  monto_total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  cliente?: Prisma.ClienteUpdateOneRequiredWithoutVentasNestedInput
+  usuario?: Prisma.UsuarioUpdateOneRequiredWithoutVentasNestedInput
+  estado_pago?: Prisma.EstadoPagoUpdateOneRequiredWithoutVentasNestedInput
+  detalles?: Prisma.DetalleVentaUpdateManyWithoutVentaNestedInput
 }
 
-export type VentaUpdateManyWithWhereWithoutUsuarioInput = {
-  where: Prisma.VentaScalarWhereInput
-  data: Prisma.XOR<Prisma.VentaUpdateManyMutationInput, Prisma.VentaUncheckedUpdateManyWithoutUsuarioInput>
+export type VentaUncheckedUpdateWithoutAbonosInput = {
+  id_venta?: Prisma.IntFieldUpdateOperationsInput | number
+  id_cliente?: Prisma.IntFieldUpdateOperationsInput | number
+  id_usuario?: Prisma.IntFieldUpdateOperationsInput | number
+  id_estado_pago?: Prisma.IntFieldUpdateOperationsInput | number
+  fecha_venta?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  monto_total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  detalles?: Prisma.DetalleVentaUncheckedUpdateManyWithoutVentaNestedInput
 }
 
 export type VentaCreateWithoutClienteInput = {
@@ -726,6 +678,18 @@ export type VentaUpdateWithWhereUniqueWithoutClienteInput = {
 export type VentaUpdateManyWithWhereWithoutClienteInput = {
   where: Prisma.VentaScalarWhereInput
   data: Prisma.XOR<Prisma.VentaUpdateManyMutationInput, Prisma.VentaUncheckedUpdateManyWithoutClienteInput>
+}
+
+export type VentaScalarWhereInput = {
+  AND?: Prisma.VentaScalarWhereInput | Prisma.VentaScalarWhereInput[]
+  OR?: Prisma.VentaScalarWhereInput[]
+  NOT?: Prisma.VentaScalarWhereInput | Prisma.VentaScalarWhereInput[]
+  id_venta?: Prisma.IntFilter<"Venta"> | number
+  id_cliente?: Prisma.IntFilter<"Venta"> | number
+  id_usuario?: Prisma.IntFilter<"Venta"> | number
+  id_estado_pago?: Prisma.IntFilter<"Venta"> | number
+  fecha_venta?: Prisma.DateTimeFilter<"Venta"> | Date | string
+  monto_total?: Prisma.DecimalFilter<"Venta"> | runtime.Decimal | runtime.DecimalJsLike | number | string
 }
 
 export type VentaCreateWithoutDetallesInput = {
@@ -782,58 +746,129 @@ export type VentaUncheckedUpdateWithoutDetallesInput = {
   abonos?: Prisma.AbonoCreditoUncheckedUpdateManyWithoutVentaNestedInput
 }
 
-export type VentaCreateWithoutAbonosInput = {
+export type VentaCreateWithoutEstado_pagoInput = {
   fecha_venta?: Date | string
   monto_total: runtime.Decimal | runtime.DecimalJsLike | number | string
   cliente: Prisma.ClienteCreateNestedOneWithoutVentasInput
   usuario: Prisma.UsuarioCreateNestedOneWithoutVentasInput
-  estado_pago: Prisma.EstadoPagoCreateNestedOneWithoutVentasInput
   detalles?: Prisma.DetalleVentaCreateNestedManyWithoutVentaInput
+  abonos?: Prisma.AbonoCreditoCreateNestedManyWithoutVentaInput
 }
 
-export type VentaUncheckedCreateWithoutAbonosInput = {
+export type VentaUncheckedCreateWithoutEstado_pagoInput = {
   id_venta?: number
   id_cliente: number
   id_usuario: number
+  fecha_venta?: Date | string
+  monto_total: runtime.Decimal | runtime.DecimalJsLike | number | string
+  detalles?: Prisma.DetalleVentaUncheckedCreateNestedManyWithoutVentaInput
+  abonos?: Prisma.AbonoCreditoUncheckedCreateNestedManyWithoutVentaInput
+}
+
+export type VentaCreateOrConnectWithoutEstado_pagoInput = {
+  where: Prisma.VentaWhereUniqueInput
+  create: Prisma.XOR<Prisma.VentaCreateWithoutEstado_pagoInput, Prisma.VentaUncheckedCreateWithoutEstado_pagoInput>
+}
+
+export type VentaCreateManyEstado_pagoInputEnvelope = {
+  data: Prisma.VentaCreateManyEstado_pagoInput | Prisma.VentaCreateManyEstado_pagoInput[]
+  skipDuplicates?: boolean
+}
+
+export type VentaUpsertWithWhereUniqueWithoutEstado_pagoInput = {
+  where: Prisma.VentaWhereUniqueInput
+  update: Prisma.XOR<Prisma.VentaUpdateWithoutEstado_pagoInput, Prisma.VentaUncheckedUpdateWithoutEstado_pagoInput>
+  create: Prisma.XOR<Prisma.VentaCreateWithoutEstado_pagoInput, Prisma.VentaUncheckedCreateWithoutEstado_pagoInput>
+}
+
+export type VentaUpdateWithWhereUniqueWithoutEstado_pagoInput = {
+  where: Prisma.VentaWhereUniqueInput
+  data: Prisma.XOR<Prisma.VentaUpdateWithoutEstado_pagoInput, Prisma.VentaUncheckedUpdateWithoutEstado_pagoInput>
+}
+
+export type VentaUpdateManyWithWhereWithoutEstado_pagoInput = {
+  where: Prisma.VentaScalarWhereInput
+  data: Prisma.XOR<Prisma.VentaUpdateManyMutationInput, Prisma.VentaUncheckedUpdateManyWithoutEstado_pagoInput>
+}
+
+export type VentaCreateWithoutUsuarioInput = {
+  fecha_venta?: Date | string
+  monto_total: runtime.Decimal | runtime.DecimalJsLike | number | string
+  cliente: Prisma.ClienteCreateNestedOneWithoutVentasInput
+  estado_pago: Prisma.EstadoPagoCreateNestedOneWithoutVentasInput
+  detalles?: Prisma.DetalleVentaCreateNestedManyWithoutVentaInput
+  abonos?: Prisma.AbonoCreditoCreateNestedManyWithoutVentaInput
+}
+
+export type VentaUncheckedCreateWithoutUsuarioInput = {
+  id_venta?: number
+  id_cliente: number
   id_estado_pago: number
   fecha_venta?: Date | string
   monto_total: runtime.Decimal | runtime.DecimalJsLike | number | string
   detalles?: Prisma.DetalleVentaUncheckedCreateNestedManyWithoutVentaInput
+  abonos?: Prisma.AbonoCreditoUncheckedCreateNestedManyWithoutVentaInput
 }
 
-export type VentaCreateOrConnectWithoutAbonosInput = {
+export type VentaCreateOrConnectWithoutUsuarioInput = {
   where: Prisma.VentaWhereUniqueInput
-  create: Prisma.XOR<Prisma.VentaCreateWithoutAbonosInput, Prisma.VentaUncheckedCreateWithoutAbonosInput>
+  create: Prisma.XOR<Prisma.VentaCreateWithoutUsuarioInput, Prisma.VentaUncheckedCreateWithoutUsuarioInput>
 }
 
-export type VentaUpsertWithoutAbonosInput = {
-  update: Prisma.XOR<Prisma.VentaUpdateWithoutAbonosInput, Prisma.VentaUncheckedUpdateWithoutAbonosInput>
-  create: Prisma.XOR<Prisma.VentaCreateWithoutAbonosInput, Prisma.VentaUncheckedCreateWithoutAbonosInput>
-  where?: Prisma.VentaWhereInput
+export type VentaCreateManyUsuarioInputEnvelope = {
+  data: Prisma.VentaCreateManyUsuarioInput | Prisma.VentaCreateManyUsuarioInput[]
+  skipDuplicates?: boolean
 }
 
-export type VentaUpdateToOneWithWhereWithoutAbonosInput = {
-  where?: Prisma.VentaWhereInput
-  data: Prisma.XOR<Prisma.VentaUpdateWithoutAbonosInput, Prisma.VentaUncheckedUpdateWithoutAbonosInput>
+export type VentaUpsertWithWhereUniqueWithoutUsuarioInput = {
+  where: Prisma.VentaWhereUniqueInput
+  update: Prisma.XOR<Prisma.VentaUpdateWithoutUsuarioInput, Prisma.VentaUncheckedUpdateWithoutUsuarioInput>
+  create: Prisma.XOR<Prisma.VentaCreateWithoutUsuarioInput, Prisma.VentaUncheckedCreateWithoutUsuarioInput>
 }
 
-export type VentaUpdateWithoutAbonosInput = {
+export type VentaUpdateWithWhereUniqueWithoutUsuarioInput = {
+  where: Prisma.VentaWhereUniqueInput
+  data: Prisma.XOR<Prisma.VentaUpdateWithoutUsuarioInput, Prisma.VentaUncheckedUpdateWithoutUsuarioInput>
+}
+
+export type VentaUpdateManyWithWhereWithoutUsuarioInput = {
+  where: Prisma.VentaScalarWhereInput
+  data: Prisma.XOR<Prisma.VentaUpdateManyMutationInput, Prisma.VentaUncheckedUpdateManyWithoutUsuarioInput>
+}
+
+export type VentaCreateManyClienteInput = {
+  id_venta?: number
+  id_usuario: number
+  id_estado_pago: number
+  fecha_venta?: Date | string
+  monto_total: runtime.Decimal | runtime.DecimalJsLike | number | string
+}
+
+export type VentaUpdateWithoutClienteInput = {
   fecha_venta?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   monto_total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  cliente?: Prisma.ClienteUpdateOneRequiredWithoutVentasNestedInput
   usuario?: Prisma.UsuarioUpdateOneRequiredWithoutVentasNestedInput
   estado_pago?: Prisma.EstadoPagoUpdateOneRequiredWithoutVentasNestedInput
   detalles?: Prisma.DetalleVentaUpdateManyWithoutVentaNestedInput
+  abonos?: Prisma.AbonoCreditoUpdateManyWithoutVentaNestedInput
 }
 
-export type VentaUncheckedUpdateWithoutAbonosInput = {
+export type VentaUncheckedUpdateWithoutClienteInput = {
   id_venta?: Prisma.IntFieldUpdateOperationsInput | number
-  id_cliente?: Prisma.IntFieldUpdateOperationsInput | number
   id_usuario?: Prisma.IntFieldUpdateOperationsInput | number
   id_estado_pago?: Prisma.IntFieldUpdateOperationsInput | number
   fecha_venta?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   monto_total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   detalles?: Prisma.DetalleVentaUncheckedUpdateManyWithoutVentaNestedInput
+  abonos?: Prisma.AbonoCreditoUncheckedUpdateManyWithoutVentaNestedInput
+}
+
+export type VentaUncheckedUpdateManyWithoutClienteInput = {
+  id_venta?: Prisma.IntFieldUpdateOperationsInput | number
+  id_usuario?: Prisma.IntFieldUpdateOperationsInput | number
+  id_estado_pago?: Prisma.IntFieldUpdateOperationsInput | number
+  fecha_venta?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  monto_total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
 }
 
 export type VentaCreateManyEstado_pagoInput = {
@@ -901,41 +936,6 @@ export type VentaUncheckedUpdateWithoutUsuarioInput = {
 export type VentaUncheckedUpdateManyWithoutUsuarioInput = {
   id_venta?: Prisma.IntFieldUpdateOperationsInput | number
   id_cliente?: Prisma.IntFieldUpdateOperationsInput | number
-  id_estado_pago?: Prisma.IntFieldUpdateOperationsInput | number
-  fecha_venta?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  monto_total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-}
-
-export type VentaCreateManyClienteInput = {
-  id_venta?: number
-  id_usuario: number
-  id_estado_pago: number
-  fecha_venta?: Date | string
-  monto_total: runtime.Decimal | runtime.DecimalJsLike | number | string
-}
-
-export type VentaUpdateWithoutClienteInput = {
-  fecha_venta?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  monto_total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  usuario?: Prisma.UsuarioUpdateOneRequiredWithoutVentasNestedInput
-  estado_pago?: Prisma.EstadoPagoUpdateOneRequiredWithoutVentasNestedInput
-  detalles?: Prisma.DetalleVentaUpdateManyWithoutVentaNestedInput
-  abonos?: Prisma.AbonoCreditoUpdateManyWithoutVentaNestedInput
-}
-
-export type VentaUncheckedUpdateWithoutClienteInput = {
-  id_venta?: Prisma.IntFieldUpdateOperationsInput | number
-  id_usuario?: Prisma.IntFieldUpdateOperationsInput | number
-  id_estado_pago?: Prisma.IntFieldUpdateOperationsInput | number
-  fecha_venta?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  monto_total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  detalles?: Prisma.DetalleVentaUncheckedUpdateManyWithoutVentaNestedInput
-  abonos?: Prisma.AbonoCreditoUncheckedUpdateManyWithoutVentaNestedInput
-}
-
-export type VentaUncheckedUpdateManyWithoutClienteInput = {
-  id_venta?: Prisma.IntFieldUpdateOperationsInput | number
-  id_usuario?: Prisma.IntFieldUpdateOperationsInput | number
   id_estado_pago?: Prisma.IntFieldUpdateOperationsInput | number
   fecha_venta?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   monto_total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string

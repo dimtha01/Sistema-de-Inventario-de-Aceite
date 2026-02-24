@@ -334,16 +334,6 @@ export type DetalleVentaUncheckedUpdateManyInput = {
   precio_unitario_aplicado?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
 }
 
-export type DetalleVentaListRelationFilter = {
-  every?: Prisma.DetalleVentaWhereInput
-  some?: Prisma.DetalleVentaWhereInput
-  none?: Prisma.DetalleVentaWhereInput
-}
-
-export type DetalleVentaOrderByRelationAggregateInput = {
-  _count?: Prisma.SortOrder
-}
-
 export type DetalleVentaCountOrderByAggregateInput = {
   id_detalle?: Prisma.SortOrder
   id_venta?: Prisma.SortOrder
@@ -382,6 +372,16 @@ export type DetalleVentaSumOrderByAggregateInput = {
   id_producto?: Prisma.SortOrder
   cantidad?: Prisma.SortOrder
   precio_unitario_aplicado?: Prisma.SortOrder
+}
+
+export type DetalleVentaListRelationFilter = {
+  every?: Prisma.DetalleVentaWhereInput
+  some?: Prisma.DetalleVentaWhereInput
+  none?: Prisma.DetalleVentaWhereInput
+}
+
+export type DetalleVentaOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type DetalleVentaCreateNestedManyWithoutProductoInput = {

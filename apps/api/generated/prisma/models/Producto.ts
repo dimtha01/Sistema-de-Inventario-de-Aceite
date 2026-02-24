@@ -403,6 +403,11 @@ export type ProductoOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
+export type ProductoScalarRelationFilter = {
+  is?: Prisma.ProductoWhereInput
+  isNot?: Prisma.ProductoWhereInput
+}
+
 export type ProductoCountOrderByAggregateInput = {
   id_producto?: Prisma.SortOrder
   id_categoria?: Prisma.SortOrder
@@ -449,11 +454,6 @@ export type ProductoSumOrderByAggregateInput = {
   stock_minimo_alerta?: Prisma.SortOrder
 }
 
-export type ProductoScalarRelationFilter = {
-  is?: Prisma.ProductoWhereInput
-  isNot?: Prisma.ProductoWhereInput
-}
-
 export type ProductoCreateNestedManyWithoutCategoriaInput = {
   create?: Prisma.XOR<Prisma.ProductoCreateWithoutCategoriaInput, Prisma.ProductoUncheckedCreateWithoutCategoriaInput> | Prisma.ProductoCreateWithoutCategoriaInput[] | Prisma.ProductoUncheckedCreateWithoutCategoriaInput[]
   connectOrCreate?: Prisma.ProductoCreateOrConnectWithoutCategoriaInput | Prisma.ProductoCreateOrConnectWithoutCategoriaInput[]
@@ -496,6 +496,52 @@ export type ProductoUncheckedUpdateManyWithoutCategoriaNestedInput = {
   deleteMany?: Prisma.ProductoScalarWhereInput | Prisma.ProductoScalarWhereInput[]
 }
 
+export type ProductoCreateNestedOneWithoutDetalles_ventaInput = {
+  create?: Prisma.XOR<Prisma.ProductoCreateWithoutDetalles_ventaInput, Prisma.ProductoUncheckedCreateWithoutDetalles_ventaInput>
+  connectOrCreate?: Prisma.ProductoCreateOrConnectWithoutDetalles_ventaInput
+  connect?: Prisma.ProductoWhereUniqueInput
+}
+
+export type ProductoUpdateOneRequiredWithoutDetalles_ventaNestedInput = {
+  create?: Prisma.XOR<Prisma.ProductoCreateWithoutDetalles_ventaInput, Prisma.ProductoUncheckedCreateWithoutDetalles_ventaInput>
+  connectOrCreate?: Prisma.ProductoCreateOrConnectWithoutDetalles_ventaInput
+  upsert?: Prisma.ProductoUpsertWithoutDetalles_ventaInput
+  connect?: Prisma.ProductoWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ProductoUpdateToOneWithWhereWithoutDetalles_ventaInput, Prisma.ProductoUpdateWithoutDetalles_ventaInput>, Prisma.ProductoUncheckedUpdateWithoutDetalles_ventaInput>
+}
+
+export type ProductoCreateNestedOneWithoutMovimientosInput = {
+  create?: Prisma.XOR<Prisma.ProductoCreateWithoutMovimientosInput, Prisma.ProductoUncheckedCreateWithoutMovimientosInput>
+  connectOrCreate?: Prisma.ProductoCreateOrConnectWithoutMovimientosInput
+  connect?: Prisma.ProductoWhereUniqueInput
+}
+
+export type ProductoUpdateOneRequiredWithoutMovimientosNestedInput = {
+  create?: Prisma.XOR<Prisma.ProductoCreateWithoutMovimientosInput, Prisma.ProductoUncheckedCreateWithoutMovimientosInput>
+  connectOrCreate?: Prisma.ProductoCreateOrConnectWithoutMovimientosInput
+  upsert?: Prisma.ProductoUpsertWithoutMovimientosInput
+  connect?: Prisma.ProductoWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ProductoUpdateToOneWithWhereWithoutMovimientosInput, Prisma.ProductoUpdateWithoutMovimientosInput>, Prisma.ProductoUncheckedUpdateWithoutMovimientosInput>
+}
+
+export type ProductoCreateNestedOneWithoutPrecioInput = {
+  create?: Prisma.XOR<Prisma.ProductoCreateWithoutPrecioInput, Prisma.ProductoUncheckedCreateWithoutPrecioInput>
+  connectOrCreate?: Prisma.ProductoCreateOrConnectWithoutPrecioInput
+  connect?: Prisma.ProductoWhereUniqueInput
+}
+
+export type ProductoUpdateOneRequiredWithoutPrecioNestedInput = {
+  create?: Prisma.XOR<Prisma.ProductoCreateWithoutPrecioInput, Prisma.ProductoUncheckedCreateWithoutPrecioInput>
+  connectOrCreate?: Prisma.ProductoCreateOrConnectWithoutPrecioInput
+  upsert?: Prisma.ProductoUpsertWithoutPrecioInput
+  connect?: Prisma.ProductoWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ProductoUpdateToOneWithWhereWithoutPrecioInput, Prisma.ProductoUpdateWithoutPrecioInput>, Prisma.ProductoUncheckedUpdateWithoutPrecioInput>
+}
+
+export type NullableStringFieldUpdateOperationsInput = {
+  set?: string | null
+}
+
 export type ProductoCreateNestedManyWithoutProveedorInput = {
   create?: Prisma.XOR<Prisma.ProductoCreateWithoutProveedorInput, Prisma.ProductoUncheckedCreateWithoutProveedorInput> | Prisma.ProductoCreateWithoutProveedorInput[] | Prisma.ProductoUncheckedCreateWithoutProveedorInput[]
   connectOrCreate?: Prisma.ProductoCreateOrConnectWithoutProveedorInput | Prisma.ProductoCreateOrConnectWithoutProveedorInput[]
@@ -536,48 +582,6 @@ export type ProductoUncheckedUpdateManyWithoutProveedorNestedInput = {
   update?: Prisma.ProductoUpdateWithWhereUniqueWithoutProveedorInput | Prisma.ProductoUpdateWithWhereUniqueWithoutProveedorInput[]
   updateMany?: Prisma.ProductoUpdateManyWithWhereWithoutProveedorInput | Prisma.ProductoUpdateManyWithWhereWithoutProveedorInput[]
   deleteMany?: Prisma.ProductoScalarWhereInput | Prisma.ProductoScalarWhereInput[]
-}
-
-export type ProductoCreateNestedOneWithoutPrecioInput = {
-  create?: Prisma.XOR<Prisma.ProductoCreateWithoutPrecioInput, Prisma.ProductoUncheckedCreateWithoutPrecioInput>
-  connectOrCreate?: Prisma.ProductoCreateOrConnectWithoutPrecioInput
-  connect?: Prisma.ProductoWhereUniqueInput
-}
-
-export type ProductoUpdateOneRequiredWithoutPrecioNestedInput = {
-  create?: Prisma.XOR<Prisma.ProductoCreateWithoutPrecioInput, Prisma.ProductoUncheckedCreateWithoutPrecioInput>
-  connectOrCreate?: Prisma.ProductoCreateOrConnectWithoutPrecioInput
-  upsert?: Prisma.ProductoUpsertWithoutPrecioInput
-  connect?: Prisma.ProductoWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.ProductoUpdateToOneWithWhereWithoutPrecioInput, Prisma.ProductoUpdateWithoutPrecioInput>, Prisma.ProductoUncheckedUpdateWithoutPrecioInput>
-}
-
-export type ProductoCreateNestedOneWithoutDetalles_ventaInput = {
-  create?: Prisma.XOR<Prisma.ProductoCreateWithoutDetalles_ventaInput, Prisma.ProductoUncheckedCreateWithoutDetalles_ventaInput>
-  connectOrCreate?: Prisma.ProductoCreateOrConnectWithoutDetalles_ventaInput
-  connect?: Prisma.ProductoWhereUniqueInput
-}
-
-export type ProductoUpdateOneRequiredWithoutDetalles_ventaNestedInput = {
-  create?: Prisma.XOR<Prisma.ProductoCreateWithoutDetalles_ventaInput, Prisma.ProductoUncheckedCreateWithoutDetalles_ventaInput>
-  connectOrCreate?: Prisma.ProductoCreateOrConnectWithoutDetalles_ventaInput
-  upsert?: Prisma.ProductoUpsertWithoutDetalles_ventaInput
-  connect?: Prisma.ProductoWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.ProductoUpdateToOneWithWhereWithoutDetalles_ventaInput, Prisma.ProductoUpdateWithoutDetalles_ventaInput>, Prisma.ProductoUncheckedUpdateWithoutDetalles_ventaInput>
-}
-
-export type ProductoCreateNestedOneWithoutMovimientosInput = {
-  create?: Prisma.XOR<Prisma.ProductoCreateWithoutMovimientosInput, Prisma.ProductoUncheckedCreateWithoutMovimientosInput>
-  connectOrCreate?: Prisma.ProductoCreateOrConnectWithoutMovimientosInput
-  connect?: Prisma.ProductoWhereUniqueInput
-}
-
-export type ProductoUpdateOneRequiredWithoutMovimientosNestedInput = {
-  create?: Prisma.XOR<Prisma.ProductoCreateWithoutMovimientosInput, Prisma.ProductoUncheckedCreateWithoutMovimientosInput>
-  connectOrCreate?: Prisma.ProductoCreateOrConnectWithoutMovimientosInput
-  upsert?: Prisma.ProductoUpsertWithoutMovimientosInput
-  connect?: Prisma.ProductoWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.ProductoUpdateToOneWithWhereWithoutMovimientosInput, Prisma.ProductoUpdateWithoutMovimientosInput>, Prisma.ProductoUncheckedUpdateWithoutMovimientosInput>
 }
 
 export type ProductoCreateWithoutCategoriaInput = {
@@ -640,117 +644,6 @@ export type ProductoScalarWhereInput = {
   url_imagen?: Prisma.StringNullableFilter<"Producto"> | string | null
   stock_actual?: Prisma.IntFilter<"Producto"> | number
   stock_minimo_alerta?: Prisma.IntFilter<"Producto"> | number
-}
-
-export type ProductoCreateWithoutProveedorInput = {
-  nombre_repuesto: string
-  url_imagen?: string | null
-  stock_actual?: number
-  stock_minimo_alerta?: number
-  categoria: Prisma.CategoriaCreateNestedOneWithoutProductosInput
-  precio?: Prisma.PrecioProductoCreateNestedOneWithoutProductoInput
-  detalles_venta?: Prisma.DetalleVentaCreateNestedManyWithoutProductoInput
-  movimientos?: Prisma.HistorialMovimientoCreateNestedManyWithoutProductoInput
-}
-
-export type ProductoUncheckedCreateWithoutProveedorInput = {
-  id_producto?: number
-  id_categoria: number
-  nombre_repuesto: string
-  url_imagen?: string | null
-  stock_actual?: number
-  stock_minimo_alerta?: number
-  precio?: Prisma.PrecioProductoUncheckedCreateNestedOneWithoutProductoInput
-  detalles_venta?: Prisma.DetalleVentaUncheckedCreateNestedManyWithoutProductoInput
-  movimientos?: Prisma.HistorialMovimientoUncheckedCreateNestedManyWithoutProductoInput
-}
-
-export type ProductoCreateOrConnectWithoutProveedorInput = {
-  where: Prisma.ProductoWhereUniqueInput
-  create: Prisma.XOR<Prisma.ProductoCreateWithoutProveedorInput, Prisma.ProductoUncheckedCreateWithoutProveedorInput>
-}
-
-export type ProductoCreateManyProveedorInputEnvelope = {
-  data: Prisma.ProductoCreateManyProveedorInput | Prisma.ProductoCreateManyProveedorInput[]
-  skipDuplicates?: boolean
-}
-
-export type ProductoUpsertWithWhereUniqueWithoutProveedorInput = {
-  where: Prisma.ProductoWhereUniqueInput
-  update: Prisma.XOR<Prisma.ProductoUpdateWithoutProveedorInput, Prisma.ProductoUncheckedUpdateWithoutProveedorInput>
-  create: Prisma.XOR<Prisma.ProductoCreateWithoutProveedorInput, Prisma.ProductoUncheckedCreateWithoutProveedorInput>
-}
-
-export type ProductoUpdateWithWhereUniqueWithoutProveedorInput = {
-  where: Prisma.ProductoWhereUniqueInput
-  data: Prisma.XOR<Prisma.ProductoUpdateWithoutProveedorInput, Prisma.ProductoUncheckedUpdateWithoutProveedorInput>
-}
-
-export type ProductoUpdateManyWithWhereWithoutProveedorInput = {
-  where: Prisma.ProductoScalarWhereInput
-  data: Prisma.XOR<Prisma.ProductoUpdateManyMutationInput, Prisma.ProductoUncheckedUpdateManyWithoutProveedorInput>
-}
-
-export type ProductoCreateWithoutPrecioInput = {
-  nombre_repuesto: string
-  url_imagen?: string | null
-  stock_actual?: number
-  stock_minimo_alerta?: number
-  categoria: Prisma.CategoriaCreateNestedOneWithoutProductosInput
-  proveedor: Prisma.ProveedorCreateNestedOneWithoutProductosInput
-  detalles_venta?: Prisma.DetalleVentaCreateNestedManyWithoutProductoInput
-  movimientos?: Prisma.HistorialMovimientoCreateNestedManyWithoutProductoInput
-}
-
-export type ProductoUncheckedCreateWithoutPrecioInput = {
-  id_producto?: number
-  id_categoria: number
-  id_proveedor: number
-  nombre_repuesto: string
-  url_imagen?: string | null
-  stock_actual?: number
-  stock_minimo_alerta?: number
-  detalles_venta?: Prisma.DetalleVentaUncheckedCreateNestedManyWithoutProductoInput
-  movimientos?: Prisma.HistorialMovimientoUncheckedCreateNestedManyWithoutProductoInput
-}
-
-export type ProductoCreateOrConnectWithoutPrecioInput = {
-  where: Prisma.ProductoWhereUniqueInput
-  create: Prisma.XOR<Prisma.ProductoCreateWithoutPrecioInput, Prisma.ProductoUncheckedCreateWithoutPrecioInput>
-}
-
-export type ProductoUpsertWithoutPrecioInput = {
-  update: Prisma.XOR<Prisma.ProductoUpdateWithoutPrecioInput, Prisma.ProductoUncheckedUpdateWithoutPrecioInput>
-  create: Prisma.XOR<Prisma.ProductoCreateWithoutPrecioInput, Prisma.ProductoUncheckedCreateWithoutPrecioInput>
-  where?: Prisma.ProductoWhereInput
-}
-
-export type ProductoUpdateToOneWithWhereWithoutPrecioInput = {
-  where?: Prisma.ProductoWhereInput
-  data: Prisma.XOR<Prisma.ProductoUpdateWithoutPrecioInput, Prisma.ProductoUncheckedUpdateWithoutPrecioInput>
-}
-
-export type ProductoUpdateWithoutPrecioInput = {
-  nombre_repuesto?: Prisma.StringFieldUpdateOperationsInput | string
-  url_imagen?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  stock_actual?: Prisma.IntFieldUpdateOperationsInput | number
-  stock_minimo_alerta?: Prisma.IntFieldUpdateOperationsInput | number
-  categoria?: Prisma.CategoriaUpdateOneRequiredWithoutProductosNestedInput
-  proveedor?: Prisma.ProveedorUpdateOneRequiredWithoutProductosNestedInput
-  detalles_venta?: Prisma.DetalleVentaUpdateManyWithoutProductoNestedInput
-  movimientos?: Prisma.HistorialMovimientoUpdateManyWithoutProductoNestedInput
-}
-
-export type ProductoUncheckedUpdateWithoutPrecioInput = {
-  id_producto?: Prisma.IntFieldUpdateOperationsInput | number
-  id_categoria?: Prisma.IntFieldUpdateOperationsInput | number
-  id_proveedor?: Prisma.IntFieldUpdateOperationsInput | number
-  nombre_repuesto?: Prisma.StringFieldUpdateOperationsInput | string
-  url_imagen?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  stock_actual?: Prisma.IntFieldUpdateOperationsInput | number
-  stock_minimo_alerta?: Prisma.IntFieldUpdateOperationsInput | number
-  detalles_venta?: Prisma.DetalleVentaUncheckedUpdateManyWithoutProductoNestedInput
-  movimientos?: Prisma.HistorialMovimientoUncheckedUpdateManyWithoutProductoNestedInput
 }
 
 export type ProductoCreateWithoutDetalles_ventaInput = {
@@ -875,6 +768,117 @@ export type ProductoUncheckedUpdateWithoutMovimientosInput = {
   stock_minimo_alerta?: Prisma.IntFieldUpdateOperationsInput | number
   precio?: Prisma.PrecioProductoUncheckedUpdateOneWithoutProductoNestedInput
   detalles_venta?: Prisma.DetalleVentaUncheckedUpdateManyWithoutProductoNestedInput
+}
+
+export type ProductoCreateWithoutPrecioInput = {
+  nombre_repuesto: string
+  url_imagen?: string | null
+  stock_actual?: number
+  stock_minimo_alerta?: number
+  categoria: Prisma.CategoriaCreateNestedOneWithoutProductosInput
+  proveedor: Prisma.ProveedorCreateNestedOneWithoutProductosInput
+  detalles_venta?: Prisma.DetalleVentaCreateNestedManyWithoutProductoInput
+  movimientos?: Prisma.HistorialMovimientoCreateNestedManyWithoutProductoInput
+}
+
+export type ProductoUncheckedCreateWithoutPrecioInput = {
+  id_producto?: number
+  id_categoria: number
+  id_proveedor: number
+  nombre_repuesto: string
+  url_imagen?: string | null
+  stock_actual?: number
+  stock_minimo_alerta?: number
+  detalles_venta?: Prisma.DetalleVentaUncheckedCreateNestedManyWithoutProductoInput
+  movimientos?: Prisma.HistorialMovimientoUncheckedCreateNestedManyWithoutProductoInput
+}
+
+export type ProductoCreateOrConnectWithoutPrecioInput = {
+  where: Prisma.ProductoWhereUniqueInput
+  create: Prisma.XOR<Prisma.ProductoCreateWithoutPrecioInput, Prisma.ProductoUncheckedCreateWithoutPrecioInput>
+}
+
+export type ProductoUpsertWithoutPrecioInput = {
+  update: Prisma.XOR<Prisma.ProductoUpdateWithoutPrecioInput, Prisma.ProductoUncheckedUpdateWithoutPrecioInput>
+  create: Prisma.XOR<Prisma.ProductoCreateWithoutPrecioInput, Prisma.ProductoUncheckedCreateWithoutPrecioInput>
+  where?: Prisma.ProductoWhereInput
+}
+
+export type ProductoUpdateToOneWithWhereWithoutPrecioInput = {
+  where?: Prisma.ProductoWhereInput
+  data: Prisma.XOR<Prisma.ProductoUpdateWithoutPrecioInput, Prisma.ProductoUncheckedUpdateWithoutPrecioInput>
+}
+
+export type ProductoUpdateWithoutPrecioInput = {
+  nombre_repuesto?: Prisma.StringFieldUpdateOperationsInput | string
+  url_imagen?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stock_actual?: Prisma.IntFieldUpdateOperationsInput | number
+  stock_minimo_alerta?: Prisma.IntFieldUpdateOperationsInput | number
+  categoria?: Prisma.CategoriaUpdateOneRequiredWithoutProductosNestedInput
+  proveedor?: Prisma.ProveedorUpdateOneRequiredWithoutProductosNestedInput
+  detalles_venta?: Prisma.DetalleVentaUpdateManyWithoutProductoNestedInput
+  movimientos?: Prisma.HistorialMovimientoUpdateManyWithoutProductoNestedInput
+}
+
+export type ProductoUncheckedUpdateWithoutPrecioInput = {
+  id_producto?: Prisma.IntFieldUpdateOperationsInput | number
+  id_categoria?: Prisma.IntFieldUpdateOperationsInput | number
+  id_proveedor?: Prisma.IntFieldUpdateOperationsInput | number
+  nombre_repuesto?: Prisma.StringFieldUpdateOperationsInput | string
+  url_imagen?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stock_actual?: Prisma.IntFieldUpdateOperationsInput | number
+  stock_minimo_alerta?: Prisma.IntFieldUpdateOperationsInput | number
+  detalles_venta?: Prisma.DetalleVentaUncheckedUpdateManyWithoutProductoNestedInput
+  movimientos?: Prisma.HistorialMovimientoUncheckedUpdateManyWithoutProductoNestedInput
+}
+
+export type ProductoCreateWithoutProveedorInput = {
+  nombre_repuesto: string
+  url_imagen?: string | null
+  stock_actual?: number
+  stock_minimo_alerta?: number
+  categoria: Prisma.CategoriaCreateNestedOneWithoutProductosInput
+  precio?: Prisma.PrecioProductoCreateNestedOneWithoutProductoInput
+  detalles_venta?: Prisma.DetalleVentaCreateNestedManyWithoutProductoInput
+  movimientos?: Prisma.HistorialMovimientoCreateNestedManyWithoutProductoInput
+}
+
+export type ProductoUncheckedCreateWithoutProveedorInput = {
+  id_producto?: number
+  id_categoria: number
+  nombre_repuesto: string
+  url_imagen?: string | null
+  stock_actual?: number
+  stock_minimo_alerta?: number
+  precio?: Prisma.PrecioProductoUncheckedCreateNestedOneWithoutProductoInput
+  detalles_venta?: Prisma.DetalleVentaUncheckedCreateNestedManyWithoutProductoInput
+  movimientos?: Prisma.HistorialMovimientoUncheckedCreateNestedManyWithoutProductoInput
+}
+
+export type ProductoCreateOrConnectWithoutProveedorInput = {
+  where: Prisma.ProductoWhereUniqueInput
+  create: Prisma.XOR<Prisma.ProductoCreateWithoutProveedorInput, Prisma.ProductoUncheckedCreateWithoutProveedorInput>
+}
+
+export type ProductoCreateManyProveedorInputEnvelope = {
+  data: Prisma.ProductoCreateManyProveedorInput | Prisma.ProductoCreateManyProveedorInput[]
+  skipDuplicates?: boolean
+}
+
+export type ProductoUpsertWithWhereUniqueWithoutProveedorInput = {
+  where: Prisma.ProductoWhereUniqueInput
+  update: Prisma.XOR<Prisma.ProductoUpdateWithoutProveedorInput, Prisma.ProductoUncheckedUpdateWithoutProveedorInput>
+  create: Prisma.XOR<Prisma.ProductoCreateWithoutProveedorInput, Prisma.ProductoUncheckedCreateWithoutProveedorInput>
+}
+
+export type ProductoUpdateWithWhereUniqueWithoutProveedorInput = {
+  where: Prisma.ProductoWhereUniqueInput
+  data: Prisma.XOR<Prisma.ProductoUpdateWithoutProveedorInput, Prisma.ProductoUncheckedUpdateWithoutProveedorInput>
+}
+
+export type ProductoUpdateManyWithWhereWithoutProveedorInput = {
+  where: Prisma.ProductoScalarWhereInput
+  data: Prisma.XOR<Prisma.ProductoUpdateManyMutationInput, Prisma.ProductoUncheckedUpdateManyWithoutProveedorInput>
 }
 
 export type ProductoCreateManyCategoriaInput = {

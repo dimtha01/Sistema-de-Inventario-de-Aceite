@@ -289,11 +289,6 @@ export type PrecioProductoUncheckedUpdateManyInput = {
   precio_venta?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
 }
 
-export type PrecioProductoNullableScalarRelationFilter = {
-  is?: Prisma.PrecioProductoWhereInput | null
-  isNot?: Prisma.PrecioProductoWhereInput | null
-}
-
 export type PrecioProductoCountOrderByAggregateInput = {
   id_producto?: Prisma.SortOrder
   precio_compra?: Prisma.SortOrder
@@ -322,6 +317,11 @@ export type PrecioProductoSumOrderByAggregateInput = {
   id_producto?: Prisma.SortOrder
   precio_compra?: Prisma.SortOrder
   precio_venta?: Prisma.SortOrder
+}
+
+export type PrecioProductoNullableScalarRelationFilter = {
+  is?: Prisma.PrecioProductoWhereInput | null
+  isNot?: Prisma.PrecioProductoWhereInput | null
 }
 
 export type PrecioProductoCreateNestedOneWithoutProductoInput = {

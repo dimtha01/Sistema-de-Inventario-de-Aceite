@@ -4,7 +4,6 @@ model HistorialMovimiento {
   id_usuario      Int
   id_tipo_mov     Int
   cantidad        Int
-  origen_destino  String?        @db.VarChar(100)
   fecha_hora      DateTime       @default(now())
   producto        Producto       @relation(fields: [id_producto], references: [id_producto])
   usuario         Usuario        @relation(fields: [id_usuario], references: [id_usuario])

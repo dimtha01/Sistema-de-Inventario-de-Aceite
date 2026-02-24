@@ -3,7 +3,7 @@ import { defineConfig } from "prisma/config";
 
 export default defineConfig({
   earlyAccess: true,
-  schema: "prisma/schema.prisma",
+  schema: "prisma",
   migrate: {
     migrations: "prisma/migrations",
     seed: "npx tsx prisma/seed.js",

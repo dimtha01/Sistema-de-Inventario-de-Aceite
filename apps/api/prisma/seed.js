@@ -70,28 +70,28 @@ async function main() {
     const usuarios = await Promise.all([
         prisma.usuario.create({
             data: {
-                nombre: 'Carlos Mendoza',
+                nombre: 'Carlos',
+                apellido: 'Mendoza',
                 email: 'carlos@autoelite.com',
                 password_hash: '$2b$10$abcdefghijk1234567890hashedpassword1',
-                avatar_url: null,
                 id_rol: roles[0].id_rol, // Administrador
             },
         }),
         prisma.usuario.create({
             data: {
-                nombre: 'María García',
+                nombre: 'María',
+                apellido: 'García',
                 email: 'maria@autoelite.com',
                 password_hash: '$2b$10$abcdefghijk1234567890hashedpassword2',
-                avatar_url: null,
                 id_rol: roles[1].id_rol, // Vendedor
             },
         }),
         prisma.usuario.create({
             data: {
-                nombre: 'Pedro Ramírez',
+                nombre: 'Pedro',
+                apellido: 'Ramírez',
                 email: 'pedro@autoelite.com',
                 password_hash: '$2b$10$abcdefghijk1234567890hashedpassword3',
-                avatar_url: null,
                 id_rol: roles[2].id_rol, // Almacenero
             },
         }),
@@ -102,41 +102,36 @@ async function main() {
         prisma.proveedor.create({
             data: {
                 nombre_empresa: 'Brembo S.p.A.',
-                pais_origen: 'Italia',
-                categoria_socio: 'OEM',
-                url_logo: null,
+                direccion: 'Italia',
+                telefono: '+39 035 605 1111',
             },
         }),
         prisma.proveedor.create({
             data: {
                 nombre_empresa: 'Bosch Automotive',
-                pais_origen: 'Alemania',
-                categoria_socio: 'OEM',
-                url_logo: null,
+                direccion: 'Alemania',
+                telefono: '+49 711 811 0',
             },
         }),
         prisma.proveedor.create({
             data: {
                 nombre_empresa: 'Michelin Group',
-                pais_origen: 'Francia',
-                categoria_socio: 'OEM',
-                url_logo: null,
+                direccion: 'Francia',
+                telefono: '+33 4 73 32 20 00',
             },
         }),
         prisma.proveedor.create({
             data: {
                 nombre_empresa: 'Öhlins Racing',
-                pais_origen: 'Suecia',
-                categoria_socio: 'Postventa',
-                url_logo: null,
+                direccion: 'Suecia',
+                telefono: '+46 8 590 025 00',
             },
         }),
         prisma.proveedor.create({
             data: {
                 nombre_empresa: 'Akrapovič',
-                pais_origen: 'Eslovenia',
-                categoria_socio: 'Postventa',
-                url_logo: null,
+                direccion: 'Eslovenia',
+                telefono: '+386 1 787 84 04',
             },
         }),
     ]);
@@ -145,41 +140,41 @@ async function main() {
     const clientes = await Promise.all([
         prisma.cliente.create({
             data: {
-                nombre_completo: 'Taller Mecánico Los Andes',
-                ubicacion: 'Av. Principal #123, Caracas',
-                es_premium: true,
+                nombre: 'Andrés',
+                apellido: 'Márquez',
+                telefono: '+58 414-1234567',
                 limite_credito: 50000.0,
             },
         }),
         prisma.cliente.create({
             data: {
-                nombre_completo: 'AutoRepuestos Express',
-                ubicacion: 'Calle Comercio #45, Valencia',
-                es_premium: true,
+                nombre: 'Jorge',
+                apellido: 'Gómez',
+                telefono: '+58 424-9876543',
                 limite_credito: 30000.0,
             },
         }),
         prisma.cliente.create({
             data: {
-                nombre_completo: 'Juan Pérez',
-                ubicacion: 'Urbanización El Parque, Maracay',
-                es_premium: false,
+                nombre: 'Juan',
+                apellido: 'Pérez',
+                telefono: '+58 412-4567890',
                 limite_credito: 5000.0,
             },
         }),
         prisma.cliente.create({
             data: {
-                nombre_completo: 'Taller Racing Pro',
-                ubicacion: 'Zona Industrial, Barquisimeto',
-                es_premium: true,
+                nombre: 'Miguel',
+                apellido: 'Bastidas',
+                telefono: '+58 414-5556677',
                 limite_credito: 75000.0,
             },
         }),
         prisma.cliente.create({
             data: {
-                nombre_completo: 'Andrea Martínez',
-                ubicacion: 'Centro Comercial Plaza, Mérida',
-                es_premium: false,
+                nombre: 'Andrea',
+                apellido: 'Martínez',
+                telefono: '+58 424-3334455',
                 limite_credito: 2000.0,
             },
         }),
@@ -318,7 +313,6 @@ async function main() {
                 id_usuario: usuarios[2].id_usuario, // Pedro (almacenero)
                 id_tipo_mov: tiposMovimiento[0].id_tipo_mov, // Entrada por Compra
                 cantidad: 50,
-                origen_destino: 'Recepción Proveedor Brembo',
             },
         }),
         prisma.historialMovimiento.create({
@@ -327,7 +321,6 @@ async function main() {
                 id_usuario: usuarios[2].id_usuario,
                 id_tipo_mov: tiposMovimiento[0].id_tipo_mov,
                 cantidad: 30,
-                origen_destino: 'Recepción Proveedor Michelin',
             },
         }),
         prisma.historialMovimiento.create({
@@ -336,7 +329,6 @@ async function main() {
                 id_usuario: usuarios[2].id_usuario,
                 id_tipo_mov: tiposMovimiento[0].id_tipo_mov,
                 cantidad: 10,
-                origen_destino: 'Recepción Proveedor Öhlins',
             },
         }),
         // Salidas por venta
@@ -346,7 +338,6 @@ async function main() {
                 id_usuario: usuarios[1].id_usuario,
                 id_tipo_mov: tiposMovimiento[1].id_tipo_mov, // Salida por Venta
                 cantidad: 2,
-                origen_destino: `Venta #${venta1.id_venta}`,
             },
         }),
         prisma.historialMovimiento.create({
@@ -355,7 +346,6 @@ async function main() {
                 id_usuario: usuarios[1].id_usuario,
                 id_tipo_mov: tiposMovimiento[1].id_tipo_mov,
                 cantidad: 1,
-                origen_destino: `Venta #${venta2.id_venta}`,
             },
         }),
         prisma.historialMovimiento.create({
@@ -364,7 +354,6 @@ async function main() {
                 id_usuario: usuarios[1].id_usuario,
                 id_tipo_mov: tiposMovimiento[1].id_tipo_mov,
                 cantidad: 1,
-                origen_destino: `Venta #${venta3.id_venta}`,
             },
         }),
         // Ajuste de inventario
@@ -374,7 +363,6 @@ async function main() {
                 id_usuario: usuarios[0].id_usuario,
                 id_tipo_mov: tiposMovimiento[2].id_tipo_mov, // Ajuste
                 cantidad: -2,
-                origen_destino: 'Ajuste por merma detectada en auditoría',
             },
         }),
         // Devolución
@@ -384,7 +372,6 @@ async function main() {
                 id_usuario: usuarios[2].id_usuario,
                 id_tipo_mov: tiposMovimiento[3].id_tipo_mov, // Devolución
                 cantidad: 2,
-                origen_destino: 'Devolución cliente - defecto de fábrica',
             },
         }),
     ]);

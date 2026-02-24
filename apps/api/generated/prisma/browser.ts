@@ -18,67 +18,67 @@ export { Prisma }
 export * as $Enums from './enums.ts'
 export * from './enums.ts';
 /**
- * Model RolUsuario
+ * Model AbonoCredito
  * 
  */
-export type RolUsuario = Prisma.RolUsuarioModel
+export type AbonoCredito = Prisma.AbonoCreditoModel
 /**
  * Model Categoria
  * 
  */
 export type Categoria = Prisma.CategoriaModel
 /**
- * Model TipoMovimiento
- * 
- */
-export type TipoMovimiento = Prisma.TipoMovimientoModel
-/**
- * Model EstadoPago
- * 
- */
-export type EstadoPago = Prisma.EstadoPagoModel
-/**
- * Model Usuario
- * 
- */
-export type Usuario = Prisma.UsuarioModel
-/**
- * Model Proveedor
- * 
- */
-export type Proveedor = Prisma.ProveedorModel
-/**
  * Model Cliente
  * 
  */
 export type Cliente = Prisma.ClienteModel
-/**
- * Model Producto
- * 
- */
-export type Producto = Prisma.ProductoModel
-/**
- * Model PrecioProducto
- * 
- */
-export type PrecioProducto = Prisma.PrecioProductoModel
-/**
- * Model Venta
- * 
- */
-export type Venta = Prisma.VentaModel
 /**
  * Model DetalleVenta
  * 
  */
 export type DetalleVenta = Prisma.DetalleVentaModel
 /**
- * Model AbonoCredito
+ * Model EstadoPago
  * 
  */
-export type AbonoCredito = Prisma.AbonoCreditoModel
+export type EstadoPago = Prisma.EstadoPagoModel
 /**
  * Model HistorialMovimiento
  * 
  */
 export type HistorialMovimiento = Prisma.HistorialMovimientoModel
+/**
+ * Model PrecioProducto
+ * 
+ */
+export type PrecioProducto = Prisma.PrecioProductoModel
+/**
+ * Model Producto
+ * 
+ */
+export type Producto = Prisma.ProductoModel
+/**
+ * Model Proveedor
+ * 
+ */
+export type Proveedor = Prisma.ProveedorModel
+/**
+ * Model RolUsuario
+ * 
+ */
+export type RolUsuario = Prisma.RolUsuarioModel
+/**
+ * Model TipoMovimiento
+ * 
+ */
+export type TipoMovimiento = Prisma.TipoMovimientoModel
+/**
+ * Model Usuario
+ * 
+ */
+export type Usuario = Prisma.UsuarioModel
+/**
+ * Model Venta
+ * 
+ */
+export type Venta = Prisma.VentaModel

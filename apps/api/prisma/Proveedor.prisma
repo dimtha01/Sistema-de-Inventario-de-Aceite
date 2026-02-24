@@ -1,9 +1,8 @@
 model Proveedor {
   id_proveedor    Int        @id @default(autoincrement())
   nombre_empresa  String     @db.VarChar(150)
-  pais_origen     String?    @db.VarChar(100)
-  categoria_socio String?    @db.VarChar(50)
-  url_logo        String?    @db.VarChar(255)
+  direccion       String?    @db.VarChar(100)
+  telefono        String?    @db.VarChar(100)
   productos       Producto[]
 
   @@map("proveedores")

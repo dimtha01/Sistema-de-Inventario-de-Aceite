@@ -292,18 +292,6 @@ export type RolUsuarioScalarRelationFilter = {
   isNot?: Prisma.RolUsuarioWhereInput
 }
 
-export type StringFieldUpdateOperationsInput = {
-  set?: string
-}
-
-export type IntFieldUpdateOperationsInput = {
-  set?: number
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
-}
-
 export type RolUsuarioCreateNestedOneWithoutUsuariosInput = {
   create?: Prisma.XOR<Prisma.RolUsuarioCreateWithoutUsuariosInput, Prisma.RolUsuarioUncheckedCreateWithoutUsuariosInput>
   connectOrCreate?: Prisma.RolUsuarioCreateOrConnectWithoutUsuariosInput

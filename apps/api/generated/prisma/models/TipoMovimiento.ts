@@ -264,6 +264,11 @@ export type TipoMovimientoUncheckedUpdateManyInput = {
   nombre_tipo?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
+export type TipoMovimientoScalarRelationFilter = {
+  is?: Prisma.TipoMovimientoWhereInput
+  isNot?: Prisma.TipoMovimientoWhereInput
+}
+
 export type TipoMovimientoCountOrderByAggregateInput = {
   id_tipo_mov?: Prisma.SortOrder
   nombre_tipo?: Prisma.SortOrder
@@ -285,11 +290,6 @@ export type TipoMovimientoMinOrderByAggregateInput = {
 
 export type TipoMovimientoSumOrderByAggregateInput = {
   id_tipo_mov?: Prisma.SortOrder
-}
-
-export type TipoMovimientoScalarRelationFilter = {
-  is?: Prisma.TipoMovimientoWhereInput
-  isNot?: Prisma.TipoMovimientoWhereInput
 }
 
 export type TipoMovimientoCreateNestedOneWithoutMovimientosInput = {
