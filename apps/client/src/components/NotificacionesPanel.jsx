@@ -30,9 +30,9 @@ const TIPO_CONFIG = {
 import { NavLink } from 'react-router-dom';
 
 /**
- * @param {{ onClose: () => void, alerts: any[] }} props
+ * @param {{ onClose: () => void, alerts: any[], onMarkRead: () => void }} props
  */
-export const NotificacionesPanel = ({ onClose, alerts = [] }) => (
+export const NotificacionesPanel = ({ onClose, alerts = [], onMarkRead }) => (
   <>
     {/* Overlay */}
     <div
@@ -101,7 +101,10 @@ export const NotificacionesPanel = ({ onClose, alerts = [] }) => (
 
       {/* Footer */}
       <div className="px-4 py-3 border-t border-slate-200 bg-slate-50">
-        <button className="w-full py-2.5 text-sm font-bold text-slate-500 hover:text-[#135bec] transition-colors flex items-center justify-center gap-2">
+        <button
+          onClick={onMarkRead}
+          className="w-full py-2.5 text-sm font-bold text-slate-500 hover:text-[#135bec] transition-colors flex items-center justify-center gap-2"
+        >
           Marcar todas como leídas
         </button>
       </div>

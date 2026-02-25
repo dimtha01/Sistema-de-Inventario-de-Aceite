@@ -3,7 +3,21 @@ import { prisma } from '../prisma.js';
 // Obtener todos los productos
 export const getProducts = async (req, res) => {
     try {
+        const { search } = req.query;
+        let whereClause = {};
+
+        if (search) {
+            whereClause = {
+                OR: [
+                    { nombre_repuesto: { contains: search, mode: 'insensitive' } },
+                    { categoria: { nombre_categoria: { contains: search, mode: 'insensitive' } } },
+                    { proveedor: { nombre_empresa: { contains: search, mode: 'insensitive' } } }
+                ]
+            };
+        }
+
         const products = await prisma.producto.findMany({
+            where: whereClause,
             include: {
                 precio: true,
                 categoria: true,
@@ -210,10 +224,9 @@ export const updateProduct = async (req, res) => {
                 });
 
                 if (!tipoAjuste) {
-                    // Fallback a entrada/salida si no hay "ajuste"
-                    const kw = difStock > 0 ? 'entrada' : 'salida';
-                    tipoAjuste = await tx.tipoMovimiento.findFirst({
-                        where: { nombre_tipo: { contains: kw, mode: 'insensitive' } }
+                    // Si no existe el tipo Ajuste, lo creamos para mantener el registro coherente
+                    tipoAjuste = await tx.tipoMovimiento.create({
+                        data: { nombre_tipo: 'Ajuste' }
                     });
                 }
 

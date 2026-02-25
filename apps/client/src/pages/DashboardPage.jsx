@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 
 export const DashboardPage = () => {
   const [periodo, setPeriodo] = useState('Últimos 6 Meses');
@@ -74,8 +75,8 @@ export const DashboardPage = () => {
               className="px-4 py-2.5 bg-[#135bec] text-white rounded-xl"
               style={{ boxShadow: '0 6px 20px -4px rgba(19,91,236,0.4)' }}
             >
-              <p className="text-white/70 text-[9px] uppercase font-bold tracking-widest">Estado</p>
-              <p className="text-xl font-black leading-tight">Activo</p>
+              <p className="text-white/70 text-[9px] uppercase font-bold tracking-widest">Conexión</p>
+              <p className="text-xl font-black leading-tight">En Línea</p>
             </div>
           </div>
         </div>
@@ -120,28 +121,36 @@ export const DashboardPage = () => {
 
           {/* Imagen destacada compacta */}
           <div className="relative group rounded-2xl overflow-hidden min-h-[260px]">
-            <div
-              className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
-              style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuBZirzTDR0p-ZNNNMNvKjmLWqKgATxWmipWKF0hWryp0IO53hAnfgd6ZGrBnoZuOqiX6b6jkcYEv-i-H_K1_bapZGpKoGy1YMH4DB5EVTio9tzBUfY0UUuVsp_ueOfO_dAoqgWNwpJf9xdbjljYjGDPE_IxpIPzGtct0SzyumkGsFjSM9onGoux3wWyN_1o9HaTaBHHmOtAGJiofL9d7TpuqP4XCouC-T0qLlckLBTlTCCBK5Kf5CM9xGbpDjnXLhmEY0sorHii-ew')" }}
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
-            <div className="absolute inset-0 p-6 flex flex-col justify-end">
-              <span className="bg-[#135bec] px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest text-white w-fit mb-3">
-                Prime Selection
-              </span>
-              <h4 className="text-white text-2xl font-bold mb-1.5 leading-tight">
-                Carbon Fiber Aerodynamics
-              </h4>
-              <p className="text-white/65 text-xs leading-relaxed line-clamp-2">
-                Componentes de alta precisión. Dominando 42% del revenue Q3.
-              </p>
-              <button className="mt-5 flex items-center gap-2 text-white font-bold text-[11px] uppercase tracking-widest w-fit hover:gap-3 transition-all">
-                Explorar Rendimiento
-                <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
-                  <path d="M5 12h14m-7-7 7 7-7 7" />
-                </svg>
-              </button>
-            </div>
+            {data.destacado ? (
+              <>
+                <div
+                  className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
+                  style={{ backgroundImage: `url('${data.destacado.imagen}')` }}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+                <div className="absolute inset-0 p-6 flex flex-col justify-end">
+                  <span className="bg-[#135bec] px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest text-white w-fit mb-3">
+                    {data.destacado.etiqueta}
+                  </span>
+                  <h4 className="text-white text-2xl font-bold mb-1.5 leading-tight">
+                    {data.destacado.nombre}
+                  </h4>
+                  <p className="text-white/65 text-xs leading-relaxed line-clamp-2">
+                    {data.destacado.descripcion}
+                  </p>
+                  <button className="mt-5 flex items-center gap-2 text-white font-bold text-[11px] uppercase tracking-widest w-fit hover:gap-3 transition-all" onClick={() => window.location.href = '/inventario'}>
+                    Ir al Inventario
+                    <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+                      <path d="M5 12h14m-7-7 7 7-7 7" />
+                    </svg>
+                  </button>
+                </div>
+              </>
+            ) : (
+              <div className="w-full h-full flex items-center justify-center bg-slate-100 text-slate-400 font-bold text-xs">
+                Cargando destacado...
+              </div>
+            )}
           </div>
 
           {/* Bar Chart compacto */}
@@ -160,31 +169,47 @@ export const DashboardPage = () => {
                 <option>Este Año</option>
               </select>
             </div>
-            <div className="flex-1 flex items-end justify-between gap-2 h-44 cursor-default">
+            <div className="flex-1 h-44 pt-4 text-xs font-bold font-sans">
               {loading ? (
                 <div className="w-full flex justify-center text-slate-400 font-bold text-xs mt-10">Cargando gráficos...</div>
               ) : data.barras.length > 0 ? (
-                data.barras.map((barra, i) => (
-                  <div key={i} className="flex-1 flex flex-col items-center gap-2 group">
-                    <div
-                      className={`w-full rounded-t-lg transition-all duration-500 relative ${barra.activa ? 'bg-[#135bec]' : 'bg-slate-100 group-hover:bg-[#135bec]/20'
-                        }`}
-                      style={{ height: barra.altura }}
-                    >
-                      <div
-                        className={`absolute -top-6 left-1/2 -translate-x-1/2 text-[9px] font-bold whitespace-nowrap transition-opacity ${barra.activa
-                            ? 'opacity-100 text-[#135bec]'
-                            : 'opacity-0 group-hover:opacity-100 text-slate-500'
-                          }`}
-                      >
-                        {barra.valor}
-                      </div>
-                    </div>
-                    <span className={`text-[9px] font-bold uppercase ${barra.activa ? 'text-slate-800' : 'text-slate-400'}`}>
-                      {barra.mes}
-                    </span>
-                  </div>
-                ))
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={data.barras} margin={{ top: 10, right: 0, left: -20, bottom: 0 }}>
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                    <XAxis
+                      dataKey="mes"
+                      axisLine={false}
+                      tickLine={false}
+                      tick={{ fill: '#94a3b8', fontSize: 10, fontWeight: 700 }}
+                      dy={10}
+                    />
+                    <YAxis
+                      axisLine={false}
+                      tickLine={false}
+                      tick={{ fill: '#94a3b8', fontSize: 10, fontWeight: 700 }}
+                      tickFormatter={(value) => `$${value >= 1000 ? (value / 1000) + 'k' : value}`}
+                    />
+                    <Tooltip
+                      cursor={{ fill: '#f8fafc' }}
+                      content={({ active, payload }) => {
+                        if (active && payload && payload.length) {
+                          return (
+                            <div className="bg-white p-3 rounded-xl shadow-lg border border-slate-100 flex flex-col gap-1">
+                              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{payload[0].payload.mes}</p>
+                              <p className="text-sm font-black text-[#135bec]">{payload[0].payload.valor}</p>
+                            </div>
+                          );
+                        }
+                        return null;
+                      }}
+                    />
+                    <Bar dataKey="totalNum" radius={[4, 4, 0, 0]} maxBarSize={40}>
+                      {data.barras.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.activa ? '#135bec' : '#cbd5e1'} />
+                      ))}
+                    </Bar>
+                  </BarChart>
+                </ResponsiveContainer>
               ) : (
                 <div className="w-full flex justify-center text-slate-400 font-bold text-xs mt-10">Sin datos registrados.</div>
               )}

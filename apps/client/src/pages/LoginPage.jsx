@@ -1,32 +1,25 @@
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
-import { useNavigate } from "react-router-dom"; // si usas react-router
+import { useNavigate } from "react-router-dom";
 
 export const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
-
-  // Estados UI
-  const [loading, setLoading] = useState(false);
-  const [errorMsg, setErrorMsg] = useState("");
-
-  const [formData, setFormData] = useState({
-    usuario: "",
-    password: "",
-  });
+  const [loading,      setLoading]      = useState(false);
+  const [errorMsg,     setErrorMsg]     = useState("");
+  const [formData,     setFormData]     = useState({ usuario: "", password: "" });
 
   const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-    setErrorMsg(""); // limpia error al escribir
+    setErrorMsg("");
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMsg("");
-
-    const email = formData.usuario.trim();
+    const email    = formData.usuario.trim();
     const password = formData.password;
 
     if (!email || !password) {
@@ -36,14 +29,11 @@ export const LoginPage = () => {
 
     try {
       setLoading(true);
-
       const resp = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
-
-      // Siempre intenta parsear JSON (tu API estandariza JSON de error/éxito)
       const json = await resp.json();
 
       if (!resp.ok || !json?.success) {
@@ -52,20 +42,16 @@ export const LoginPage = () => {
       }
 
       const token = json?.data?.token;
-      const user = json?.data?.user;
+      const user  = json?.data?.user;
 
       if (!token || !user) {
         setErrorMsg("Respuesta inválida del servidor.");
         return;
       }
 
-      // Persistencia simple
       localStorage.setItem("mp_token", token);
       localStorage.setItem("mp_user", JSON.stringify(user));
-
-      // Redirección (ajusta a tu app)
       navigate("/dashboard");
-      // window.location.href = "/"; // opción sin router
     } catch (err) {
       setErrorMsg("No se pudo conectar con el servidor.");
     } finally {
@@ -74,15 +60,16 @@ export const LoginPage = () => {
   };
 
   return (
-    <div className="flex flex-col bg-[#f6f6f8] font-[Manrope,sans-serif] relative">
+    <div className="flex flex-col min-h-screen bg-[#eef0f5] font-[Manrope,sans-serif] relative">
+
       {/* Fondo mesh */}
       <div
         className="fixed inset-0 z-0"
         style={{
-          backgroundColor: "#f6f6f8",
+          backgroundColor: "#eef0f5",
           backgroundImage: `
-            radial-gradient(at 0% 0%, rgba(19, 91, 236, 0.04) 0px, transparent 50%),
-            radial-gradient(at 100% 100%, rgba(19, 91, 236, 0.06) 0px, transparent 50%)
+            radial-gradient(at 0% 0%,   rgba(19, 91, 236, 0.07) 0px, transparent 50%),
+            radial-gradient(at 100% 100%, rgba(19, 91, 236, 0.10) 0px, transparent 50%)
           `,
         }}
       />
@@ -90,21 +77,22 @@ export const LoginPage = () => {
       {/* Contenido centrado */}
       <div className="relative z-10 flex-1 flex items-center justify-center px-4 py-8">
         <div className="w-full max-w-sm">
+
           {/* Logo */}
           <div className="flex items-center justify-center gap-2 mb-8">
-            <span className="text-sm font-black tracking-[0.2em] uppercase text-slate-800">
+            <span className="text-sm font-black tracking-[0.2em] uppercase text-slate-900">
               ICON
             </span>
           </div>
 
           {/* Card */}
           <div
-            className="bg-white rounded-2xl border border-slate-100 p-8"
-            style={{ boxShadow: "0 8px 40px -8px rgba(0,0,0,0.08)" }}
+            className="bg-white rounded-2xl border border-slate-200 p-8"
+            style={{ boxShadow: "0 8px 40px -8px rgba(0,0,0,0.14)" }}
           >
             {/* Encabezado */}
             <div className="mb-8 text-center">
-              <h1 className="text-xl font-semibold tracking-tight text-slate-800 mb-1.5">
+              <h1 className="text-xl font-bold tracking-tight text-slate-900 mb-1.5">
                 Bienvenido
               </h1>
               <p className="text-slate-500 text-xs leading-relaxed">
@@ -113,21 +101,22 @@ export const LoginPage = () => {
             </div>
 
             {/* Error */}
-            {errorMsg ? (
-              <div className="mb-6 rounded-xl border border-red-100 bg-red-50 px-4 py-3">
+            {errorMsg && (
+              <div className="mb-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3">
                 <p className="text-[11px] font-semibold text-red-700 tracking-wide">
                   {errorMsg}
                 </p>
               </div>
-            ) : null}
+            )}
 
             {/* Formulario */}
             <form className="space-y-6" onSubmit={handleSubmit}>
+
               {/* Usuario */}
               <div className="space-y-1.5">
                 <label
                   htmlFor="usuario"
-                  className="block text-[10px] font-bold uppercase tracking-[0.18em] text-slate-600"
+                  className="block text-[10px] font-black uppercase tracking-[0.18em] text-slate-700"
                 >
                   Usuario
                 </label>
@@ -140,7 +129,7 @@ export const LoginPage = () => {
                   placeholder="correo@ejemplo.com"
                   autoComplete="email"
                   disabled={loading}
-                  className="w-full bg-transparent border-0 border-b border-slate-300 py-3 px-0 focus:ring-0 focus:border-[#135bec] transition-colors text-sm placeholder:text-slate-400 text-slate-800 font-medium outline-none disabled:opacity-60"
+                  className="w-full bg-transparent border-0 border-b-2 border-slate-300 py-3 px-0 focus:ring-0 focus:border-[#135bec] transition-colors text-sm placeholder:text-slate-400 text-slate-900 font-medium outline-none disabled:opacity-60"
                 />
               </div>
 
@@ -149,19 +138,11 @@ export const LoginPage = () => {
                 <div className="flex justify-between items-center">
                   <label
                     htmlFor="password"
-                    className="block text-[10px] font-bold uppercase tracking-[0.18em] text-slate-600"
+                    className="block text-[10px] font-black uppercase tracking-[0.18em] text-slate-700"
                   >
                     Contraseña
                   </label>
-                  {/* <a
-                    href="#"
-                    onClick={(e) => e.preventDefault()}
-                    className="text-[10px] font-semibold text-[#135bec] hover:text-[#135bec]/70 transition-colors"
-                  >
-                    ¿Olvidaste tu clave?
-                  </a> */}
                 </div>
-
                 <div className="relative">
                   <input
                     id="password"
@@ -172,22 +153,19 @@ export const LoginPage = () => {
                     placeholder="••••••••"
                     autoComplete="current-password"
                     disabled={loading}
-                    className="w-full bg-transparent border-0 border-b border-slate-300 py-3 px-0 pr-8 focus:ring-0 focus:border-[#135bec] transition-colors text-sm placeholder:text-slate-400 text-slate-800 font-medium outline-none disabled:opacity-60"
+                    className="w-full bg-transparent border-0 border-b-2 border-slate-300 py-3 px-0 pr-8 focus:ring-0 focus:border-[#135bec] transition-colors text-sm placeholder:text-slate-400 text-slate-900 font-medium outline-none disabled:opacity-60"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword((prev) => !prev)}
-                    className="absolute right-0 top-1/2 -translate-y-1/2 text-slate-400 hover:text-[#135bec] transition-colors p-0.5"
-                    aria-label={
-                      showPassword ? "Ocultar contraseña" : "Mostrar contraseña"
-                    }
+                    className="absolute right-0 top-1/2 -translate-y-1/2 text-slate-500 hover:text-[#135bec] transition-colors p-0.5"
+                    aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
                     disabled={loading}
                   >
-                    {showPassword ? (
-                      <EyeOff size={16} strokeWidth={1.8} />
-                    ) : (
-                      <Eye size={16} strokeWidth={1.8} />
-                    )}
+                    {showPassword
+                      ? <EyeOff size={16} strokeWidth={1.8} />
+                      : <Eye    size={16} strokeWidth={1.8} />
+                    }
                   </button>
                 </div>
               </div>
@@ -197,8 +175,8 @@ export const LoginPage = () => {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full bg-[#135bec] hover:bg-[#135bec]/90 active:scale-[0.98] text-white font-bold py-3.5 rounded-xl transition-all text-[11px] uppercase tracking-[0.25em] disabled:opacity-70 disabled:active:scale-100"
-                  style={{ boxShadow: "0 8px 24px -4px rgba(19, 91, 236, 0.35)" }}
+                  className="w-full bg-[#135bec] hover:bg-[#1048bc] active:scale-[0.98] text-white font-bold py-3.5 rounded-xl transition-all text-[11px] uppercase tracking-[0.25em] disabled:opacity-70 disabled:active:scale-100"
+                  style={{ boxShadow: "0 8px 24px -4px rgba(19, 91, 236, 0.45)" }}
                 >
                   {loading ? "Ingresando..." : "Ingresar al Sistema"}
                 </button>
@@ -207,18 +185,16 @@ export const LoginPage = () => {
           </div>
 
           {/* Línea decorativa */}
-          <div className="mt-8 h-px bg-gradient-to-r from-transparent via-slate-300 to-transparent" />
+          <div className="mt-8 h-px bg-gradient-to-r from-transparent via-slate-400 to-transparent" />
 
           {/* Footer mini */}
           <div className="mt-6 flex justify-between items-center">
-            <span className="text-[10px] text-slate-400 uppercase tracking-widest">
+            <span className="text-[10px] text-slate-500 uppercase tracking-widest">
               © 2026
             </span>
-            <div className="flex gap-4">
-              <span className="text-[10px] text-slate-400 uppercase tracking-widest">
-                v1.0.0
-              </span>
-            </div>
+            <span className="text-[10px] text-slate-500 uppercase tracking-widest">
+              v1.0.0
+            </span>
           </div>
         </div>
       </div>

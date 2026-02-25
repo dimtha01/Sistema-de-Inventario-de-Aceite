@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { ModalNuevoProducto } from '../components/ModalNuevoProducto';
 
 // ── Íconos ───────────────────────────────────────────────
@@ -120,33 +121,37 @@ const DrawerContent = ({ productoSel, onDeselect, onEditar }) => {
 
 // ── Página principal ──────────────────────────────────────
 export const InventarioPage = () => {
-  const [productos,       setProductos]       = useState([]);
-  const [loading,         setLoading]         = useState(true);
+  const [productos, setProductos] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [categoriaActiva, setCategoriaActiva] = useState('Todos');
-  const [marcaActiva,     setMarcaActiva]     = useState('Todas');
-  const [productoSel,     setProductoSel]     = useState(null);
-  const [panelOpen,       setPanelOpen]       = useState(false);
-  const [modalProducto,   setModalProducto]   = useState(null);
+  const [marcaActiva, setMarcaActiva] = useState('Todas');
+  const [productoSel, setProductoSel] = useState(null);
+  const [panelOpen, setPanelOpen] = useState(false);
+  const [modalProducto, setModalProducto] = useState(null);
   const modalAbierto = modalProducto !== null;
 
+  const location = useLocation();
+
   useEffect(() => {
-    fetch('/api/inventory/products')
+    setLoading(true);
+    fetch(`/api/inventory/products${location.search}`)
       .then(res => res.json())
       .then(res => {
         if (res.success && res.data) {
           setProductos(res.data);
           if (res.data.length > 0) setProductoSel(res.data[0]);
+          else setProductoSel(null);
         }
       })
       .finally(() => setLoading(false));
-  }, []);
+  }, [location.search]);
 
   const categorias = ['Todos', ...new Set(productos.map(p => p.categoria).filter(Boolean))];
-  const marcas     = ['Todas', ...new Set(productos.map(p => p.proveedor).filter(Boolean))];
+  const marcas = ['Todas', ...new Set(productos.map(p => p.proveedor).filter(Boolean))];
 
   const productosFiltrados = productos.filter(p => {
     const passCategoria = categoriaActiva === 'Todos' || p.categoria === categoriaActiva;
-    const passMarca     = marcaActiva === 'Todas'    || p.proveedor  === marcaActiva;
+    const passMarca = marcaActiva === 'Todas' || p.proveedor === marcaActiva;
     return passCategoria && passMarca;
   });
 
@@ -204,11 +209,10 @@ export const InventarioPage = () => {
                 <button
                   key={cat}
                   onClick={() => setCategoriaActiva(cat)}
-                  className={`px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wide transition-colors ${
-                    categoriaActiva === cat
+                  className={`px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wide transition-colors ${categoriaActiva === cat
                       ? 'bg-[#135bec] text-white shadow-sm shadow-[#135bec]/30'
                       : 'bg-white border border-slate-300 text-slate-600 hover:border-[#135bec]/50 hover:text-[#135bec]'
-                  }`}
+                    }`}
                 >
                   {cat}
                 </button>
@@ -228,11 +232,10 @@ export const InventarioPage = () => {
               <button
                 key={marca}
                 onClick={() => setMarcaActiva(marca)}
-                className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wide flex-shrink-0 transition-colors ${
-                  marcaActiva === marca
+                className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wide flex-shrink-0 transition-colors ${marcaActiva === marca
                     ? 'bg-slate-900 text-white'
                     : 'bg-white border border-slate-300 text-slate-500 hover:border-[#135bec]/50 hover:text-[#135bec]'
-                }`}
+                  }`}
               >
                 {marca}
               </button>
@@ -248,11 +251,10 @@ export const InventarioPage = () => {
             <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
               {productosFiltrados.map(p => (
                 <div key={p.id_producto} className="group cursor-pointer" onClick={() => seleccionar(p)}>
-                  <div className={`aspect-square rounded-xl bg-white overflow-hidden border mb-2 transition-all duration-300 hover:shadow-lg hover:shadow-[#135bec]/10 ${
-                    productoSel?.id_producto === p.id_producto
+                  <div className={`aspect-square rounded-xl bg-white overflow-hidden border mb-2 transition-all duration-300 hover:shadow-lg hover:shadow-[#135bec]/10 ${productoSel?.id_producto === p.id_producto
                       ? 'border-[#135bec] shadow-md shadow-[#135bec]/15'
                       : 'border-slate-200 hover:border-slate-300'
-                  }`}>
+                    }`}>
                     {p.imagen ? (
                       <div
                         className="w-full h-full bg-center bg-cover transition-transform duration-500 group-hover:scale-105"

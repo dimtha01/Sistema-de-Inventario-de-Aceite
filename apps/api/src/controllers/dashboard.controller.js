@@ -60,7 +60,8 @@ export const getDashboardData = async (req, res) => {
                 mes: m.mes,
                 altura: `${altura || 5}%`, // Min height 5%
                 valor: `$${formatTotal}`,
-                activa: m.activa
+                activa: m.activa,
+                totalNum: m.total
             };
         });
 
@@ -71,6 +72,28 @@ export const getDashboardData = async (req, res) => {
                 ? `$${(val / 1000).toFixed(1)}k`
                 : `$${val.toFixed(0)}`;
 
+        // 4. Producto Destacado
+        const productosDestacados = [...productos].sort((a, b) => {
+            const valA = (a.stock_actual || 0) * (a.precio ? Number(a.precio.precio_compra) : 0);
+            const valB = (b.stock_actual || 0) * (b.precio ? Number(b.precio.precio_compra) : 0);
+            return valB - valA;
+        });
+
+        let destacadoData = null;
+        if (productosDestacados.length > 0) {
+            const destacado = productosDestacados[0];
+            const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:3000';
+            const cleanImagePath = destacado.url_imagen ? destacado.url_imagen.replace(/\\/g, '/').replace(/^\/+/, '') : '';
+            const imageUrlFormatted = cleanImagePath ? (cleanImagePath.startsWith('http') ? cleanImagePath : `${BACKEND_URL}/${cleanImagePath}`) : 'https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?auto=format&fit=crop&q=80&w=800';
+
+            destacadoData = {
+                nombre: destacado.nombre_repuesto,
+                imagen: imageUrlFormatted,
+                descripcion: `Stock actual: ${destacado.stock_actual} unidades. Representa la mayor inversión en inventario actual.`,
+                etiqueta: 'Producto Principal'
+            };
+        }
+
         res.status(200).json({
             success: true,
             data: {
@@ -79,7 +102,8 @@ export const getDashboardData = async (req, res) => {
                     totalVentas: totalVentas.toString(),
                     ingresosTotales: formatMoney(ingresosTotales)
                 },
-                barras
+                barras,
+                destacado: destacadoData
             }
         });
 

@@ -1,22 +1,38 @@
 import { useState, useEffect } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { Bell, LogOut, Menu, X } from 'lucide-react';
 import { NotificacionesPanel } from './NotificacionesPanel';
 
 const navLinks = [
-  { to: '/inventario',  label: 'Inventario' },
-  { to: '/clientes',    label: 'Clientes' },
+  { to: '/inventario', label: 'Inventario' },
+  { to: '/clientes', label: 'Clientes' },
   { to: '/proveedores', label: 'Proveedores' },
-  { to: '/categorias',  label: 'Categorias' },
-  { to: '/pos',         label: 'Ventas' },
-  { to: '/historial',   label: 'Historial' },
+  { to: '/categorias', label: 'Categorias' },
+  { to: '/pos', label: 'Ventas' },
+  { to: '/historial', label: 'Historial' },
 ];
 
 export const Header = () => {
   const navigate = useNavigate();
-  const [menuOpen,   setMenuOpen]   = useState(false);
-  const [showNotif,  setShowNotif]  = useState(false);
-  const [alerts,     setAlerts]     = useState([]);
+  const location = useLocation();
+  const isInventario = location.pathname === '/inventario';
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [showNotif, setShowNotif] = useState(false);
+  const [alerts, setAlerts] = useState([]);
+  const [searchVal, setSearchVal] = useState('');
+
+  // Sincronizar búsqueda cuando cambia la URL
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    setSearchVal(params.get('search') || '');
+  }, [location.search]);
+
+  const handleSearch = (e) => {
+    setSearchVal(e.target.value);
+    if (isInventario) {
+      navigate(`/inventario?search=${encodeURIComponent(e.target.value)}`);
+    }
+  };
 
   const [isDark, setIsDark] = useState(() => {
     if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
@@ -25,12 +41,32 @@ export const Header = () => {
     return false;
   });
 
-  useEffect(() => {
+  const fetchAlerts = () => {
     fetch('/api/inventory/alerts')
       .then(res => res.json())
-      .then(data => { if (data.success) setAlerts(data.data); })
+      .then(data => {
+        if (data.success) {
+          const leidas = JSON.parse(localStorage.getItem('alertas_leidas') || '[]');
+          const noLeidas = data.data.filter(a => !leidas.includes(a.id));
+          setAlerts(noLeidas);
+        }
+      })
       .catch(err => console.error('Error fetching alerts:', err));
+  };
+
+  useEffect(() => {
+    fetchAlerts();
+    const interval = setInterval(fetchAlerts, 5000);
+    return () => clearInterval(interval);
   }, []);
+
+  const markAllAsRead = () => {
+    const leidas = JSON.parse(localStorage.getItem('alertas_leidas') || '[]');
+    const nuevasLeidas = [...new Set([...leidas, ...alerts.map(a => a.id)])];
+    localStorage.setItem('alertas_leidas', JSON.stringify(nuevasLeidas));
+    setAlerts([]);
+    setShowNotif(false);
+  };
 
   const handleLogout = () => {
     localStorage.removeItem('mp_token');
@@ -43,7 +79,11 @@ export const Header = () => {
   return (
     <>
       {showNotif && (
-        <NotificacionesPanel onClose={() => setShowNotif(false)} alerts={alerts} />
+        <NotificacionesPanel
+          onClose={() => setShowNotif(false)}
+          alerts={alerts}
+          onMarkRead={markAllAsRead}
+        />
       )}
 
       <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-300 px-4 md:px-8 py-3">
@@ -61,10 +101,9 @@ export const Header = () => {
                   key={to}
                   to={to}
                   className={({ isActive }) =>
-                    `text-[11px] font-bold uppercase tracking-widest transition-colors pb-0.5 whitespace-nowrap ${
-                      isActive
-                        ? 'text-[#135bec] border-b-2 border-[#135bec]'
-                        : 'text-slate-500 hover:text-slate-900 border-b-2 border-transparent'
+                    `text-[11px] font-bold uppercase tracking-widest transition-colors pb-0.5 whitespace-nowrap ${isActive
+                      ? 'text-[#135bec] border-b-2 border-[#135bec]'
+                      : 'text-slate-500 hover:text-slate-900 border-b-2 border-transparent'
                     }`
                   }
                 >
@@ -74,17 +113,34 @@ export const Header = () => {
             </nav>
           </div>
 
+          {/* Buscador (solo en inventario) */}
+          {isInventario && (
+            <div className="hidden md:block relative w-64 max-w-sm">
+              <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400"
+                fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                <circle cx="11" cy="11" r="8" />
+                <path d="m21 21-4.35-4.35" />
+              </svg>
+              <input
+                type="text"
+                value={searchVal}
+                onChange={handleSearch}
+                placeholder="Buscar por nombre, categoría, proveedor..."
+                className="w-full pl-9 pr-3 py-1.5 bg-slate-50 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-[#135bec]/20 border border-slate-200 placeholder:text-slate-400 text-slate-700 transition-all"
+              />
+            </div>
+          )}
+
           {/* Acciones */}
           <div className="flex items-center gap-2 sm:gap-3">
 
             {/* Botón Bell con badge */}
             <button
               onClick={() => setShowNotif(p => !p)}
-              className={`relative p-2 rounded-full transition-colors group ${
-                showNotif
-                  ? 'bg-[#135bec]/10 text-[#135bec]'
-                  : 'hover:bg-slate-100 text-slate-500'
-              }`}
+              className={`relative p-2 rounded-full transition-colors group ${showNotif
+                ? 'bg-[#135bec]/10 text-[#135bec]'
+                : 'hover:bg-slate-100 text-slate-500'
+                }`}
               aria-label="Notificaciones"
             >
               <Bell
@@ -126,7 +182,7 @@ export const Header = () => {
               aria-label="Menú"
             >
               {menuOpen
-                ? <X    size={18} strokeWidth={2} className="text-slate-700" />
+                ? <X size={18} strokeWidth={2} className="text-slate-700" />
                 : <Menu size={18} strokeWidth={2} className="text-slate-600" />
               }
             </button>
@@ -148,10 +204,9 @@ export const Header = () => {
                 to={to}
                 onClick={closeMobile}
                 className={({ isActive }) =>
-                  `flex items-center px-4 py-3 rounded-xl text-xs font-bold uppercase tracking-widest transition-all ${
-                    isActive
-                      ? 'bg-[#135bec]/10 text-[#135bec]'
-                      : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+                  `flex items-center px-4 py-3 rounded-xl text-xs font-bold uppercase tracking-widest transition-all ${isActive
+                    ? 'bg-[#135bec]/10 text-[#135bec]'
+                    : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
                   }`
                 }
               >
@@ -161,18 +216,22 @@ export const Header = () => {
 
             <div className="border-t border-slate-200 my-1" />
 
-            <div className="relative">
-              <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400"
-                fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                <circle cx="11" cy="11" r="8" />
-                <path d="m21 21-4.35-4.35" />
-              </svg>
-              <input
-                type="text"
-                placeholder="Buscar..."
-                className="w-full pl-9 pr-3 py-2.5 bg-slate-50 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-[#135bec]/20 border border-slate-200 placeholder:text-slate-400 text-slate-700"
-              />
-            </div>
+            {isInventario && (
+              <div className="relative mb-2">
+                <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400"
+                  fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                  <circle cx="11" cy="11" r="8" />
+                  <path d="m21 21-4.35-4.35" />
+                </svg>
+                <input
+                  type="text"
+                  value={searchVal}
+                  onChange={handleSearch}
+                  placeholder="Buscar en inventario..."
+                  className="w-full pl-9 pr-3 py-2.5 bg-slate-50 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-[#135bec]/20 border border-slate-200 placeholder:text-slate-400 text-slate-700"
+                />
+              </div>
+            )}
 
             <button
               onClick={() => { closeMobile(); handleLogout(); }}
