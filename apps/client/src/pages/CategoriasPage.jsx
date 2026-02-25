@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
+import { ModalNuevaCategoria } from '../components/ModalNuevaCategoria';
 import { Search, Plus, Layers, Tags, Package, X, Trash2, CheckCircle2, AlertCircle } from 'lucide-react';
 
 // ── Modal Notificación (reemplaza alert) ──────────────────
@@ -8,9 +9,8 @@ const ModalNotificacion = ({ tipo, mensaje, onClose }) => {
     <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm" onClick={onClose}>
       <div className="bg-white w-full max-w-xs rounded-2xl shadow-xl overflow-hidden flex flex-col" onClick={e => e.stopPropagation()}>
         <div className="px-5 py-5 flex flex-col items-center text-center gap-3">
-          <div className={`w-12 h-12 rounded-full flex items-center justify-center border ${
-            esError ? 'bg-rose-100 border-rose-200' : 'bg-emerald-100 border-emerald-200'
-          }`}>
+          <div className={`w-12 h-12 rounded-full flex items-center justify-center border ${esError ? 'bg-rose-100 border-rose-200' : 'bg-emerald-100 border-emerald-200'
+            }`}>
             {esError
               ? <AlertCircle size={22} className="text-rose-600" />
               : <CheckCircle2 size={22} className="text-emerald-600" />
@@ -21,76 +21,14 @@ const ModalNotificacion = ({ tipo, mensaje, onClose }) => {
         <div className="px-5 py-3 bg-slate-50 border-t border-slate-200 flex justify-center">
           <button
             onClick={onClose}
-            className={`px-6 py-2 rounded-xl text-white font-bold text-xs uppercase tracking-widest transition-all active:scale-95 ${
-              esError
-                ? 'bg-rose-500 hover:bg-rose-600 shadow-md shadow-rose-500/20'
-                : 'bg-emerald-500 hover:bg-emerald-600 shadow-md shadow-emerald-500/20'
-            }`}
+            className={`px-6 py-2 rounded-xl text-white font-bold text-xs uppercase tracking-widest transition-all active:scale-95 ${esError
+              ? 'bg-rose-500 hover:bg-rose-600 shadow-md shadow-rose-500/20'
+              : 'bg-emerald-500 hover:bg-emerald-600 shadow-md shadow-emerald-500/20'
+              }`}
           >
             Aceptar
           </button>
         </div>
-      </div>
-    </div>
-  );
-};
-
-// ── Modal Nueva Categoría ─────────────────────────────────
-const ModalNuevaCategoria = ({ onClose, onGuardar, onNotificar }) => {
-  const [nombre, setNombre]   = useState('');
-  const [loading, setLoading] = useState(false);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!nombre.trim()) return;
-    setLoading(true);
-    try {
-      const resp = await fetch('/api/categories', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ nombre })
-      });
-      const json = await resp.json();
-      if (resp.ok && json.success) { onGuardar(json.data); onClose(); }
-      else onNotificar('error', json.message || 'Error al crear categoría');
-    } catch (error) {
-      console.error(error);
-      onNotificar('error', 'Error de conexión con el servidor');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm" onClick={onClose}>
-      <div className="bg-white w-full max-w-sm rounded-2xl shadow-xl overflow-hidden flex flex-col" onClick={e => e.stopPropagation()}>
-        <div className="px-5 py-4 flex items-center justify-between border-b border-slate-200">
-          <h2 className="text-base font-bold text-slate-900">Nueva Categoría</h2>
-          <button onClick={onClose} className="text-slate-500 hover:text-slate-700 hover:bg-slate-100 p-1.5 rounded-lg transition-colors">
-            <X size={18} />
-          </button>
-        </div>
-        <form onSubmit={handleSubmit}>
-          <div className="px-5 py-5">
-            <label className="text-xs font-bold text-slate-700 uppercase tracking-wide mb-2 block">
-              Nombre de la Categoría
-            </label>
-            <input
-              required autoFocus type="text"
-              value={nombre} onChange={e => setNombre(e.target.value)}
-              placeholder="Ej. Sistema Eléctrico"
-              className="w-full px-3 py-2.5 rounded-xl border-2 border-slate-200 bg-slate-50 text-slate-900 focus:bg-white focus:ring-2 focus:ring-[#135bec]/20 focus:border-[#135bec] transition-all outline-none text-sm font-medium placeholder:text-slate-400"
-            />
-          </div>
-          <div className="px-5 py-3.5 bg-slate-50 border-t border-slate-200 flex justify-end gap-2.5">
-            <button type="button" onClick={onClose} className="px-4 py-2 rounded-xl text-slate-600 font-bold hover:bg-slate-200 transition-colors text-xs border border-slate-200">
-              Cancelar
-            </button>
-            <button type="submit" disabled={loading} className="px-5 py-2 rounded-xl bg-[#135bec] text-white font-bold hover:bg-[#1048bc] shadow-md shadow-[#135bec]/20 transition-all active:scale-95 text-xs disabled:opacity-50">
-              Guardar
-            </button>
-          </div>
-        </form>
       </div>
     </div>
   );
@@ -182,12 +120,12 @@ const CategoriaCard = ({ categoria, onEliminar }) => (
 
 // ── Página principal ─────────────────────────────────────
 export const CategoriasPage = () => {
-  const [busqueda, setBusqueda]                     = useState('');
-  const [showModal, setShowModal]                   = useState(false);
-  const [categorias, setCategorias]                 = useState([]);
-  const [loading, setLoading]                       = useState(true);
+  const [busqueda, setBusqueda] = useState('');
+  const [showModal, setShowModal] = useState(false);
+  const [categorias, setCategorias] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [categoriaAEliminar, setCategoriaAEliminar] = useState(null);
-  const [notificacion, setNotificacion]             = useState(null); // { tipo, mensaje }
+  const [notificacion, setNotificacion] = useState(null); // { tipo, mensaje }
 
   const notificar = (tipo, mensaje) => setNotificacion({ tipo, mensaje });
 

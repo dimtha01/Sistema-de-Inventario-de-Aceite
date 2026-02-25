@@ -1,14 +1,56 @@
 import { useState, useEffect } from 'react';
+import { ModalNuevaCategoria } from './ModalNuevaCategoria';
+import { ModalNuevoProveedor } from './ModalNuevoProveedor';
+
+// ── Modal Notificación ────────────────────────────────────
+const ModalNotificacion = ({ tipo, mensaje, onClose }) => {
+  const esError = tipo === 'error';
+  return (
+    <div className="fixed inset-0 z-[80] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm" onClick={onClose}>
+      <div className="bg-white w-full max-w-xs rounded-2xl shadow-xl overflow-hidden flex flex-col" onClick={e => e.stopPropagation()}>
+        <div className="px-5 py-5 flex flex-col items-center text-center gap-3">
+          <div className={`w-12 h-12 rounded-full flex items-center justify-center border ${esError ? 'bg-rose-100 border-rose-200' : 'bg-emerald-100 border-emerald-200'
+            }`}>
+            {esError ? (
+              <svg className="w-6 h-6 text-rose-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+            ) : (
+              <svg className="w-6 h-6 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+            )}
+          </div>
+          <p className="text-sm font-bold text-slate-800 leading-snug">{mensaje}</p>
+        </div>
+        <div className="px-5 py-3 bg-slate-50 border-t border-slate-200 flex justify-center">
+          <button
+            onClick={onClose}
+            className={`px-6 py-2 rounded-xl text-white font-bold text-xs uppercase tracking-widest transition-all active:scale-95 ${esError
+                ? 'bg-rose-500 hover:bg-rose-600 shadow-md shadow-rose-500/20'
+                : 'bg-emerald-500 hover:bg-emerald-600 shadow-md shadow-emerald-500/20'
+              }`}
+          >
+            Aceptar
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const inputCls =
   'w-full pl-9 pr-3 py-2.5 bg-slate-50 border-2 border-transparent focus:border-[#135bec] focus:outline-none rounded-xl text-slate-900 placeholder:text-slate-400 text-sm font-medium transition-all';
 
 // ── Sub-componente Field ──────────────────────────────────
-const Field = ({ label, labelColor = 'text-slate-400', icon, children }) => (
+const Field = ({ label, labelColor = 'text-slate-400', icon, rightContent, children }) => (
   <div className="space-y-1">
-    <label className={`text-[10px] font-black uppercase tracking-widest ${labelColor}`}>
-      {label}
-    </label>
+    <div className="flex justify-between items-center">
+      <label className={`text-[10px] font-black uppercase tracking-widest ${labelColor}`}>
+        {label}
+      </label>
+      {rightContent}
+    </div>
     <div className="relative">
       <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
         {icon}
@@ -79,13 +121,16 @@ export const ModalNuevoProducto = ({ onClose, onGuardar, productoEditar = null }
   const modoEdicion = Boolean(productoEditar); // Identifica si estamos creando o editando
 
   const [form, setForm] = useState({
-    nombre: '', stock: '', id_categoria: '', id_proveedor: '',
+    nombre: '', stock: '', stock_minimo_alerta: '', id_categoria: '', id_proveedor: '',
     precioCompra: '', precioVenta: '', preview: null, imagen: null,
   });
 
   const [dragging, setDragging] = useState(false);
   const [opciones, setOpciones] = useState({ categorias: [], proveedores: [] });
   const [saving, setSaving] = useState(false);
+  const [modalCat, setModalCat] = useState(false);
+  const [modalProv, setModalProv] = useState(false);
+  const [notificacion, setNotificacion] = useState(null);
 
   useEffect(() => {
     fetch('/api/inventory/options')
@@ -100,6 +145,7 @@ export const ModalNuevoProducto = ({ onClose, onGuardar, productoEditar = null }
             setForm({
               nombre: productoEditar.nombre || '',
               stock: productoEditar.stock !== undefined ? String(productoEditar.stock) : '',
+              stock_minimo_alerta: productoEditar.stock_minimo_alerta !== undefined ? String(productoEditar.stock_minimo_alerta) : '5',
               id_categoria: productoEditar.id_categoria || (res.data.categorias[0]?.id_categoria ?? ''),
               id_proveedor: productoEditar.id_proveedor || (res.data.proveedores[0]?.id_proveedor ?? ''),
               precioCompra: productoEditar.precioCompra !== undefined ? String(productoEditar.precioCompra) : '',
@@ -120,6 +166,18 @@ export const ModalNuevoProducto = ({ onClose, onGuardar, productoEditar = null }
   }, [modoEdicion, productoEditar]);
 
   const set = (name, value) => setForm(p => ({ ...p, [name]: value }));
+
+  const handlerNuevaCat = (cat) => {
+    const newCat = { ...cat, id_categoria: cat.id_categoria || cat.id, nombre_categoria: cat.nombre_categoria || cat.nombre };
+    setOpciones(p => ({ ...p, categorias: [...p.categorias, newCat] }));
+    set('id_categoria', newCat.id_categoria);
+  };
+
+  const handlerNuevoProv = (prov) => {
+    const newProv = { ...prov, id_proveedor: prov.id_proveedor || prov.id, nombre_empresa: prov.nombre_empresa || prov.nombre };
+    setOpciones(p => ({ ...p, proveedores: [...p.proveedores, newProv] }));
+    set('id_proveedor', newProv.id_proveedor);
+  };
 
   const handleImagen = (file) => {
     if (!file?.type.startsWith('image/')) return;
@@ -142,6 +200,7 @@ export const ModalNuevoProducto = ({ onClose, onGuardar, productoEditar = null }
       const fd = new FormData();
       fd.append("nombre", form.nombre);
       fd.append("stock", String(Number(form.stock) || 0));
+      fd.append("stock_minimo_alerta", String(Number(form.stock_minimo_alerta) || 5));
       fd.append("id_categoria", String(form.id_categoria));
       fd.append("id_proveedor", String(form.id_proveedor));
       fd.append("precioCompra", String(parseFloat(form.precioCompra) || 0));
@@ -174,14 +233,17 @@ export const ModalNuevoProducto = ({ onClose, onGuardar, productoEditar = null }
       }
 
       if (resp.ok && json.success) {
-        onGuardar(json.data);
-        onClose();
+        setNotificacion({ tipo: 'exito', mensaje: `¡Producto ${modoEdicion ? 'actualizado' : 'creado'} exitosamente!` });
+        setTimeout(() => {
+          onGuardar(json.data);
+          onClose();
+        }, 1200);
       } else {
-        alert(json.message || `Error al ${modoEdicion ? 'actualizar' : 'crear'} producto`);
+        setNotificacion({ tipo: 'error', mensaje: json.message || `Error al ${modoEdicion ? 'actualizar' : 'crear'} producto` });
       }
     } catch (error) {
       console.error(error);
-      alert("Error de conexión con el servidor");
+      setNotificacion({ tipo: 'error', mensaje: "Error de conexión con el servidor" });
     } finally {
       setSaving(false);
     }
@@ -307,7 +369,7 @@ export const ModalNuevoProducto = ({ onClose, onGuardar, productoEditar = null }
               />
             </Field>
 
-            {/* Stock + Categoría */}
+            {/* Stock + Alerta */}
             <div className="grid grid-cols-2 gap-3">
               <Field label="Stock Inicial" icon={<IcBox />}>
                 <input
@@ -320,7 +382,27 @@ export const ModalNuevoProducto = ({ onClose, onGuardar, productoEditar = null }
                   className={inputCls}
                 />
               </Field>
-              <Field label="Categoría" icon={<IcGrid />}>
+              <Field label="Stock Crítico" icon={<IcTrend />}>
+                <input
+                  name="stock_minimo_alerta"
+                  type="number"
+                  min="0"
+                  value={form.stock_minimo_alerta}
+                  onChange={e => set('stock_minimo_alerta', e.target.value)}
+                  placeholder="5"
+                  className={inputCls}
+                />
+              </Field>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <Field
+                label="Categoría"
+                icon={<IcGrid />}
+                rightContent={
+                  <button type="button" onClick={() => setModalCat(true)} className="text-[10px] text-[#135bec] font-bold hover:underline">+ Agregar</button>
+                }
+              >
                 <select
                   name="id_categoria"
                   value={form.id_categoria}
@@ -330,10 +412,13 @@ export const ModalNuevoProducto = ({ onClose, onGuardar, productoEditar = null }
                   {opciones.categorias.map(c => <option key={c.id_categoria} value={c.id_categoria}>{c.nombre_categoria}</option>)}
                 </select>
               </Field>
-            </div>
-
-            <div className="grid grid-cols-1 gap-3">
-              <Field label="Proveedor" icon={<IcGrid />}>
+              <Field
+                label="Proveedor"
+                icon={<IcGrid />}
+                rightContent={
+                  <button type="button" onClick={() => setModalProv(true)} className="text-[10px] text-[#135bec] font-bold hover:underline">+ Agregar</button>
+                }
+              >
                 <select
                   name="id_proveedor"
                   value={form.id_proveedor}
@@ -408,6 +493,15 @@ export const ModalNuevoProducto = ({ onClose, onGuardar, productoEditar = null }
           </form>
         </div>
       </div>
+      {modalCat && <ModalNuevaCategoria onClose={() => setModalCat(false)} onGuardar={handlerNuevaCat} />}
+      {modalProv && <ModalNuevoProveedor onClose={() => setModalProv(false)} onGuardar={handlerNuevoProv} />}
+      {notificacion && (
+        <ModalNotificacion
+          tipo={notificacion.tipo}
+          mensaje={notificacion.mensaje}
+          onClose={() => setNotificacion(null)}
+        />
+      )}
     </div>
   );
 };

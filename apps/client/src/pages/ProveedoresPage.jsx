@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
+import { ModalNuevoProveedor } from '../components/ModalNuevoProveedor';
 import { Search, Plus, MapPin, Building2, X, Trash2, Phone, CheckCircle2, AlertCircle } from 'lucide-react';
 
 const FILTROS = [{ key: 'todos', label: 'Todos' }];
@@ -11,9 +12,8 @@ const ModalNotificacion = ({ tipo, mensaje, onClose }) => {
     <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm" onClick={onClose}>
       <div className="bg-white w-full max-w-xs rounded-2xl shadow-xl overflow-hidden flex flex-col" onClick={e => e.stopPropagation()}>
         <div className="px-5 py-5 flex flex-col items-center text-center gap-3">
-          <div className={`w-12 h-12 rounded-full flex items-center justify-center border ${
-            esError ? 'bg-rose-50 border-rose-200' : 'bg-emerald-50 border-emerald-200'
-          }`}>
+          <div className={`w-12 h-12 rounded-full flex items-center justify-center border ${esError ? 'bg-rose-50 border-rose-200' : 'bg-emerald-50 border-emerald-200'
+            }`}>
             {esError
               ? <AlertCircle size={22} className="text-rose-500" />
               : <CheckCircle2 size={22} className="text-emerald-500" />
@@ -24,113 +24,13 @@ const ModalNotificacion = ({ tipo, mensaje, onClose }) => {
         <div className="px-5 py-3 bg-slate-50 border-t border-slate-200 flex justify-center">
           <button
             onClick={onClose}
-            className={`px-6 py-2 rounded-xl text-white font-bold text-xs uppercase tracking-widest transition-all active:scale-95 ${
-              esError
+            className={`px-6 py-2 rounded-xl text-white font-bold text-xs uppercase tracking-widest transition-all active:scale-95 ${esError
                 ? 'bg-rose-500 hover:bg-rose-600 shadow-md shadow-rose-500/20'
                 : 'bg-emerald-500 hover:bg-emerald-600 shadow-md shadow-emerald-500/20'
-            }`}
+              }`}
           >
             Aceptar
           </button>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// ── Modal Nuevo Proveedor ─────────────────────────────────
-const ModalNuevoProveedor = ({ onClose, onGuardar, onNotificar }) => {
-  const [form, setForm] = useState(formInicial);
-  const set = (k, v) => setForm(p => ({ ...p, [k]: v }));
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!form.nombre_empresa.trim()) return;
-    try {
-      const resp = await fetch('/api/providers', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form)
-      });
-      const json = await resp.json();
-      if (json.success) { onGuardar(json.data); onClose(); }
-      else onNotificar('error', json.message || 'Error al crear proveedor');
-    } catch (error) {
-      console.error(error);
-      onNotificar('error', 'Error de conexión con el servidor');
-    }
-  };
-
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4" onClick={onClose}>
-      <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-md" />
-      <div className="relative w-full max-w-md overflow-hidden rounded-2xl bg-white shadow-2xl border border-slate-200" onClick={e => e.stopPropagation()}>
-
-        {/* Header */}
-        <div className="flex items-center justify-between border-b border-slate-200 px-5 py-3.5">
-          <div className="flex items-center gap-2.5">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#135bec]/10 text-[#135bec]">
-              <Building2 size={15} />
-            </div>
-            <div>
-              <h2 className="text-[11px] font-extrabold tracking-widest text-slate-900 uppercase">AutoPart Pro</h2>
-              <p className="text-[9px] font-bold text-slate-500 tracking-[0.2em] uppercase">Sistema de Gestión Premium</p>
-            </div>
-          </div>
-          <button onClick={onClose} className="flex h-7 w-7 items-center justify-center rounded-full hover:bg-slate-100 text-slate-500 transition-colors">
-            <X size={14} />
-          </button>
-        </div>
-
-        {/* Body */}
-        <div className="px-5 py-5">
-          <div className="mb-5 text-center">
-            <h1 className="text-lg font-extrabold text-slate-900">Nuevo Proveedor</h1>
-            <p className="mt-1 text-[11px] text-slate-500">Ingrese los detalles del socio comercial.</p>
-          </div>
-          <form onSubmit={handleSubmit} className="space-y-3.5">
-            <div className="flex flex-col gap-1">
-              <label className="text-[9px] font-black uppercase tracking-widest text-slate-500">Nombre de la Empresa</label>
-              <input
-                required type="text"
-                value={form.nombre_empresa} onChange={e => set('nombre_empresa', e.target.value)}
-                placeholder="Ej. Brembo S.p.A."
-                className="w-full rounded-xl border-2 border-slate-200 bg-slate-50 px-3 py-2.5 text-xs font-medium text-slate-900 outline-none focus:border-[#135bec] focus:bg-white transition-all placeholder:text-slate-400"
-              />
-            </div>
-            <div className="flex flex-col gap-1">
-              <label className="text-[9px] font-black uppercase tracking-widest text-slate-500">Dirección</label>
-              <div className="relative">
-                <MapPin size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#135bec]/60" />
-                <input
-                  type="text"
-                  value={form.direccion} onChange={e => set('direccion', e.target.value)}
-                  placeholder="Ej. Av. Principal, Edif. Pro, Local 1"
-                  className="w-full rounded-xl border-2 border-slate-200 bg-slate-50 pl-8 pr-3 py-2.5 text-xs font-medium text-slate-900 outline-none focus:border-[#135bec] focus:bg-white transition-all placeholder:text-slate-400"
-                />
-              </div>
-            </div>
-            <div className="flex flex-col gap-1">
-              <label className="text-[9px] font-black uppercase tracking-widest text-slate-500">Teléfono</label>
-              <div className="relative">
-                <Phone size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#135bec]/60" />
-                <input
-                  type="text"
-                  value={form.telefono} onChange={e => set('telefono', e.target.value)}
-                  placeholder="Ej. +58 412-1234567"
-                  className="w-full rounded-xl border-2 border-slate-200 bg-slate-50 pl-8 pr-3 py-2.5 text-xs font-medium text-slate-900 outline-none focus:border-[#135bec] focus:bg-white transition-all placeholder:text-slate-400"
-                />
-              </div>
-            </div>
-            <div className="flex flex-col-reverse gap-2 pt-2 sm:flex-row sm:justify-end">
-              <button type="button" onClick={onClose} className="rounded-xl border border-slate-300 px-5 py-2 text-[10px] font-bold uppercase tracking-widest text-slate-600 hover:bg-slate-100 transition-all">
-                Cancelar
-              </button>
-              <button type="submit" className="rounded-xl bg-[#135bec] px-6 py-2 text-[10px] font-bold uppercase tracking-widest text-white shadow-md shadow-[#135bec]/20 hover:bg-[#1048bc] transition-all">
-                Registrar Proveedor
-              </button>
-            </div>
-          </form>
         </div>
       </div>
     </div>
@@ -229,13 +129,13 @@ const ProveedorCard = ({ proveedor, onEliminar }) => (
 
 // ── Página principal ─────────────────────────────────────
 export const ProveedoresPage = () => {
-  const [filtroActivo, setFiltroActivo]             = useState('todos');
-  const [busqueda, setBusqueda]                     = useState('');
-  const [showModal, setShowModal]                   = useState(false);
-  const [proveedores, setProveedores]               = useState([]);
-  const [loading, setLoading]                       = useState(true);
+  const [filtroActivo, setFiltroActivo] = useState('todos');
+  const [busqueda, setBusqueda] = useState('');
+  const [showModal, setShowModal] = useState(false);
+  const [proveedores, setProveedores] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [proveedorAEliminar, setProveedorAEliminar] = useState(null);
-  const [notificacion, setNotificacion]             = useState(null); // { tipo, mensaje }
+  const [notificacion, setNotificacion] = useState(null); // { tipo, mensaje }
 
   const notificar = (tipo, mensaje) => setNotificacion({ tipo, mensaje });
 
@@ -333,18 +233,16 @@ export const ProveedoresPage = () => {
               <button
                 key={f.key}
                 onClick={() => setFiltroActivo(f.key)}
-                className={`flex items-center gap-1 px-3 py-1.5 rounded-md text-[9px] font-bold uppercase tracking-wider transition-all whitespace-nowrap ${
-                  filtroActivo === f.key
+                className={`flex items-center gap-1 px-3 py-1.5 rounded-md text-[9px] font-bold uppercase tracking-wider transition-all whitespace-nowrap ${filtroActivo === f.key
                     ? 'bg-white text-[#135bec] shadow-sm'
                     : 'text-slate-500 hover:text-slate-700'
-                }`}
+                  }`}
               >
                 {f.label}
-                <span className={`px-1 py-0.5 rounded text-[8px] ${
-                  filtroActivo === f.key
+                <span className={`px-1 py-0.5 rounded text-[8px] ${filtroActivo === f.key
                     ? 'bg-[#135bec]/10 text-[#135bec]'
                     : 'bg-slate-200 text-slate-600'
-                }`}>
+                  }`}>
                   {count}
                 </span>
               </button>

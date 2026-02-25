@@ -46,6 +46,7 @@ export const getProducts = async (req, res) => {
                 id_producto: p.id_producto,
                 nombre: p.nombre_repuesto,
                 stock: p.stock_actual,
+                stock_minimo_alerta: p.stock_minimo_alerta,
                 stockColor: p.stock_actual <= p.stock_minimo_alerta ? 'text-orange-500' : 'text-slate-900',
                 imagen: imageUrl, // Aquí enviamos la ruta ya corregida
                 precioCompra: p.precio?.precio_compra ? Number(p.precio.precio_compra) : 0,
@@ -71,9 +72,11 @@ export const createProduct = async (req, res) => {
             nombre,
             stock,
             id_categoria,
+            id_proveedor,
             precioCompra,
             precioVenta,
-            id_usuario: reqUsuario
+            id_usuario: reqUsuario,
+            stock_minimo_alerta
         } = req.body;
 
         // 1. Conversión hiper-segura de los IDs
@@ -94,13 +97,15 @@ export const createProduct = async (req, res) => {
         const safeCompra = precioCompra ? Number(precioCompra) : 0;
         const safeVenta = precioVenta ? Number(precioVenta) : 0;
 
+        const safeStockMinimo = stock_minimo_alerta !== undefined ? Number(stock_minimo_alerta) : 5;
+
         // 3. Transacción protegida contra timeouts
         const newProduct = await prisma.$transaction(async (tx) => {
             const p = await tx.producto.create({
                 data: {
                     nombre_repuesto: nombre,
                     stock_actual: safeStock,
-                    stock_minimo_alerta: 5,
+                    stock_minimo_alerta: safeStockMinimo,
                     url_imagen: imagenUrl,
                     id_categoria: safeCategoria,
                     id_proveedor: safeProveedor,
@@ -149,6 +154,7 @@ export const createProduct = async (req, res) => {
             id_producto: newProduct.id_producto,
             nombre: newProduct.nombre_repuesto,
             stock: newProduct.stock_actual,
+            stock_minimo_alerta: newProduct.stock_minimo_alerta,
             stockColor: newProduct.stock_actual <= newProduct.stock_minimo_alerta ? "text-orange-500" : "text-slate-900",
             imagen: imageUrlFormatted,
             precioCompra: newProduct.precio?.precio_compra ? Number(newProduct.precio.precio_compra) : 0,
@@ -183,7 +189,8 @@ export const updateProduct = async (req, res) => {
             id_proveedor,
             precioCompra,
             precioVenta,
-            id_usuario: reqUsuario
+            id_usuario: reqUsuario,
+            stock_minimo_alerta
         } = req.body;
 
         if (!id) {
@@ -209,6 +216,7 @@ export const updateProduct = async (req, res) => {
                 data: {
                     nombre_repuesto: nombre || existingProduct.nombre_repuesto,
                     stock_actual: stock !== undefined ? Number(stock) : existingProduct.stock_actual,
+                    stock_minimo_alerta: stock_minimo_alerta !== undefined ? Number(stock_minimo_alerta) : existingProduct.stock_minimo_alerta,
                     url_imagen: imagenUrl,
                     id_categoria: id_categoria ? Number(id_categoria) : existingProduct.id_categoria,
                     id_proveedor: id_proveedor ? Number(id_proveedor) : existingProduct.id_proveedor,
@@ -288,6 +296,7 @@ export const updateProduct = async (req, res) => {
             id_producto: updatedProduct.id_producto,
             nombre: updatedProduct.nombre_repuesto,
             stock: updatedProduct.stock_actual,
+            stock_minimo_alerta: updatedProduct.stock_minimo_alerta,
             stockColor: updatedProduct.stock_actual <= updatedProduct.stock_minimo_alerta ? "text-orange-500" : "text-slate-900",
             imagen: imageUrlFormatted,
             precioCompra: updatedProduct.precio?.precio_compra ? Number(updatedProduct.precio.precio_compra) : 0,

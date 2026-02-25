@@ -5,7 +5,6 @@ const formInicial = {
     nombre: "",
     apellido: "",
     telefono: "",
-    limite_credito: "",
 };
 
 const inputCls =
@@ -55,7 +54,6 @@ export const ModalNuevoCliente = ({ onClose, onGuardar }) => {
                     nombre: form.nombre.trim(),
                     apellido: form.apellido.trim(),
                     telefono: form.telefono.trim() || null,
-                    limite_credito: parseFloat(form.limite_credito) || 0,
                 }),
             });
 
@@ -161,7 +159,7 @@ export const ModalNuevoCliente = ({ onClose, onGuardar }) => {
                         </Field>
 
                         {/* Límite de crédito */}
-                        <Field label="Límite de Crédito ($)" icon={<CreditCard size={14} />}>
+                        {/* <Field label="Límite de Crédito ($)" icon={<CreditCard size={14} />}>
                             <input
                                 name="limite_credito"
                                 type="number"
@@ -173,14 +171,13 @@ export const ModalNuevoCliente = ({ onClose, onGuardar }) => {
                                 disabled={saving}
                                 className={inputCls}
                             />
-                        </Field>
+                        </Field> */}
 
                         {/* Tip */}
                         <div className="flex items-start gap-2 p-3 rounded-xl bg-[#135bec]/5 border border-[#135bec]/10">
                             <Info size={14} className="text-[#135bec] flex-shrink-0 mt-0.5" />
                             <p className="text-[10px] text-slate-500 leading-relaxed italic">
-                                El saldo pendiente se calcula dinámicamente a partir de las ventas
-                                a crédito y los abonos registrados.
+                                El saldo pendiente se calcula dinámicamente a partir de las ventas y los abonos registrados.
                             </p>
                         </div>
                     </form>
