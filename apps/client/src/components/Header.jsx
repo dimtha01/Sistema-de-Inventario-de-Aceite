@@ -4,11 +4,12 @@ import { Bell, LogOut, Menu, X } from 'lucide-react';
 import { NotificacionesPanel } from './NotificacionesPanel';
 
 const navLinks = [
-  { to: '/pos', label: 'Ventas' },
+
   { to: '/inventario', label: 'Inventario' },
   { to: '/clientes', label: 'Clientes' },
   { to: '/proveedores', label: 'Proveedores' },
   { to: '/categorias', label: 'Categorias' },
+  { to: '/pos', label: 'Ventas' },
   { to: '/historial', label: 'Historial' },
 ];
 
