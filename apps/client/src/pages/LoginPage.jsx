@@ -60,7 +60,7 @@ export const LoginPage = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#eef0f5] font-[Manrope,sans-serif] relative">
+    <div className="flex flex-col bg-[#eef0f5] font-[Manrope,sans-serif] relative">
 
       {/* Fondo mesh */}
       <div

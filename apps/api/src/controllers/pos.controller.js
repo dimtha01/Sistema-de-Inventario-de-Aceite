@@ -46,11 +46,10 @@ export const getPosData = async (req, res) => {
 // Genera una nueva venta
 export const createVenta = async (req, res) => {
     try {
-        const { id_cliente, id_estado_pago, productos, abono_inicial } = req.body;
+        const { id_cliente, id_estado_pago, productos, abono_inicial, id_usuario: reqUsuario } = req.body;
 
-        // El id_usuario normalmente vendría del token (req.user.id), pero 
-        // usaremos uno por defecto por ahora si no existe auth completo
-        const id_usuario = 1; // Ajustar según mecanismo de auth
+        // El id_usuario ahora lo tomamos de la petición, con un fallback a 1 por seguridad
+        const id_usuario = parseInt(reqUsuario) || 1;
 
         if (!id_cliente || !id_estado_pago || !productos || productos.length === 0) {
             return res.status(400).json({ success: false, message: 'Datos incompletos para la venta' });

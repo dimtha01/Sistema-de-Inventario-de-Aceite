@@ -71,9 +71,9 @@ export const createProduct = async (req, res) => {
             nombre,
             stock,
             id_categoria,
-            id_proveedor,
             precioCompra,
             precioVenta,
+            id_usuario: reqUsuario
         } = req.body;
 
         // 1. Conversión hiper-segura de los IDs
@@ -123,7 +123,7 @@ export const createProduct = async (req, res) => {
                 await tx.historialMovimiento.create({
                     data: {
                         id_producto: p.id_producto,
-                        id_usuario: 1, // Usuario por defecto
+                        id_usuario: parseInt(reqUsuario) || 1, // Fallback si no llega el ID
                         id_tipo_mov: tipoEntrada ? tipoEntrada.id_tipo_mov : 1,
                         cantidad: safeStock,
                     }
@@ -183,6 +183,7 @@ export const updateProduct = async (req, res) => {
             id_proveedor,
             precioCompra,
             precioVenta,
+            id_usuario: reqUsuario
         } = req.body;
 
         if (!id) {
@@ -233,7 +234,7 @@ export const updateProduct = async (req, res) => {
                 await tx.historialMovimiento.create({
                     data: {
                         id_producto: p.id_producto,
-                        id_usuario: 1, // Usuario por defecto
+                        id_usuario: parseInt(reqUsuario) || 1, // Fallback a 1 si no se envía
                         id_tipo_mov: tipoAjuste ? tipoAjuste.id_tipo_mov : (difStock > 0 ? 1 : 2),
                         cantidad: difStock // Puede ser negativo o positivo
                     }

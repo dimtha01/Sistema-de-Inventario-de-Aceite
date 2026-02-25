@@ -208,6 +208,9 @@ export const PosPage = () => {
             ?.nombre_estado.toLowerCase() === 'pendiente';
         const abonoAEnviar = esPendiente && abonoInicial ? Number(abonoInicial) : 0;
 
+        const mpUser = JSON.parse(localStorage.getItem('mp_user') || '{}');
+        const id_usuario = mpUser.id_usuario || 1;
+
         setLoadingVenta(true);
         try {
             const res = await fetch('/api/pos/venta', {
@@ -215,6 +218,7 @@ export const PosPage = () => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     id_cliente: clienteSeleccionado,
+                    id_usuario: id_usuario,
                     id_estado_pago: estadoPagoSeleccionado,
                     abono_inicial: abonoAEnviar,
                     productos: carrito.map(item => ({ id_producto: item.id_producto, cantidad: item.cantidad }))

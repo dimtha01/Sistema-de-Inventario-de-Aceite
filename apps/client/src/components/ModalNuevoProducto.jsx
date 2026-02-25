@@ -93,7 +93,7 @@ export const ModalNuevoProducto = ({ onClose, onGuardar, productoEditar = null }
       .then(res => {
         if (res.success && res.data) {
           setOpciones(res.data);
-          
+
           // ── LÓGICA DE POBLACIÓN DE DATOS ──
           if (modoEdicion && productoEditar) {
             // Llenar el form con los datos del producto a editar
@@ -147,13 +147,18 @@ export const ModalNuevoProducto = ({ onClose, onGuardar, productoEditar = null }
       fd.append("precioCompra", String(parseFloat(form.precioCompra) || 0));
       fd.append("precioVenta", String(parseFloat(form.precioVenta) || 0));
 
+      const mpUser = JSON.parse(localStorage.getItem('mp_user') || '{}');
+      if (mpUser.id_usuario) {
+        fd.append("id_usuario", String(mpUser.id_usuario));
+      }
+
       if (form.imagen) fd.append("image", form.imagen);
 
       // ── DINAMISMO ENTRE POST (CREAR) Y PUT (EDITAR) ──
-      const url = modoEdicion 
+      const url = modoEdicion
         ? `/api/inventory/products/${productoEditar.id_producto}` // Editar
         : "/api/inventory/products"; // Crear
-      
+
       const method = modoEdicion ? "PUT" : "POST";
 
       const resp = await fetch(url, {
@@ -215,12 +220,11 @@ export const ModalNuevoProducto = ({ onClose, onGuardar, productoEditar = null }
             onDragLeave={() => setDragging(false)}
             onDrop={handleDrop}
             onClick={() => document.getElementById('mp-file-input').click()}
-            className={`flex flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed px-4 py-8 cursor-pointer transition-all ${
-              dragging
-                ? 'border-[#135bec] bg-[#135bec]/5'
-                : form.preview
-                  ? 'border-[#135bec]/40 bg-white'
-                  : 'border-[#135bec]/20 bg-white hover:border-[#135bec] hover:bg-[#135bec]/5'
+            className={`flex flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed px-4 py-8 cursor-pointer transition-all ${dragging
+              ? 'border-[#135bec] bg-[#135bec]/5'
+              : form.preview
+                ? 'border-[#135bec]/40 bg-white'
+                : 'border-[#135bec]/20 bg-white hover:border-[#135bec] hover:bg-[#135bec]/5'
               }`}
           >
             <input
@@ -265,8 +269,8 @@ export const ModalNuevoProducto = ({ onClose, onGuardar, productoEditar = null }
           <div className="flex items-start gap-2 p-2.5 rounded-xl bg-[#135bec]/5 border border-[#135bec]/10">
             <IcInfo />
             <p className="text-[10px] text-slate-500 leading-relaxed italic">
-              {modoEdicion 
-                ? 'Si no cambias la imagen, se conservará la original.' 
+              {modoEdicion
+                ? 'Si no cambias la imagen, se conservará la original.'
                 : 'Use fondos neutros y luz natural para mejor visualización.'}
             </p>
           </div>
@@ -372,8 +376,8 @@ export const ModalNuevoProducto = ({ onClose, onGuardar, productoEditar = null }
             {/* Margen en tiempo real */}
             {margenPreview !== null && (
               <div className={`flex items-center gap-2 px-3 py-2 rounded-xl border text-xs font-bold transition-all ${Number(margenPreview) >= 0
-                  ? 'bg-emerald-50 border-emerald-100 text-emerald-700'
-                  : 'bg-red-50 border-red-100 text-red-600'
+                ? 'bg-emerald-50 border-emerald-100 text-emerald-700'
+                : 'bg-red-50 border-red-100 text-red-600'
                 }`}>
                 <IcTrend />
                 Margen estimado: <span>{margenPreview}%</span>
@@ -388,8 +392,8 @@ export const ModalNuevoProducto = ({ onClose, onGuardar, productoEditar = null }
                 className="w-full py-3 bg-[#135bec] text-white rounded-xl font-black uppercase tracking-widest text-xs transition-all hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50"
                 style={{ boxShadow: '0 6px 20px -4px rgba(19,91,236,0.4)' }}
               >
-                {saving 
-                  ? (modoEdicion ? 'Actualizando...' : 'Guardando...') 
+                {saving
+                  ? (modoEdicion ? 'Actualizando...' : 'Guardando...')
                   : (modoEdicion ? 'Actualizar Producto' : 'Guardar Producto')}
               </button>
               <button
