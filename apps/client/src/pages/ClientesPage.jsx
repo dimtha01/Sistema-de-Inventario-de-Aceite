@@ -1,5 +1,9 @@
 import { useState, useMemo, useEffect } from 'react';
-import { Search, Plus, Users, Building2, Calendar, CreditCard, X, History, Phone } from 'lucide-react';
+import {
+  Search, Plus, Users, Building2, Calendar, CreditCard,
+  X, History, Phone, ChevronLeft, ChevronRight,
+  CheckCircle2, AlertCircle
+} from 'lucide-react';
 import { ModalNuevoCliente } from '../components/ModalNuevoCliente';
 
 const TABS = [
@@ -23,6 +27,8 @@ const ESTADO_CONFIG = {
   },
 };
 
+const POR_PAGINA = 12;
+
 const EstadoBadge = ({ estado }) => {
   const cfg = ESTADO_CONFIG[estado] || ESTADO_CONFIG.aldia;
   return (
@@ -44,15 +50,116 @@ const Avatar = ({ iniciales, estado }) => {
 const getIniciales = (nombre = '') =>
   nombre.split(' ').filter(Boolean).slice(0, 2).map(w => w[0].toUpperCase()).join('');
 
+// ── Modal Notificación ────────────────────────────────────
+const ModalNotificacion = ({ tipo, mensaje, onClose }) => {
+  const esError = tipo === 'error';
+  return (
+    <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm" onClick={onClose}>
+      <div className="bg-white w-full max-w-xs rounded-2xl shadow-xl overflow-hidden flex flex-col" onClick={e => e.stopPropagation()}>
+        <div className="px-5 py-5 flex flex-col items-center text-center gap-3">
+          <div className={`w-12 h-12 rounded-full flex items-center justify-center border ${
+            esError ? 'bg-rose-100 border-rose-200' : 'bg-emerald-100 border-emerald-200'
+          }`}>
+            {esError
+              ? <AlertCircle size={22} className="text-rose-600" />
+              : <CheckCircle2 size={22} className="text-emerald-600" />
+            }
+          </div>
+          <p className="text-sm font-bold text-slate-800 leading-snug">{mensaje}</p>
+        </div>
+        <div className="px-5 py-3 bg-slate-50 border-t border-slate-200 flex justify-center">
+          <button
+            onClick={onClose}
+            className={`px-6 py-2 rounded-xl text-white font-bold text-xs uppercase tracking-widest transition-all active:scale-95 ${
+              esError
+                ? 'bg-rose-500 hover:bg-rose-600 shadow-md shadow-rose-500/20'
+                : 'bg-emerald-500 hover:bg-emerald-600 shadow-md shadow-emerald-500/20'
+            }`}
+          >
+            Aceptar
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ── Paginación ────────────────────────────────────────────
+const Paginacion = ({ pagina, totalPaginas, total, onChange }) => {
+  if (totalPaginas <= 1) return null;
+
+  const paginas = [];
+  let inicio = Math.max(1, pagina - 2);
+  let fin    = Math.min(totalPaginas, inicio + 4);
+  if (fin - inicio < 4) inicio = Math.max(1, fin - 4);
+  for (let i = inicio; i <= fin; i++) paginas.push(i);
+
+  return (
+    <div className="flex flex-col items-center gap-2 pt-2">
+      <div className="flex items-center gap-1.5">
+        <button
+          onClick={() => onChange(pagina - 1)}
+          disabled={pagina === 1}
+          className="w-7 h-7 flex items-center justify-center rounded-lg border border-slate-200 text-slate-500 hover:bg-slate-100 hover:text-slate-700 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+        >
+          <ChevronLeft size={13} />
+        </button>
+
+        {inicio > 1 && (
+          <>
+            <button onClick={() => onChange(1)} className="w-7 h-7 rounded-lg text-[10px] font-bold border border-slate-200 text-slate-600 hover:bg-slate-100 transition-all">1</button>
+            {inicio > 2 && <span className="text-slate-400 text-xs px-0.5">…</span>}
+          </>
+        )}
+
+        {paginas.map(p => (
+          <button
+            key={p}
+            onClick={() => onChange(p)}
+            className={`w-7 h-7 rounded-lg text-[10px] font-bold transition-all border ${
+              p === pagina
+                ? 'bg-[#135bec] text-white border-[#135bec] shadow-sm shadow-[#135bec]/20'
+                : 'border-slate-200 text-slate-600 hover:bg-slate-100'
+            }`}
+          >
+            {p}
+          </button>
+        ))}
+
+        {fin < totalPaginas && (
+          <>
+            {fin < totalPaginas - 1 && <span className="text-slate-400 text-xs px-0.5">…</span>}
+            <button onClick={() => onChange(totalPaginas)} className="w-7 h-7 rounded-lg text-[10px] font-bold border border-slate-200 text-slate-600 hover:bg-slate-100 transition-all">{totalPaginas}</button>
+          </>
+        )}
+
+        <button
+          onClick={() => onChange(pagina + 1)}
+          disabled={pagina === totalPaginas}
+          className="w-7 h-7 flex items-center justify-center rounded-lg border border-slate-200 text-slate-500 hover:bg-slate-100 hover:text-slate-700 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+        >
+          <ChevronRight size={13} />
+        </button>
+      </div>
+      <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">
+        {(pagina - 1) * POR_PAGINA + 1}–{Math.min(pagina * POR_PAGINA, total)} de {total} clientes
+      </p>
+    </div>
+  );
+};
+
 // ── Modal Historial de Compras ────────────────────────────
-const ModalHistorial = ({ cliente, onClose, onAbonar }) => {
+const ModalHistorial = ({ cliente, onClose, onAbonar, onNotificar }) => {
   const [abonoVentaId, setAbonoVentaId] = useState(null);
-  const [montoAbono, setMontoAbono]     = useState('');
+  const [montoAbono,   setMontoAbono]   = useState('');
   const [loadingAbono, setLoadingAbono] = useState(false);
 
   const handleRegistrarAbono = async (e) => {
     e.preventDefault();
-    if (!montoAbono || montoAbono <= 0) return alert('Monto inválido');
+    if (!montoAbono || montoAbono <= 0) {
+      onNotificar('error', 'Ingresa un monto válido');
+      return;
+    }
     setLoadingAbono(true);
     await onAbonar(abonoVentaId, Number(montoAbono));
     setLoadingAbono(false);
@@ -102,7 +209,7 @@ const ModalHistorial = ({ cliente, onClose, onAbonar }) => {
         <div className="overflow-y-auto flex-1 px-5 py-3 flex flex-col gap-3">
           {(!cliente.ventas || cliente.ventas.length === 0) ? (
             <div className="flex flex-col items-center justify-center py-10 text-center gap-2">
-              <History size={22} className="text-slate-300" />
+              <History size={22} className="text-slate-400" />
               <p className="text-xs font-bold text-slate-500 uppercase tracking-widest">Sin compras registradas</p>
             </div>
           ) : (
@@ -238,7 +345,7 @@ const ClienteContent = ({ clienteSel, onVerHistorial }) => {
         </div>
       </div>
 
-      {/* Contacto — teléfono (sin icono ubicación) */}
+      {/* Contacto */}
       <div className="flex items-center gap-2.5 bg-white border border-slate-200 p-2.5 rounded-xl">
         <div className="w-7 h-7 rounded-full bg-slate-100 flex items-center justify-center text-slate-500">
           <Phone size={12} />
@@ -268,14 +375,18 @@ const ClienteContent = ({ clienteSel, onVerHistorial }) => {
 
 // ── Página principal ──────────────────────────────────────
 export const ClientesPage = () => {
-  const [clientes, setClientes]         = useState([]);
-  const [tabActiva, setTabActiva]       = useState('todos');
-  const [busqueda, setBusqueda]         = useState('');
-  const [clienteSel, setClienteSel]     = useState(null);
-  const [showModal, setShowModal]       = useState(false);
-  const [showHistorial, setShowHistorial]       = useState(false);
-  const [clienteHistorial, setClienteHistorial] = useState(null);
-  const [loading, setLoading]           = useState(true);
+  const [clientes,          setClientes]          = useState([]);
+  const [tabActiva,         setTabActiva]         = useState('todos');
+  const [busqueda,          setBusqueda]          = useState('');
+  const [clienteSel,        setClienteSel]        = useState(null);
+  const [showModal,         setShowModal]         = useState(false);
+  const [showHistorial,     setShowHistorial]     = useState(false);
+  const [clienteHistorial,  setClienteHistorial]  = useState(null);
+  const [loading,           setLoading]           = useState(true);
+  const [pagina,            setPagina]            = useState(1);
+  const [notificacion,      setNotificacion]      = useState(null);
+
+  const notificar = (tipo, mensaje) => setNotificacion({ tipo, mensaje });
 
   const fetchClientes = () => {
     setLoading(true);
@@ -294,10 +405,14 @@ export const ClientesPage = () => {
           }
         }
       })
+      .catch(() => notificar('error', 'No se pudo cargar la lista de clientes'))
       .finally(() => setLoading(false));
   };
 
   useEffect(() => { fetchClientes(); }, []);
+
+  // Reset página al cambiar filtros
+  useEffect(() => { setPagina(1); }, [tabActiva, busqueda]);
 
   const handleAbonar = async (id_venta, monto) => {
     try {
@@ -307,9 +422,16 @@ export const ClientesPage = () => {
         body: JSON.stringify({ id_venta, monto })
       });
       const data = await resp.json();
-      if (resp.ok && data.success) { alert('Abono registrado con éxito'); fetchClientes(); }
-      else alert(data.message || 'Error al abonar');
-    } catch (e) { console.error(e); alert('Error de conexión o fallo del servidor'); }
+      if (resp.ok && data.success) {
+        notificar('exito', 'Abono registrado con éxito');
+        fetchClientes();
+      } else {
+        notificar('error', data.message || 'Error al abonar');
+      }
+    } catch (e) {
+      console.error(e);
+      notificar('error', 'Error de conexión con el servidor');
+    }
   };
 
   const handleGuardar = (nuevoCliente) => {
@@ -322,6 +444,7 @@ export const ClientesPage = () => {
     };
     setClientes(prev => [clienteFormateado, ...prev]);
     setClienteSel(clienteFormateado);
+    setPagina(1);
   };
 
   const handleVerHistorial = (cliente) => {
@@ -339,8 +462,23 @@ export const ClientesPage = () => {
     return lista;
   }, [clientes, tabActiva, busqueda]);
 
+  const totalPaginas = Math.max(1, Math.ceil(clientesFiltrados.length / POR_PAGINA));
+  const paginaSegura = Math.min(pagina, totalPaginas);
+  const clientesPaginados = clientesFiltrados.slice(
+    (paginaSegura - 1) * POR_PAGINA,
+    paginaSegura * POR_PAGINA
+  );
+
   return (
     <>
+      {notificacion && (
+        <ModalNotificacion
+          tipo={notificacion.tipo}
+          mensaje={notificacion.mensaje}
+          onClose={() => setNotificacion(null)}
+        />
+      )}
+
       {showModal && (
         <ModalNuevoCliente onClose={() => setShowModal(false)} onGuardar={handleGuardar} />
       )}
@@ -350,6 +488,7 @@ export const ClientesPage = () => {
           cliente={clienteHistorial}
           onClose={() => { setShowHistorial(false); setClienteHistorial(null); }}
           onAbonar={handleAbonar}
+          onNotificar={notificar}
         />
       )}
 
@@ -421,50 +560,57 @@ export const ClientesPage = () => {
             <div className="flex items-center justify-center py-16 text-slate-500 text-xs font-bold">
               Cargando clientes...
             </div>
-          ) : clientesFiltrados.length > 0 ? (
-            <div className="flex flex-col gap-2">
-              {clientesFiltrados.map(cliente => {
-                const cfg = ESTADO_CONFIG[cliente.estado] || ESTADO_CONFIG.aldia;
-                const isSelected = clienteSel?.id === cliente.id;
-                return (
-                  <div
-                    key={cliente.id}
-                    onClick={() => setClienteSel(cliente)}
-                    className={`group relative bg-white rounded-xl p-3 transition-all duration-200 cursor-pointer border-2 ${
-                      isSelected
-                        ? 'border-[#135bec] shadow-sm'
-                        : 'border-slate-200 hover:border-slate-300 hover:shadow-sm'
-                    } flex items-center gap-3`}
-                  >
-                    <Avatar iniciales={cliente.iniciales} estado={cliente.estado} />
-
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-1.5 mb-0.5">
-                        <h3 className="font-bold text-xs text-slate-900 truncate group-hover:text-[#135bec] transition-colors">
-                          {cliente.nombre}
-                        </h3>
-                        <EstadoBadge estado={cliente.estado} />
+          ) : clientesPaginados.length > 0 ? (
+            <>
+              <div className="flex flex-col gap-2">
+                {clientesPaginados.map(cliente => {
+                  const cfg = ESTADO_CONFIG[cliente.estado] || ESTADO_CONFIG.aldia;
+                  const isSelected = clienteSel?.id === cliente.id;
+                  return (
+                    <div
+                      key={cliente.id}
+                      onClick={() => setClienteSel(cliente)}
+                      className={`group relative bg-white rounded-xl p-3 transition-all duration-200 cursor-pointer border-2 ${
+                        isSelected
+                          ? 'border-[#135bec] shadow-sm'
+                          : 'border-slate-200 hover:border-slate-300 hover:shadow-sm'
+                      } flex items-center gap-3`}
+                    >
+                      <Avatar iniciales={cliente.iniciales} estado={cliente.estado} />
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-1.5 mb-0.5">
+                          <h3 className="font-bold text-xs text-slate-900 truncate group-hover:text-[#135bec] transition-colors">
+                            {cliente.nombre}
+                          </h3>
+                          <EstadoBadge estado={cliente.estado} />
+                        </div>
+                        <div className="flex items-center gap-1 text-[10px] font-medium text-slate-500">
+                          <Phone size={10} />
+                          <span>{cliente.telefono || '—'}</span>
+                        </div>
                       </div>
-                      {/* Teléfono en lugar de ubicación */}
-                      <div className="flex items-center gap-1 text-[10px] font-medium text-slate-500">
-                        <Phone size={10} />
-                        <span>{cliente.telefono || '—'}</span>
+                      <div className="flex flex-col items-end gap-1 flex-shrink-0">
+                        <span className="text-[8px] font-bold text-slate-500 uppercase tracking-widest">Saldo</span>
+                        <span className={`text-xs font-black tracking-tighter ${cfg.saldo}`}>
+                          ${(cliente.saldo ?? 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                        </span>
+                        <span className="text-[9px] font-medium text-slate-500">
+                          {cliente.ultimaCompra || '—'}
+                        </span>
                       </div>
                     </div>
+                  );
+                })}
+              </div>
 
-                    <div className="flex flex-col items-end gap-1 flex-shrink-0">
-                      <span className="text-[8px] font-bold text-slate-500 uppercase tracking-widest">Saldo</span>
-                      <span className={`text-xs font-black tracking-tighter ${cfg.saldo}`}>
-                        ${(cliente.saldo ?? 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}
-                      </span>
-                      <span className="text-[9px] font-medium text-slate-500">
-                        {cliente.ultimaCompra || '—'}
-                      </span>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+              {/* Paginación */}
+              <Paginacion
+                pagina={paginaSegura}
+                totalPaginas={totalPaginas}
+                total={clientesFiltrados.length}
+                onChange={p => setPagina(p)}
+              />
+            </>
           ) : (
             <div className="flex flex-col items-center justify-center py-14 bg-white rounded-xl border border-dashed border-slate-200 text-center">
               <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center mb-3 border border-slate-200">
