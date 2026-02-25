@@ -1,8 +1,42 @@
 import { useState, useMemo, useEffect } from 'react';
-import { Search, Plus, Layers, Tags, Package, X, Trash2 } from 'lucide-react';
+import { Search, Plus, Layers, Tags, Package, X, Trash2, CheckCircle2, AlertCircle } from 'lucide-react';
+
+// ── Modal Notificación (reemplaza alert) ──────────────────
+const ModalNotificacion = ({ tipo, mensaje, onClose }) => {
+  const esError = tipo === 'error';
+  return (
+    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm" onClick={onClose}>
+      <div className="bg-white w-full max-w-xs rounded-2xl shadow-xl overflow-hidden flex flex-col" onClick={e => e.stopPropagation()}>
+        <div className="px-5 py-5 flex flex-col items-center text-center gap-3">
+          <div className={`w-12 h-12 rounded-full flex items-center justify-center border ${
+            esError ? 'bg-rose-100 border-rose-200' : 'bg-emerald-100 border-emerald-200'
+          }`}>
+            {esError
+              ? <AlertCircle size={22} className="text-rose-600" />
+              : <CheckCircle2 size={22} className="text-emerald-600" />
+            }
+          </div>
+          <p className="text-sm font-bold text-slate-800 leading-snug">{mensaje}</p>
+        </div>
+        <div className="px-5 py-3 bg-slate-50 border-t border-slate-200 flex justify-center">
+          <button
+            onClick={onClose}
+            className={`px-6 py-2 rounded-xl text-white font-bold text-xs uppercase tracking-widest transition-all active:scale-95 ${
+              esError
+                ? 'bg-rose-500 hover:bg-rose-600 shadow-md shadow-rose-500/20'
+                : 'bg-emerald-500 hover:bg-emerald-600 shadow-md shadow-emerald-500/20'
+            }`}
+          >
+            Aceptar
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 // ── Modal Nueva Categoría ─────────────────────────────────
-const ModalNuevaCategoria = ({ onClose, onGuardar }) => {
+const ModalNuevaCategoria = ({ onClose, onGuardar, onNotificar }) => {
   const [nombre, setNombre]   = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -18,10 +52,10 @@ const ModalNuevaCategoria = ({ onClose, onGuardar }) => {
       });
       const json = await resp.json();
       if (resp.ok && json.success) { onGuardar(json.data); onClose(); }
-      else alert(json.message || 'Error al crear categoría');
+      else onNotificar('error', json.message || 'Error al crear categoría');
     } catch (error) {
       console.error(error);
-      alert('Error en el servidor');
+      onNotificar('error', 'Error de conexión con el servidor');
     } finally {
       setLoading(false);
     }
@@ -30,9 +64,9 @@ const ModalNuevaCategoria = ({ onClose, onGuardar }) => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm" onClick={onClose}>
       <div className="bg-white w-full max-w-sm rounded-2xl shadow-xl overflow-hidden flex flex-col" onClick={e => e.stopPropagation()}>
-        <div className="px-5 py-4 flex items-center justify-between border-b border-slate-100">
+        <div className="px-5 py-4 flex items-center justify-between border-b border-slate-200">
           <h2 className="text-base font-bold text-slate-900">Nueva Categoría</h2>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 hover:bg-slate-100 p-1.5 rounded-lg transition-colors">
+          <button onClick={onClose} className="text-slate-500 hover:text-slate-700 hover:bg-slate-100 p-1.5 rounded-lg transition-colors">
             <X size={18} />
           </button>
         </div>
@@ -45,11 +79,11 @@ const ModalNuevaCategoria = ({ onClose, onGuardar }) => {
               required autoFocus type="text"
               value={nombre} onChange={e => setNombre(e.target.value)}
               placeholder="Ej. Sistema Eléctrico"
-              className="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 focus:bg-white focus:ring-2 focus:ring-[#135bec]/20 focus:border-[#135bec] transition-all outline-none text-sm font-medium"
+              className="w-full px-3 py-2.5 rounded-xl border-2 border-slate-200 bg-slate-50 text-slate-900 focus:bg-white focus:ring-2 focus:ring-[#135bec]/20 focus:border-[#135bec] transition-all outline-none text-sm font-medium placeholder:text-slate-400"
             />
           </div>
-          <div className="px-5 py-3.5 bg-slate-50 border-t border-slate-100 flex justify-end gap-2.5">
-            <button type="button" onClick={onClose} className="px-4 py-2 rounded-xl text-slate-600 font-bold hover:bg-slate-200 transition-colors text-xs">
+          <div className="px-5 py-3.5 bg-slate-50 border-t border-slate-200 flex justify-end gap-2.5">
+            <button type="button" onClick={onClose} className="px-4 py-2 rounded-xl text-slate-600 font-bold hover:bg-slate-200 transition-colors text-xs border border-slate-200">
               Cancelar
             </button>
             <button type="submit" disabled={loading} className="px-5 py-2 rounded-xl bg-[#135bec] text-white font-bold hover:bg-[#1048bc] shadow-md shadow-[#135bec]/20 transition-all active:scale-95 text-xs disabled:opacity-50">
@@ -76,15 +110,15 @@ const ModalEliminar = ({ categoria, onClose, onConfirmar }) => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm" onClick={onClose}>
       <div className="bg-white w-full max-w-xs rounded-2xl shadow-xl overflow-hidden flex flex-col" onClick={e => e.stopPropagation()}>
-        <div className="px-5 py-4 flex items-center justify-between border-b border-slate-100">
+        <div className="px-5 py-4 flex items-center justify-between border-b border-slate-200">
           <h2 className="text-sm font-bold text-slate-900">Eliminar Categoría</h2>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 hover:bg-slate-100 p-1.5 rounded-lg transition-colors">
+          <button onClick={onClose} className="text-slate-500 hover:text-slate-700 hover:bg-slate-100 p-1.5 rounded-lg transition-colors">
             <X size={16} />
           </button>
         </div>
         <div className="px-5 py-5 flex flex-col items-center text-center gap-3">
-          <div className="w-11 h-11 rounded-full bg-rose-50 flex items-center justify-center border border-rose-100">
-            <Trash2 size={18} className="text-rose-500" />
+          <div className="w-11 h-11 rounded-full bg-rose-100 flex items-center justify-center border border-rose-200">
+            <Trash2 size={18} className="text-rose-600" />
           </div>
           <p className="text-xs font-medium text-slate-600 leading-relaxed">
             ¿Eliminar la categoría{' '}
@@ -92,11 +126,8 @@ const ModalEliminar = ({ categoria, onClose, onConfirmar }) => {
             Esta acción no se puede deshacer.
           </p>
         </div>
-        <div className="px-5 py-3.5 bg-slate-50 border-t border-slate-100 flex justify-end gap-2">
-          <button
-            type="button" onClick={onClose}
-            className="px-4 py-2 rounded-xl text-slate-600 font-bold hover:bg-slate-200 transition-colors text-xs"
-          >
+        <div className="px-5 py-3.5 bg-slate-50 border-t border-slate-200 flex justify-end gap-2">
+          <button type="button" onClick={onClose} className="px-4 py-2 rounded-xl text-slate-700 font-bold hover:bg-slate-200 transition-colors text-xs border border-slate-200">
             Cancelar
           </button>
           <button
@@ -115,25 +146,6 @@ const ModalEliminar = ({ categoria, onClose, onConfirmar }) => {
 const CategoriaCard = ({ categoria, onEliminar }) => (
   <div className="group bg-white flex flex-col rounded-xl border border-slate-200 p-3 transition-all duration-300 hover:shadow-md hover:border-[#135bec]/40 hover:-translate-y-0.5">
 
-    {/* Fila superior: icono + badge */}
-    {/* <div className="flex justify-between items-start mb-3">
-      <div className="w-8 h-8 flex items-center justify-center rounded-lg bg-slate-50 text-slate-400 group-hover:bg-[#135bec]/10 group-hover:text-[#135bec] transition-colors duration-300 flex-shrink-0">
-        <Layers size={15} className="group-hover:scale-110 transition-transform duration-300" />
-      </div>
-      <span className={`px-1.5 py-0.5 text-[8px] font-black uppercase tracking-widest rounded border flex items-center gap-1 ${
-        categoria.estado === 'Crítico'       ? 'bg-rose-50   text-rose-600   border-rose-100'  :
-        categoria.estado === 'Revisar stock' ? 'bg-amber-50  text-amber-600  border-amber-100' :
-                                              'bg-emerald-50 text-emerald-600 border-emerald-100'
-      }`}>
-        <span className={`w-1 h-1 rounded-full ${
-          categoria.estado === 'Crítico'       ? 'bg-rose-500'  :
-          categoria.estado === 'Revisar stock' ? 'bg-amber-500' :
-                                                'bg-emerald-500'
-        }`} />
-        {categoria.estado}
-      </span>
-    </div> */}
-
     {/* Nombre */}
     <h3 className="text-sm font-black text-slate-900 leading-tight mb-3 group-hover:text-[#135bec] transition-colors duration-300 truncate">
       {categoria.nombre}
@@ -141,16 +153,16 @@ const CategoriaCard = ({ categoria, onEliminar }) => (
 
     {/* Stats */}
     <div className="grid grid-cols-2 gap-1.5 mb-3">
-      <div className="bg-slate-50 rounded-lg p-2 border border-slate-100 flex flex-col justify-center">
-        <div className="flex items-center gap-1 text-[8px] font-black text-slate-400 uppercase tracking-widest mb-0.5">
-          <Package size={10} className="opacity-70" />
+      <div className="bg-slate-100 rounded-lg p-2 border border-slate-200 flex flex-col justify-center">
+        <div className="flex items-center gap-1 text-[8px] font-black text-slate-500 uppercase tracking-widest mb-0.5">
+          <Package size={10} />
           <span>Items</span>
         </div>
         <p className="text-xs font-black text-slate-900">{categoria.productos}</p>
       </div>
-      <div className="bg-slate-50 rounded-lg p-2 border border-slate-100 flex flex-col justify-center">
-        <div className="flex items-center gap-1 text-[8px] font-black text-slate-400 uppercase tracking-widest mb-0.5">
-          <Tags size={10} className="opacity-70" />
+      <div className="bg-slate-100 rounded-lg p-2 border border-slate-200 flex flex-col justify-center">
+        <div className="flex items-center gap-1 text-[8px] font-black text-slate-500 uppercase tracking-widest mb-0.5">
+          <Tags size={10} />
           <span>Valor</span>
         </div>
         <p className="text-xs font-black text-slate-900 truncate">{categoria.stockValor}</p>
@@ -160,7 +172,7 @@ const CategoriaCard = ({ categoria, onEliminar }) => (
     {/* Botón eliminar */}
     <button
       onClick={(e) => { e.stopPropagation(); onEliminar(categoria); }}
-      className="w-full flex items-center justify-center gap-1 py-2 bg-slate-50 border border-slate-100 text-slate-400 font-bold rounded-lg text-[9px] uppercase tracking-widest hover:bg-rose-50 hover:border-rose-100 hover:text-rose-500 transition-all duration-300"
+      className="w-full flex items-center justify-center gap-1 py-2 bg-slate-100 border border-slate-200 text-slate-500 font-bold rounded-lg text-[9px] uppercase tracking-widest hover:bg-rose-50 hover:border-rose-200 hover:text-rose-600 transition-all duration-300"
     >
       <Trash2 size={10} />
       Eliminar
@@ -170,16 +182,20 @@ const CategoriaCard = ({ categoria, onEliminar }) => (
 
 // ── Página principal ─────────────────────────────────────
 export const CategoriasPage = () => {
-  const [busqueda, setBusqueda]         = useState('');
-  const [showModal, setShowModal]       = useState(false);
-  const [categorias, setCategorias]     = useState([]);
-  const [loading, setLoading]           = useState(true);
+  const [busqueda, setBusqueda]                     = useState('');
+  const [showModal, setShowModal]                   = useState(false);
+  const [categorias, setCategorias]                 = useState([]);
+  const [loading, setLoading]                       = useState(true);
   const [categoriaAEliminar, setCategoriaAEliminar] = useState(null);
+  const [notificacion, setNotificacion]             = useState(null); // { tipo, mensaje }
+
+  const notificar = (tipo, mensaje) => setNotificacion({ tipo, mensaje });
 
   useEffect(() => {
     fetch('/api/categories')
       .then(res => res.json())
       .then(res => { if (res.success && res.data) setCategorias(res.data); })
+      .catch(() => notificar('error', 'No se pudo cargar la lista de categorías'))
       .finally(() => setLoading(false));
   }, []);
 
@@ -197,22 +213,33 @@ export const CategoriasPage = () => {
       const json = await resp.json();
       if (resp.ok && json.success) {
         setCategorias(prev => prev.filter(c => c.id !== id));
+        notificar('exito', 'Categoría eliminada correctamente');
       } else {
-        alert(json.message || 'Error al eliminar categoría');
+        notificar('error', json.message || 'Error al eliminar categoría');
       }
     } catch (error) {
       console.error(error);
-      alert('Error en el servidor');
+      notificar('error', 'Error de conexión con el servidor');
     }
   };
 
   return (
     <div className="flex flex-col gap-4 w-full p-3 lg:p-5 mx-auto max-w-7xl">
 
+      {/* ── Modales ── */}
+      {notificacion && (
+        <ModalNotificacion
+          tipo={notificacion.tipo}
+          mensaje={notificacion.mensaje}
+          onClose={() => setNotificacion(null)}
+        />
+      )}
+
       {showModal && (
         <ModalNuevaCategoria
           onClose={() => setShowModal(false)}
           onGuardar={handleGuardar}
+          onNotificar={notificar}
         />
       )}
 
@@ -245,7 +272,7 @@ export const CategoriasPage = () => {
       </div>
 
       {/* ── Buscador ── */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 bg-white p-2.5 rounded-xl border border-slate-100 shadow-sm sticky top-4 z-20">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 bg-white p-2.5 rounded-xl border border-slate-200 shadow-sm sticky top-4 z-20">
         <div className="flex items-center gap-2 w-full sm:min-w-[280px] relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={13} />
           <input
@@ -253,7 +280,7 @@ export const CategoriasPage = () => {
             placeholder="Buscar categoría..."
             value={busqueda}
             onChange={e => setBusqueda(e.target.value)}
-            className="w-full pl-8 pr-3 py-1.5 bg-slate-50 border border-transparent focus:border-[#135bec] rounded-lg text-[11px] font-semibold outline-none transition-all placeholder:text-slate-400"
+            className="w-full pl-8 pr-3 py-1.5 bg-slate-50 border border-slate-200 focus:border-[#135bec] rounded-lg text-[11px] font-semibold outline-none transition-all placeholder:text-slate-400"
           />
         </div>
         <div className="flex items-center px-2.5 py-1 gap-1 text-[9px] font-black uppercase tracking-widest text-[#135bec] bg-[#135bec]/10 rounded-lg whitespace-nowrap border border-[#135bec]/20 w-full sm:w-auto justify-center">
@@ -264,7 +291,7 @@ export const CategoriasPage = () => {
 
       {/* ── Grid ── */}
       {loading ? (
-        <div className="flex items-center justify-center py-16 text-slate-400 text-xs font-bold">
+        <div className="flex items-center justify-center py-16 text-slate-500 text-xs font-bold">
           Cargando categorías...
         </div>
       ) : (
@@ -281,11 +308,11 @@ export const CategoriasPage = () => {
 
       {/* ── Empty state ── */}
       {filtradas.length === 0 && !loading && (
-        <div className="flex flex-col items-center justify-center py-12 bg-white rounded-xl border border-slate-100 border-dashed text-center shadow-sm">
-          <div className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center mb-3 border border-slate-100">
-            <Layers size={18} className="text-slate-300" />
+        <div className="flex flex-col items-center justify-center py-12 bg-white rounded-xl border border-dashed border-slate-200 text-center shadow-sm">
+          <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center mb-3 border border-slate-200">
+            <Layers size={18} className="text-slate-400" />
           </div>
-          <h3 className="text-xs font-black text-slate-900 uppercase tracking-widest">Sin resultados</h3>
+          <h3 className="text-xs font-black text-slate-700 uppercase tracking-widest">Sin resultados</h3>
         </div>
       )}
 
