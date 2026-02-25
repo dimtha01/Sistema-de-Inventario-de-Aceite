@@ -12,7 +12,7 @@ const ProductoCard = ({ producto, onAgregar }) => (
         className="group bg-white rounded-lg overflow-hidden border border-slate-100 hover:border-[#135bec]/50 transition-all cursor-pointer shadow-sm hover:shadow-lg relative flex flex-col"
         onClick={() => onAgregar(producto)}
     >
-        <div className="absolute top-2 right-2 bg-white/90 backdrop-blur-sm px-1.5 py-0.5 rounded text-[9px] font-bold border border-slate-200 z-10">
+        <div className="absolute top-2 right-2 bg-white/90 backdrop-blur-sm px-1.5 rounded text-[9px] font-bold border border-slate-200 z-10">
             Stock: {producto.stock}
         </div>
         <div className="aspect-square bg-slate-50 flex items-center justify-center p-5 relative">
