@@ -19,9 +19,6 @@ export const getProviders = async (req, res) => {
             direccion: p.direccion || '—',
             telefono: p.telefono || '—',
             productos: p._count.productos,
-            // Mantener campos de UI para no romper el diseño
-            descripcion: 'Proveedor oficial de repuestos y componentes automotrices.',
-            logo: null
         }));
 
         res.status(200).json({ success: true, data: formatted });
@@ -62,5 +59,29 @@ export const createProvider = async (req, res) => {
     } catch (error) {
         console.error('Error in createProvider:', error);
         res.status(500).json({ success: false, message: 'Error al crear proveedor' });
+    }
+};
+
+export const deleteProvider = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        // Verificar si tiene productos asociados
+        const productsCount = await prisma.producto.count({
+            where: { id_proveedor: Number(id) }
+        });
+
+        if (productsCount > 0) {
+            return res.status(400).json({ success: false, message: 'No se puede eliminar el proveedor porque tiene productos asociados.' });
+        }
+
+        await prisma.proveedor.delete({
+            where: { id_proveedor: Number(id) }
+        });
+
+        return res.status(200).json({ success: true, message: 'Proveedor eliminado exitosamente' });
+    } catch (error) {
+        console.error('Error in deleteProvider:', error);
+        return res.status(500).json({ success: false, message: 'Error al eliminar proveedor' });
     }
 };

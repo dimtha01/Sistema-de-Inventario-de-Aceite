@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
-import { Search, Plus, Layers, ArrowRight, Tags, Package, X } from 'lucide-react';
+import { Search, Plus, Layers, Tags, Package, X, Trash2 } from 'lucide-react';
 
 // ── Modal Nueva Categoría ─────────────────────────────────
 const ModalNuevaCategoria = ({ onClose, onGuardar }) => {
@@ -62,10 +62,61 @@ const ModalNuevaCategoria = ({ onClose, onGuardar }) => {
   );
 };
 
+// ── Modal Confirmar Eliminación ───────────────────────────
+const ModalEliminar = ({ categoria, onClose, onConfirmar }) => {
+  const [loading, setLoading] = useState(false);
+
+  const handleEliminar = async () => {
+    setLoading(true);
+    await onConfirmar(categoria.id);
+    setLoading(false);
+    onClose();
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm" onClick={onClose}>
+      <div className="bg-white w-full max-w-xs rounded-2xl shadow-xl overflow-hidden flex flex-col" onClick={e => e.stopPropagation()}>
+        <div className="px-5 py-4 flex items-center justify-between border-b border-slate-100">
+          <h2 className="text-sm font-bold text-slate-900">Eliminar Categoría</h2>
+          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 hover:bg-slate-100 p-1.5 rounded-lg transition-colors">
+            <X size={16} />
+          </button>
+        </div>
+        <div className="px-5 py-5 flex flex-col items-center text-center gap-3">
+          <div className="w-11 h-11 rounded-full bg-rose-50 flex items-center justify-center border border-rose-100">
+            <Trash2 size={18} className="text-rose-500" />
+          </div>
+          <p className="text-xs font-medium text-slate-600 leading-relaxed">
+            ¿Eliminar la categoría{' '}
+            <span className="font-black text-slate-900">"{categoria.nombre}"</span>?
+            Esta acción no se puede deshacer.
+          </p>
+        </div>
+        <div className="px-5 py-3.5 bg-slate-50 border-t border-slate-100 flex justify-end gap-2">
+          <button
+            type="button" onClick={onClose}
+            className="px-4 py-2 rounded-xl text-slate-600 font-bold hover:bg-slate-200 transition-colors text-xs"
+          >
+            Cancelar
+          </button>
+          <button
+            onClick={handleEliminar} disabled={loading}
+            className="px-4 py-2 rounded-xl bg-rose-500 hover:bg-rose-600 text-white font-bold text-xs transition-all active:scale-95 disabled:opacity-50 shadow-md shadow-rose-500/20"
+          >
+            {loading ? 'Eliminando...' : 'Eliminar'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 // ── Tarjeta de categoría ──────────────────────────────────
-const CategoriaCard = ({ categoria }) => (
-  <div className="group bg-white flex flex-col rounded-xl border border-slate-200 p-3 transition-all duration-300 hover:shadow-md hover:border-[#135bec]/40 hover:-translate-y-0.5 cursor-pointer">
-    <div className="flex justify-between items-start mb-3">
+const CategoriaCard = ({ categoria, onEliminar }) => (
+  <div className="group bg-white flex flex-col rounded-xl border border-slate-200 p-3 transition-all duration-300 hover:shadow-md hover:border-[#135bec]/40 hover:-translate-y-0.5">
+
+    {/* Fila superior: icono + badge */}
+    {/* <div className="flex justify-between items-start mb-3">
       <div className="w-8 h-8 flex items-center justify-center rounded-lg bg-slate-50 text-slate-400 group-hover:bg-[#135bec]/10 group-hover:text-[#135bec] transition-colors duration-300 flex-shrink-0">
         <Layers size={15} className="group-hover:scale-110 transition-transform duration-300" />
       </div>
@@ -75,18 +126,20 @@ const CategoriaCard = ({ categoria }) => (
                                               'bg-emerald-50 text-emerald-600 border-emerald-100'
       }`}>
         <span className={`w-1 h-1 rounded-full ${
-          categoria.estado === 'Crítico'       ? 'bg-rose-500'   :
-          categoria.estado === 'Revisar stock' ? 'bg-amber-500'  :
+          categoria.estado === 'Crítico'       ? 'bg-rose-500'  :
+          categoria.estado === 'Revisar stock' ? 'bg-amber-500' :
                                                 'bg-emerald-500'
         }`} />
         {categoria.estado}
       </span>
-    </div>
+    </div> */}
 
+    {/* Nombre */}
     <h3 className="text-sm font-black text-slate-900 leading-tight mb-3 group-hover:text-[#135bec] transition-colors duration-300 truncate">
       {categoria.nombre}
     </h3>
 
+    {/* Stats */}
     <div className="grid grid-cols-2 gap-1.5 mb-3">
       <div className="bg-slate-50 rounded-lg p-2 border border-slate-100 flex flex-col justify-center">
         <div className="flex items-center gap-1 text-[8px] font-black text-slate-400 uppercase tracking-widest mb-0.5">
@@ -104,19 +157,24 @@ const CategoriaCard = ({ categoria }) => (
       </div>
     </div>
 
-    <button className="w-full flex items-center justify-center gap-1 py-2 bg-slate-50 border border-slate-100 text-slate-600 font-bold rounded-lg text-[9px] uppercase tracking-widest group-hover:bg-[#135bec] group-hover:border-[#135bec] group-hover:text-white transition-all duration-300">
-      Explorar
-      <ArrowRight size={10} className="group-hover:translate-x-1 transition-transform" />
+    {/* Botón eliminar */}
+    <button
+      onClick={(e) => { e.stopPropagation(); onEliminar(categoria); }}
+      className="w-full flex items-center justify-center gap-1 py-2 bg-slate-50 border border-slate-100 text-slate-400 font-bold rounded-lg text-[9px] uppercase tracking-widest hover:bg-rose-50 hover:border-rose-100 hover:text-rose-500 transition-all duration-300"
+    >
+      <Trash2 size={10} />
+      Eliminar
     </button>
   </div>
 );
 
 // ── Página principal ─────────────────────────────────────
 export const CategoriasPage = () => {
-  const [busqueda, setBusqueda]   = useState('');
-  const [showModal, setShowModal] = useState(false);
-  const [categorias, setCategorias] = useState([]);
-  const [loading, setLoading]     = useState(true);
+  const [busqueda, setBusqueda]         = useState('');
+  const [showModal, setShowModal]       = useState(false);
+  const [categorias, setCategorias]     = useState([]);
+  const [loading, setLoading]           = useState(true);
+  const [categoriaAEliminar, setCategoriaAEliminar] = useState(null);
 
   useEffect(() => {
     fetch('/api/categories')
@@ -133,6 +191,21 @@ export const CategoriasPage = () => {
 
   const handleGuardar = (nueva) => setCategorias(prev => [nueva, ...prev]);
 
+  const handleEliminar = async (id) => {
+    try {
+      const resp = await fetch(`/api/categories/${id}`, { method: 'DELETE' });
+      const json = await resp.json();
+      if (resp.ok && json.success) {
+        setCategorias(prev => prev.filter(c => c.id !== id));
+      } else {
+        alert(json.message || 'Error al eliminar categoría');
+      }
+    } catch (error) {
+      console.error(error);
+      alert('Error en el servidor');
+    }
+  };
+
   return (
     <div className="flex flex-col gap-4 w-full p-3 lg:p-5 mx-auto max-w-7xl">
 
@@ -140,6 +213,14 @@ export const CategoriasPage = () => {
         <ModalNuevaCategoria
           onClose={() => setShowModal(false)}
           onGuardar={handleGuardar}
+        />
+      )}
+
+      {categoriaAEliminar && (
+        <ModalEliminar
+          categoria={categoriaAEliminar}
+          onClose={() => setCategoriaAEliminar(null)}
+          onConfirmar={handleEliminar}
         />
       )}
 
@@ -189,7 +270,11 @@ export const CategoriasPage = () => {
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
           {filtradas.map(c => (
-            <CategoriaCard key={c.id} categoria={c} />
+            <CategoriaCard
+              key={c.id}
+              categoria={c}
+              onEliminar={(cat) => setCategoriaAEliminar(cat)}
+            />
           ))}
         </div>
       )}

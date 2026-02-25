@@ -306,3 +306,24 @@ export const getFormOptions = async (req, res) => {
         return res.status(500).json({ success: false, message: 'Error obteniendo opciones' });
     }
 };
+
+export const getLowStockAlerts = async (req, res) => {
+    try {
+        const products = await prisma.producto.findMany();
+        const alerts = products
+            .filter(p => p.stock_actual <= p.stock_minimo_alerta)
+            .map(p => ({
+                id: p.id_producto,
+                tipo: p.stock_actual === 0 ? 'critico' : 'advertencia',
+                titulo: p.stock_actual === 0 ? 'Stock Agotado' : 'Stock Bajo',
+                tiempo: 'Ahora',
+                mensaje: `El repuesto "${p.nombre_repuesto}" tiene solo ${p.stock_actual} unidades (mínimo: ${p.stock_minimo_alerta}).`,
+                accion: 'Ir al inventario'
+            }));
+
+        return res.status(200).json({ success: true, data: alerts });
+    } catch (error) {
+        console.error('Error in getLowStockAlerts:', error);
+        return res.status(500).json({ success: false, message: 'Error obteniendo alertas' });
+    }
+};

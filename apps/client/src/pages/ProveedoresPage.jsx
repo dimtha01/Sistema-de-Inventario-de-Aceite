@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
-import { Search, Plus, MapPin, Building2, X } from 'lucide-react';
+import { Search, Plus, MapPin, Building2, X, Trash2, Phone } from 'lucide-react';
 
 const FILTROS = [{ key: 'todos', label: 'Todos' }];
 const formInicial = { nombre_empresa: '', direccion: '', telefono: '' };
@@ -52,8 +52,6 @@ const ModalNuevoProveedor = ({ onClose, onGuardar }) => {
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-3.5">
-
-            {/* Nombre */}
             <div className="flex flex-col gap-1">
               <label className="text-[9px] font-black uppercase tracking-widest text-slate-400">Nombre de la Empresa</label>
               <input
@@ -63,8 +61,6 @@ const ModalNuevoProveedor = ({ onClose, onGuardar }) => {
                 className="w-full rounded-xl border-2 border-transparent bg-slate-50 px-3 py-2.5 text-xs font-medium text-slate-900 outline-none focus:border-[#135bec] focus:bg-white transition-all placeholder:text-slate-400"
               />
             </div>
-
-            {/* Dirección */}
             <div className="flex flex-col gap-1">
               <label className="text-[9px] font-black uppercase tracking-widest text-slate-400">Dirección</label>
               <div className="relative">
@@ -77,19 +73,18 @@ const ModalNuevoProveedor = ({ onClose, onGuardar }) => {
                 />
               </div>
             </div>
-
-            {/* Teléfono */}
             <div className="flex flex-col gap-1">
               <label className="text-[9px] font-black uppercase tracking-widest text-slate-400">Teléfono</label>
-              <input
-                type="text"
-                value={form.telefono} onChange={e => set('telefono', e.target.value)}
-                placeholder="Ej. +58 412-1234567"
-                className="w-full rounded-xl border-2 border-transparent bg-slate-50 px-3 py-2.5 text-xs font-medium text-slate-900 outline-none focus:border-[#135bec] focus:bg-white transition-all placeholder:text-slate-400"
-              />
+              <div className="relative">
+                <Phone size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#135bec]/50" />
+                <input
+                  type="text"
+                  value={form.telefono} onChange={e => set('telefono', e.target.value)}
+                  placeholder="Ej. +58 412-1234567"
+                  className="w-full rounded-xl border-2 border-transparent bg-slate-50 pl-8 pr-3 py-2.5 text-xs font-medium text-slate-900 outline-none focus:border-[#135bec] focus:bg-white transition-all placeholder:text-slate-400"
+                />
+              </div>
             </div>
-
-            {/* Botones */}
             <div className="flex flex-col-reverse gap-2 pt-2 sm:flex-row sm:justify-end">
               <button type="button" onClick={onClose} className="rounded-xl border border-slate-200 px-5 py-2 text-[10px] font-bold uppercase tracking-widest text-slate-500 hover:bg-slate-50 transition-all">
                 Cancelar
@@ -98,7 +93,6 @@ const ModalNuevoProveedor = ({ onClose, onGuardar }) => {
                 Registrar Proveedor
               </button>
             </div>
-
           </form>
         </div>
       </div>
@@ -106,24 +100,96 @@ const ModalNuevoProveedor = ({ onClose, onGuardar }) => {
   );
 };
 
-// ── Tarjeta de proveedor ──────────────────────────────────
-const ProveedorCard = ({ proveedor }) => (
-  <div className="group flex flex-col bg-white rounded-xl border border-slate-100 overflow-hidden hover:shadow-lg hover:shadow-[#135bec]/5 transition-all duration-300">
-    <div className="p-3.5 flex flex-col flex-1">
-      <div className="flex items-center gap-1 text-slate-400 mb-2">
-        <MapPin size={11} />
-        <span className="text-[9px] font-bold uppercase tracking-wider truncate">{proveedor.direccion}</span>
-      </div>
+// ── Modal Confirmar Eliminación ───────────────────────────
+const ModalEliminar = ({ proveedor, onClose, onConfirmar }) => {
+  const [loading, setLoading] = useState(false);
 
-      <h3 className="text-sm font-black text-slate-900 leading-tight mb-1.5 group-hover:text-[#135bec] transition-colors truncate">
+  const handleEliminar = async () => {
+    setLoading(true);
+    await onConfirmar(proveedor.id);
+    setLoading(false);
+    onClose();
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm" onClick={onClose}>
+      <div className="bg-white w-full max-w-xs rounded-2xl shadow-xl overflow-hidden flex flex-col" onClick={e => e.stopPropagation()}>
+        <div className="px-5 py-4 flex items-center justify-between border-b border-slate-100">
+          <h2 className="text-sm font-bold text-slate-900">Eliminar Proveedor</h2>
+          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 hover:bg-slate-100 p-1.5 rounded-lg transition-colors">
+            <X size={16} />
+          </button>
+        </div>
+        <div className="px-5 py-5 flex flex-col items-center text-center gap-3">
+          <div className="w-11 h-11 rounded-full bg-rose-50 flex items-center justify-center border border-rose-100">
+            <Trash2 size={18} className="text-rose-500" />
+          </div>
+          <p className="text-xs font-medium text-slate-600 leading-relaxed">
+            ¿Eliminar el proveedor{' '}
+            <span className="font-black text-slate-900">"{proveedor.nombre}"</span>?
+            Esta acción no se puede deshacer.
+          </p>
+        </div>
+        <div className="px-5 py-3.5 bg-slate-50 border-t border-slate-100 flex justify-end gap-2">
+          <button
+            type="button" onClick={onClose}
+            className="px-4 py-2 rounded-xl text-slate-600 font-bold hover:bg-slate-200 transition-colors text-xs"
+          >
+            Cancelar
+          </button>
+          <button
+            onClick={handleEliminar} disabled={loading}
+            className="px-4 py-2 rounded-xl bg-rose-500 hover:bg-rose-600 text-white font-bold text-xs transition-all active:scale-95 disabled:opacity-50 shadow-md shadow-rose-500/20"
+          >
+            {loading ? 'Eliminando...' : 'Eliminar'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ── Tarjeta de proveedor ──────────────────────────────────
+const ProveedorCard = ({ proveedor, onEliminar }) => (
+  <div className="group flex flex-col bg-white rounded-xl border border-slate-100 overflow-hidden hover:shadow-lg hover:shadow-[#135bec]/5 transition-all duration-300">
+    <div className="p-3.5 flex flex-col flex-1 gap-2">
+
+      {/* Nombre */}
+      <h3 className="text-sm font-black text-slate-900 leading-tight group-hover:text-[#135bec] transition-colors truncate">
         {proveedor.nombre}
       </h3>
 
-      <div className="flex items-center justify-between pt-2.5 border-t border-slate-100 mt-auto">
+      {/* Dirección */}
+      <div className="flex items-center gap-1 text-slate-400">
+        <MapPin size={10} className="flex-shrink-0" />
+        <span className="text-[9px] font-bold uppercase tracking-wider truncate">
+          {proveedor.direccion || '—'}
+        </span>
+      </div>
+
+      {/* Teléfono */}
+      <div className="flex items-center gap-1 text-slate-400">
+        <Phone size={10} className="flex-shrink-0" />
+        <span className="text-[9px] font-bold tracking-wide truncate">
+          {proveedor.telefono || '—'}
+        </span>
+      </div>
+
+      {/* Separador + Catálogo */}
+      <div className="flex items-center justify-between pt-2 border-t border-slate-100 mt-auto">
         <div>
           <span className="block text-[8px] font-bold text-slate-400 uppercase tracking-widest">Catálogo</span>
           <span className="text-xs font-black text-slate-900">{proveedor.productos} ref.</span>
         </div>
+
+        {/* Botón eliminar */}
+        <button
+          onClick={(e) => { e.stopPropagation(); onEliminar(proveedor); }}
+          className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[9px] font-bold uppercase tracking-wider bg-slate-50 border border-slate-100 text-slate-400 hover:bg-rose-50 hover:border-rose-100 hover:text-rose-500 transition-all duration-200"
+        >
+          <Trash2 size={10} />
+          Eliminar
+        </button>
       </div>
     </div>
   </div>
@@ -131,11 +197,12 @@ const ProveedorCard = ({ proveedor }) => (
 
 // ── Página principal ─────────────────────────────────────
 export const ProveedoresPage = () => {
-  const [filtroActivo, setFiltroActivo] = useState('todos');
-  const [busqueda, setBusqueda]         = useState('');
-  const [showModal, setShowModal]       = useState(false);
-  const [proveedores, setProveedores]   = useState([]);
-  const [loading, setLoading]           = useState(true);
+  const [filtroActivo, setFiltroActivo]           = useState('todos');
+  const [busqueda, setBusqueda]                   = useState('');
+  const [showModal, setShowModal]                 = useState(false);
+  const [proveedores, setProveedores]             = useState([]);
+  const [loading, setLoading]                     = useState(true);
+  const [proveedorAEliminar, setProveedorAEliminar] = useState(null);
 
   useEffect(() => {
     fetch('/api/providers')
@@ -158,6 +225,21 @@ export const ProveedoresPage = () => {
 
   const handleGuardar = (nuevo) => setProveedores(prev => [nuevo, ...prev]);
 
+  const handleEliminar = async (id) => {
+    try {
+      const resp = await fetch(`/api/providers/${id}`, { method: 'DELETE' });
+      const json = await resp.json();
+      if (resp.ok && json.success) {
+        setProveedores(prev => prev.filter(p => p.id !== id));
+      } else {
+        alert(json.message || 'Error al eliminar proveedor');
+      }
+    } catch (error) {
+      console.error(error);
+      alert('Error en el servidor');
+    }
+  };
+
   return (
     <div className="flex flex-col gap-4 w-full max-w-7xl mx-auto p-3 lg:p-5">
 
@@ -168,12 +250,18 @@ export const ProveedoresPage = () => {
         />
       )}
 
+      {proveedorAEliminar && (
+        <ModalEliminar
+          proveedor={proveedorAEliminar}
+          onClose={() => setProveedorAEliminar(null)}
+          onConfirmar={handleEliminar}
+        />
+      )}
+
       {/* ── Encabezado ── */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
         <div>
-          <h1 className="text-xl font-black text-slate-900 tracking-tight leading-tight">
-            Proveedores
-          </h1>
+          <h1 className="text-xl font-black text-slate-900 tracking-tight leading-tight">Proveedores</h1>
           <p className="text-[11px] font-medium text-slate-500 mt-0.5 max-w-xl">
             Gestiona tu red global de fabricantes automotrices de alto rendimiento.
           </p>
@@ -216,7 +304,6 @@ export const ProveedoresPage = () => {
             );
           })}
         </div>
-
         <div className="relative w-full lg:w-64">
           <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400" size={13} />
           <input
@@ -237,7 +324,11 @@ export const ProveedoresPage = () => {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
           {filtrados.map(p => (
-            <ProveedorCard key={p.id} proveedor={p} />
+            <ProveedorCard
+              key={p.id}
+              proveedor={p}
+              onEliminar={(prov) => setProveedorAEliminar(prov)}
+            />
           ))}
         </div>
       )}

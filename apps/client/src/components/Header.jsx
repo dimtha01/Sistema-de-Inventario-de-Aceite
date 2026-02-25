@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { Bell, LogOut, Menu, X } from 'lucide-react';
 import { NotificacionesPanel } from './NotificacionesPanel';
@@ -13,13 +13,31 @@ const navLinks = [
   { to: '/historial', label: 'Historial' },
 ];
 
-// cantidad de alertas sin leer (puedes hacerlo dinámico luego)
-const UNREAD_COUNT = 2;
 
 export const Header = () => {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
   const [showNotif, setShowNotif] = useState(false);
+
+  const [isDark, setIsDark] = useState(() => {
+    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      return true;
+    }
+    return false;
+  });
+
+  const [alerts, setAlerts] = useState([]);
+
+  useEffect(() => {
+    fetch('/api/inventory/alerts')
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          setAlerts(data.data);
+        }
+      })
+      .catch(err => console.error('Error fetching alerts:', err));
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem('mp_token');
@@ -33,7 +51,7 @@ export const Header = () => {
     <>
       {/* ── Panel de notificaciones ── */}
       {showNotif && (
-        <NotificacionesPanel onClose={() => setShowNotif(false)} />
+        <NotificacionesPanel onClose={() => setShowNotif(false)} alerts={alerts} />
       )}
 
       <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200 px-4 md:px-8 py-3">
@@ -84,8 +102,8 @@ export const Header = () => {
             <button
               onClick={() => setShowNotif(p => !p)}
               className={`relative p-2 rounded-full transition-colors group ${showNotif
-                  ? 'bg-[#135bec]/10 text-[#135bec]'
-                  : 'hover:bg-slate-100 text-slate-400'
+                ? 'bg-[#135bec]/10 text-[#135bec]'
+                : 'hover:bg-slate-100 text-slate-400'
                 }`}
               aria-label="Notificaciones"
             >
@@ -95,10 +113,10 @@ export const Header = () => {
                 className={`transition-colors ${showNotif ? 'text-[#135bec]' : 'group-hover:text-[#135bec]'}`}
               />
               {/* Badge contador */}
-              {UNREAD_COUNT > 0 && (
+              {alerts.length > 0 && (
                 <span className="absolute top-1 right-1 min-w-[14px] h-[14px] bg-red-500 rounded-full border-2 border-white flex items-center justify-center">
                   <span className="text-[8px] font-black text-white leading-none px-0.5">
-                    {UNREAD_COUNT}
+                    {alerts.length}
                   </span>
                 </span>
               )}

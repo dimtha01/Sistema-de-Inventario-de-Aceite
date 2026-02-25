@@ -1,74 +1,38 @@
 import { X, AlertCircle, AlertTriangle, Info, BellRing } from 'lucide-react';
 
-const notificaciones = [
-  {
-    id: 1,
-    tipo: 'critico',
-    titulo: 'Alerta de Stock Crítico',
-    tiempo: 'Ahora',
-    mensaje: (
-      <>
-        <span className="font-bold">Stock Bajo:</span> Solo quedan 2 unidades de{' '}
-        <span className="underline">Faro Laser Matrix</span>. Se requiere reabastecimiento urgente.
-      </>
-    ),
-    accion: 'Generar pedido de compra',
-  },
-  {
-    id: 2,
-    tipo: 'advertencia',
-    titulo: 'Aviso de Stock Bajo',
-    tiempo: 'Hace 2h',
-    mensaje: (
-      <>
-        El producto <span className="font-bold">Pastillas de Freno (PB-99)</span> ha llegado a su
-        punto de reorden (8 unidades).
-      </>
-    ),
-  },
-  {
-    id: 3,
-    tipo: 'info',
-    titulo: 'Pedido Recibido',
-    tiempo: 'Hace 5h',
-    mensaje: (
-      <>
-        Se ha confirmado la recepción de 100 unidades de{' '}
-        <span className="font-bold">Bujía de Iridio</span>. Inventario actualizado.
-      </>
-    ),
-  },
-];
+// Alerts will be passed as props
 
 const TIPO_CONFIG = {
   critico: {
-    wrapper:  'bg-red-50 border-l-4 border-red-500',
-    icon:     <AlertCircle size={18} className="text-red-600 flex-shrink-0 mt-0.5" />,
-    titulo:   'text-red-800',
-    tiempo:   'text-red-500',
-    mensaje:  'text-red-700',
-    accion:   'text-red-800 decoration-red-400',
+    wrapper: 'bg-red-50 border-l-4 border-red-500',
+    icon: <AlertCircle size={18} className="text-red-600 flex-shrink-0 mt-0.5" />,
+    titulo: 'text-red-800',
+    tiempo: 'text-red-500',
+    mensaje: 'text-red-700',
+    accion: 'text-red-800 decoration-red-400',
   },
   advertencia: {
-    wrapper:  'bg-amber-50 border-l-4 border-amber-500',
-    icon:     <AlertTriangle size={18} className="text-amber-600 flex-shrink-0 mt-0.5" />,
-    titulo:   'text-amber-800',
-    tiempo:   'text-amber-500',
-    mensaje:  'text-amber-700',
+    wrapper: 'bg-amber-50 border-l-4 border-amber-500',
+    icon: <AlertTriangle size={18} className="text-amber-600 flex-shrink-0 mt-0.5" />,
+    titulo: 'text-amber-800',
+    tiempo: 'text-amber-500',
+    mensaje: 'text-amber-700',
   },
   info: {
-    wrapper:  'bg-blue-50 border-l-4 border-[#135bec]',
-    icon:     <Info size={18} className="text-[#135bec] flex-shrink-0 mt-0.5" />,
-    titulo:   'text-slate-800',
-    tiempo:   'text-slate-500',
-    mensaje:  'text-slate-600',
+    wrapper: 'bg-blue-50 border-l-4 border-[#135bec]',
+    icon: <Info size={18} className="text-[#135bec] flex-shrink-0 mt-0.5" />,
+    titulo: 'text-slate-800',
+    tiempo: 'text-slate-500',
+    mensaje: 'text-slate-600',
   },
 };
 
+import { NavLink } from 'react-router-dom';
+
 /**
- * @param {{ onClose: () => void }} props
+ * @param {{ onClose: () => void, alerts: any[] }} props
  */
-export const NotificacionesPanel = ({ onClose }) => (
+export const NotificacionesPanel = ({ onClose, alerts = [] }) => (
   <>
     {/* Overlay */}
     <div
@@ -84,9 +48,11 @@ export const NotificacionesPanel = ({ onClose }) => (
         <div className="flex items-center gap-2">
           <BellRing size={20} className="text-[#135bec]" />
           <h2 className="text-lg font-bold text-slate-900">Notificaciones</h2>
-          <span className="ml-1 px-2 py-0.5 rounded-full bg-red-100 text-red-600 text-[10px] font-black">
-            {notificaciones.length}
-          </span>
+          {alerts.length > 0 && (
+            <span className="ml-1 px-2 py-0.5 rounded-full bg-red-100 text-red-600 text-[10px] font-black">
+              {alerts.length}
+            </span>
+          )}
         </div>
         <button
           onClick={onClose}
@@ -98,8 +64,13 @@ export const NotificacionesPanel = ({ onClose }) => (
 
       {/* Lista */}
       <div className="flex-1 overflow-y-auto p-4 space-y-3">
-        {notificaciones.map((n) => {
-          const cfg = TIPO_CONFIG[n.tipo];
+        {alerts.length === 0 ? (
+          <div className="flex flex-col items-center justify-center h-full text-center text-slate-400 gap-2">
+            <BellRing size={24} className="opacity-20" />
+            <p className="text-xs font-medium">No hay notificaciones nuevas</p>
+          </div>
+        ) : alerts.map((n) => {
+          const cfg = TIPO_CONFIG[n.tipo] || TIPO_CONFIG.info;
           return (
             <div key={n.id} className={`${cfg.wrapper} p-4 rounded-r-xl shadow-sm`}>
               <div className="flex gap-3">
@@ -117,9 +88,9 @@ export const NotificacionesPanel = ({ onClose }) => (
                     {n.mensaje}
                   </p>
                   {n.accion && (
-                    <button className={`mt-3 text-xs font-bold underline ${cfg.accion}`}>
+                    <NavLink to="/inventario" onClick={onClose} className={`mt-3 inline-block text-xs font-bold underline ${cfg.accion}`}>
                       {n.accion}
-                    </button>
+                    </NavLink>
                   )}
                 </div>
               </div>

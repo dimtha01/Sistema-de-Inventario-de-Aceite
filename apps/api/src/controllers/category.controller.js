@@ -52,18 +52,42 @@ export const createCategory = async (req, res) => {
             data: { nombre_categoria: nombre }
         });
 
-        return res.status(201).json({ 
-            success: true, 
+        return res.status(201).json({
+            success: true,
             data: {
                 id: newCategory.id_categoria,
                 nombre: newCategory.nombre_categoria,
                 productos: 0,
                 stockValor: '$0.00',
                 estado: 'Óptimo'
-            } 
+            }
         });
     } catch (error) {
         console.error('Error in createCategory:', error);
         return res.status(500).json({ success: false, message: 'Error al crear categoria' });
+    }
+};
+
+export const deleteCategory = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        // Verificar si tiene productos asociados
+        const productsCount = await prisma.producto.count({
+            where: { id_categoria: Number(id) }
+        });
+
+        if (productsCount > 0) {
+            return res.status(400).json({ success: false, message: 'No se puede eliminar la categoría porque tiene productos asociados.' });
+        }
+
+        await prisma.categoria.delete({
+            where: { id_categoria: Number(id) }
+        });
+
+        return res.status(200).json({ success: true, message: 'Categoría eliminada exitosamente' });
+    } catch (error) {
+        console.error('Error in deleteCategory:', error);
+        return res.status(500).json({ success: false, message: 'Error al eliminar categoria' });
     }
 };
