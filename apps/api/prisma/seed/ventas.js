@@ -56,9 +56,12 @@ export async function seedVentas(prisma, clientes, usuarios, estadosPago, produc
             let montoAbonado = 0;
 
             for (let k = 0; k < numAbonos; k++) {
-                const maxAbono = (montoTotal - montoAbonado) * 0.9;
+                const montoRestante = montoTotal - montoAbonado;
+                const minAbono = Math.min(montoTotal * 0.1, montoRestante * 0.5);
+                const maxAbono = Math.max(minAbono + 1, montoRestante * 0.9);
+
                 const abono = faker.number.float({
-                    min: montoTotal * 0.1,
+                    min: minAbono,
                     max: maxAbono,
                     fractionDigits: 2,
                 });

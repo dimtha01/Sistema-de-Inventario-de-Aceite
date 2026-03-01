@@ -125,11 +125,17 @@ export const createProduct = async (req, res) => {
                     where: { nombre_tipo: { contains: 'entrada', mode: 'insensitive' } }
                 });
 
+                if (!tipoEntrada) {
+                    tipoEntrada = await tx.tipoMovimiento.create({
+                        data: { nombre_tipo: 'Entrada por Compra' }
+                    });
+                }
+
                 await tx.historialMovimiento.create({
                     data: {
                         id_producto: p.id_producto,
-                        id_usuario: parseInt(reqUsuario) || 1, // Fallback si no llega el ID
-                        id_tipo_mov: tipoEntrada ? tipoEntrada.id_tipo_mov : 1,
+                        id_usuario: parseInt(reqUsuario) || 1,
+                        id_tipo_mov: tipoEntrada.id_tipo_mov,
                         cantidad: safeStock,
                     }
                 });
