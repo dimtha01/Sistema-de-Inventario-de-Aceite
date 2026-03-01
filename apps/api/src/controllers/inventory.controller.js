@@ -34,13 +34,15 @@ export const getProducts = async (req, res) => {
 
         // Mapear al formato esperado por el frontend
         const formatedProducts = products.map((p) => {
-            // Limpiamos la ruta por si se guardó con barras invertidas (típico en Windows)
-            const cleanImagePath = p.url_imagen ? p.url_imagen.replace(/\\/g, '/') : '';
+            let imageUrl = '';
 
-            // Construimos la URL absoluta
-            const imageUrl = cleanImagePath
-                ? (cleanImagePath.startsWith('http') ? cleanImagePath : `${BACKEND_URL}/${cleanImagePath}`)
-                : '';
+            if (p.url_imagen) {
+                const imagePath = p.url_imagen.replace(/\\/g, '/');
+                // Si ya tiene protocolo (http/https), usar tal cual. Si no, agregar BACKEND_URL
+                imageUrl = imagePath.startsWith('http://') || imagePath.startsWith('https://')
+                    ? imagePath
+                    : `${BACKEND_URL}/${imagePath.replace(/^\/+/, '')}`;
+            }
 
             return {
                 id_producto: p.id_producto,
@@ -48,7 +50,7 @@ export const getProducts = async (req, res) => {
                 stock: p.stock_actual,
                 stock_minimo_alerta: p.stock_minimo_alerta,
                 stockColor: p.stock_actual <= p.stock_minimo_alerta ? 'text-orange-500' : 'text-slate-900',
-                imagen: imageUrl, // Aquí enviamos la ruta ya corregida
+                imagen: imageUrl,
                 precioCompra: p.precio?.precio_compra ? Number(p.precio.precio_compra) : 0,
                 precioVenta: p.precio?.precio_venta ? Number(p.precio.precio_venta) : 0,
                 categoria: p.categoria?.nombre_categoria || 'Generico',
@@ -151,10 +153,17 @@ export const createProduct = async (req, res) => {
                 timeout: 20000,
             });
 
-        // 4. Formatear para el Frontend (evitando doble barra en la imagen)
+        // 4. Formatear para el Frontend (detecta protocolo http/https automáticamente)
         const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:3000';
-        const cleanImagePath = newProduct.url_imagen ? newProduct.url_imagen.replace(/\\/g, '/').replace(/^\/+/, '') : '';
-        const imageUrlFormatted = cleanImagePath ? `${BACKEND_URL}/${cleanImagePath}` : '';
+        let imageUrlFormatted = '';
+
+        if (newProduct.url_imagen) {
+            const imagePath = newProduct.url_imagen.replace(/\\/g, '/');
+            // Si ya tiene protocolo (http/https), usar tal cual. Si no, agregar BACKEND_URL
+            imageUrlFormatted = imagePath.startsWith('http://') || imagePath.startsWith('https://')
+                ? imagePath
+                : `${BACKEND_URL}/${imagePath.replace(/^\/+/, '')}`;
+        }
 
         const formatted = {
             id_producto: newProduct.id_producto,
@@ -293,10 +302,15 @@ export const updateProduct = async (req, res) => {
             });
 
         const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:3000';
-        const cleanImagePath = updatedProduct.url_imagen ? updatedProduct.url_imagen.replace(/\\/g, '/') : '';
-        const imageUrlFormatted = cleanImagePath
-            ? (cleanImagePath.startsWith('http') ? cleanImagePath : `${BACKEND_URL}/${cleanImagePath}`)
-            : '';
+        let imageUrlFormatted = '';
+
+        if (updatedProduct.url_imagen) {
+            const imagePath = updatedProduct.url_imagen.replace(/\\/g, '/');
+            // Si ya tiene protocolo (http/https), usar tal cual. Si no, agregar BACKEND_URL
+            imageUrlFormatted = imagePath.startsWith('http://') || imagePath.startsWith('https://')
+                ? imagePath
+                : `${BACKEND_URL}/${imagePath.replace(/^\/+/, '')}`;
+        }
 
         const formatted = {
             id_producto: updatedProduct.id_producto,
