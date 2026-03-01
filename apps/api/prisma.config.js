@@ -4,9 +4,9 @@ import { defineConfig } from "prisma/config";
 export default defineConfig({
   earlyAccess: true,
   schema: "prisma",
-  migrate: {
-    migrations: "prisma/migrations",
-    seed: "npx tsx prisma/seed.js",
+  migrations: {
+    dir: "prisma/migrations",
+    seed: "npx tsx prisma/seed/index.js",
   },
   datasource: {
     url: process.env.DATABASE_URL,

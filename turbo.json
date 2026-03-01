@@ -5,13 +5,42 @@
       "persistent": true,
       "cache": false
     },
+    "start": {
+      "dependsOn": ["^start"],
+      "cache": false
+    },
     "build": {
       "dependsOn": ["^build"],
       "outputs": ["dist/**"]
     },
     "lint": {
       "outputs": []
+    },
+    "prisma:studio": {
+      "dependsOn": ["^prisma:studio"],
+      "outputs": []
+    },
+    "prisma:migrate": {
+      "dependsOn": ["^prisma:migrate"],
+      "outputs": ["migrations/**"]
+    },
+    "prisma:reset": {
+      "dependsOn": ["^prisma:reset"],
+      "outputs": []
+    },
+     "prisma:generate": {
+      "dependsOn": ["^prisma:generate"],
+      "outputs": ["node_modules/.prisma/**"]
+    },
+    "prisma:push": {
+      "dependsOn": ["^prisma:push"],
+      "outputs": []
+    },
+    "prisma:seed": {
+      "dependsOn": ["^prisma:seed"],
+      "outputs": []
     }
+
   },
   "globalDependencies": [".env?"],
   "globalEnv": ["*"]

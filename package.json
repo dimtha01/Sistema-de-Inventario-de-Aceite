@@ -5,9 +5,14 @@
   "main": "index.js",
   "scripts": {
     "dev": "env-cmd -f .env --silent -- pnpm -r --parallel run dev",
-    "dev:api": "env-cmd -f .env --silent -- pnpm --filter=api run dev",
-    "studio": "pnpm --filter=api run studio",
+    "start": "env-cmd -f .env --silent -- pnpm -r --parallel run start",
     "build": "pnpm -r run build",
+    "studio": "env-cmd -f .env --silent -- pnpm -r --parallel run prisma:studio",
+    "migrate": "turbo run prisma:migrate",
+    "reset":"turbo run prisma:reset",
+    "generate": "turbo run prisma:generate",
+    "push": "turbo run prisma:push",
+    "seed" : "turbo run prisma:seed", 
     "lint": "pnpm -r run lint"
   },
   "keywords": [],
