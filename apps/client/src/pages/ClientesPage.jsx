@@ -177,7 +177,7 @@ const ModalHistorial = ({ cliente, onClose, onAbonar, onNotificar }) => {
             <History size={15} className="text-[#135bec]" />
             <div>
               <h2 className="text-sm font-black text-slate-900 leading-tight">Historial de Compras</h2>
-              <p className="text-[10px] text-slate-500 font-semibold">{cliente.nombre}</p>
+              <p className="text-[10px] text-slate-500 font-semibold">{cliente.nombre} {cliente.apellido || ''}</p>
             </div>
           </div>
           <button onClick={onClose} className="h-7 w-7 flex items-center justify-center rounded-full hover:bg-slate-200 text-slate-500 transition-colors">
@@ -194,13 +194,13 @@ const ModalHistorial = ({ cliente, onClose, onAbonar, onNotificar }) => {
           <div className="bg-slate-100 rounded-lg p-2 text-center border border-slate-200">
             <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest block mb-0.5">Total</span>
             <span className="text-sm font-black text-slate-900">
-              ${(cliente.ventas?.reduce((s, v) => s + (v.monto || 0), 0) ?? 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}
+              ${(cliente.ventas?.reduce((s, v) => s + (v.monto || 0), 0) ?? 0).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
             </span>
           </div>
           <div className={`rounded-lg p-2 text-center border ${cliente.saldo > 0 ? 'bg-red-100 border-red-200' : 'bg-emerald-100 border-emerald-200'}`}>
             <span className={`text-[8px] font-black uppercase tracking-widest block mb-0.5 ${cliente.saldo > 0 ? 'text-red-600' : 'text-emerald-600'}`}>Saldo</span>
             <span className={`text-sm font-black ${cliente.saldo > 0 ? 'text-red-700' : 'text-emerald-700'}`}>
-              ${(cliente.saldo ?? 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}
+              ${(cliente.saldo ?? 0).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
             </span>
           </div>
         </div>
@@ -225,7 +225,7 @@ const ModalHistorial = ({ cliente, onClose, onAbonar, onNotificar }) => {
                   <div className="text-right">
                     <span className="text-[9px] uppercase font-black tracking-widest text-[#135bec] block">Total</span>
                     <span className="text-sm font-black text-slate-900 leading-none">
-                      ${(v.monto || 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                      ${(v.monto || 0).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
                     </span>
                   </div>
                 </div>
@@ -238,7 +238,7 @@ const ModalHistorial = ({ cliente, onClose, onAbonar, onNotificar }) => {
                         <span className="font-black text-slate-500 mr-1">{d.cantidad}×</span>{d.producto}
                       </span>
                       <span className="text-slate-900 font-bold whitespace-nowrap">
-                        ${(d.precio || 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                        ${(d.precio || 0).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
                       </span>
                     </div>
                   ))}
@@ -248,11 +248,11 @@ const ModalHistorial = ({ cliente, onClose, onAbonar, onNotificar }) => {
                 <div className="flex items-center justify-between px-1">
                   <span className="text-[9px] font-bold text-slate-500">
                     Abonado: <strong className="text-slate-700">
-                      ${(v.abonado || 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                      ${(v.abonado || 0).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
                     </strong>
                   </span>
                   <span className={`text-[9px] font-black uppercase ${v.saldo_restante > 0 ? 'text-red-600' : 'text-emerald-600'}`}>
-                    Resta: ${(v.saldo_restante || 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                    Resta: ${(v.saldo_restante || 0).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
                   </span>
                 </div>
 
@@ -261,8 +261,20 @@ const ModalHistorial = ({ cliente, onClose, onAbonar, onNotificar }) => {
                   abonoVentaId === v.id_venta ? (
                     <form onSubmit={handleRegistrarAbono} className="flex gap-2">
                       <input
-                        type="number" step="0.01" max={v.saldo_restante}
-                        value={montoAbono} onChange={e => setMontoAbono(e.target.value)}
+                        type="number" step="0.01" min="0" max={v.saldo_restante}
+                        value={montoAbono}
+                        onChange={e => {
+                          const val = e.target.value;
+                          // Limitar a 2 decimales
+                          if (val.includes('.')) {
+                            const [entera, decimal] = val.split('.');
+                            if (decimal?.length > 2) {
+                                    setMontoAbono(`${entera}.${decimal.slice(0, 2)}`);
+                                    return;
+                            }
+                          }
+                          setMontoAbono(val);
+                        }}
                         placeholder="Monto..." autoFocus
                         className="flex-1 bg-white border border-slate-300 rounded-lg text-xs px-2 py-1.5 outline-none focus:border-[#135bec]"
                       />
@@ -318,7 +330,7 @@ const ClienteContent = ({ clienteSel, onVerHistorial }) => {
         <Avatar iniciales={clienteSel.iniciales} estado={clienteSel.estado} />
         <div>
           <EstadoBadge estado={clienteSel.estado} />
-          <h3 className="text-base font-black text-slate-900 mt-1.5 mb-0.5 leading-tight">{clienteSel.nombre}</h3>
+          <h3 className="text-base font-black text-slate-900 mt-1.5 mb-0.5 leading-tight">{clienteSel.nombre} {clienteSel.apellido || ''}</h3>
           <p className="text-[10px] font-semibold text-slate-500 flex items-center justify-center gap-1">
             <Building2 size={11} /> {clienteSel.tipo || '—'}
           </p>
@@ -332,7 +344,7 @@ const ClienteContent = ({ clienteSel, onVerHistorial }) => {
           <div className="flex items-baseline gap-0.5">
             <span className="text-[9px] text-slate-500 font-medium">$</span>
             <span className={`text-lg font-black tracking-tighter leading-tight ${ESTADO_CONFIG[clienteSel.estado]?.saldo || 'text-slate-900'}`}>
-              {(clienteSel.saldo ?? 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}
+              {(clienteSel.saldo ?? 0).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
             </span>
           </div>
         </div>
@@ -400,7 +412,7 @@ export const ClientesPage = () => {
           }));
           setClientes(formatted);
           if (clienteSel) {
-            const updated = formatted.find(c => c.id === clienteSel.id);
+            const updated = formatted.find(c => c.id_cliente === clienteSel.id_cliente);
             if (updated) setClienteSel(updated);
           }
         }
@@ -424,7 +436,25 @@ export const ClientesPage = () => {
       const data = await resp.json();
       if (resp.ok && data.success) {
         notificar('exito', 'Abono registrado con éxito');
-        fetchClientes();
+        // Recargar el cliente específico del historial
+        const clienteResp = await fetch(`/api/clientes/${clienteHistorial.id_cliente}`);
+        const clienteData = await clienteResp.json();
+        if (clienteData.success && clienteData.data) {
+          const clienteActualizado = {
+            ...clienteData.data,
+            iniciales: getIniciales(`${clienteData.data.nombre} ${clienteData.data.apellido || ''}`)
+          };
+          // Actualizar el modal con los nuevos datos
+          setClienteHistorial(clienteActualizado);
+          // Actualizar en la lista principal
+          setClientes(prev => prev.map(c =>
+            c.id_cliente === clienteActualizado.id_cliente ? clienteActualizado : c
+          ));
+          // Actualizar clienteSel si es el mismo
+          if (clienteSel?.id_cliente === clienteHistorial.id_cliente) {
+            setClienteSel(clienteActualizado);
+          }
+        }
       } else {
         notificar('error', data.message || 'Error al abonar');
       }
@@ -457,7 +487,7 @@ export const ClientesPage = () => {
     if (tabActiva !== 'todos') lista = lista.filter(c => c.estado === tabActiva);
     if (busqueda) {
       const b = busqueda.toLowerCase();
-      lista = lista.filter(c => c.nombre.toLowerCase().includes(b));
+      lista = lista.filter(c => `${c.nombre} ${c.apellido || ''}`.toLowerCase().includes(b));
     }
     return lista;
   }, [clientes, tabActiva, busqueda]);
@@ -565,10 +595,10 @@ export const ClientesPage = () => {
               <div className="flex flex-col gap-2">
                 {clientesPaginados.map(cliente => {
                   const cfg = ESTADO_CONFIG[cliente.estado] || ESTADO_CONFIG.aldia;
-                  const isSelected = clienteSel?.id === cliente.id;
+                  const isSelected = clienteSel?.id_cliente === cliente.id_cliente;
                   return (
                     <div
-                      key={cliente.id}
+                      key={cliente.id_cliente}
                       onClick={() => setClienteSel(cliente)}
                       className={`group relative bg-white rounded-xl p-3 transition-all duration-200 cursor-pointer border-2 ${
                         isSelected
@@ -580,7 +610,7 @@ export const ClientesPage = () => {
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-1.5 mb-0.5">
                           <h3 className="font-bold text-xs text-slate-900 truncate group-hover:text-[#135bec] transition-colors">
-                            {cliente.nombre}
+                            {cliente.nombre} {cliente.apellido || ''}
                           </h3>
                           <EstadoBadge estado={cliente.estado} />
                         </div>
@@ -592,7 +622,7 @@ export const ClientesPage = () => {
                       <div className="flex flex-col items-end gap-1 flex-shrink-0">
                         <span className="text-[8px] font-bold text-slate-500 uppercase tracking-widest">Saldo</span>
                         <span className={`text-xs font-black tracking-tighter ${cfg.saldo}`}>
-                          ${(cliente.saldo ?? 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                          ${(cliente.saldo ?? 0).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
                         </span>
                         <span className="text-[9px] font-medium text-slate-500">
                           {cliente.ultimaCompra || '—'}

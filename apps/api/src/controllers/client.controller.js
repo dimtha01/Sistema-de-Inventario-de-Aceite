@@ -47,8 +47,9 @@ export const getClientes = async (req, res) => {
             });
 
             return {
-                id: c.id_cliente,
-                nombre: `${c.nombre} ${c.apellido}`,
+                id_cliente: c.id_cliente,
+                nombre: c.nombre,
+                apellido: c.apellido,
                 telefono: c.telefono,
                 limite_credito: Number(c.limite_credito),
                 saldo: saldoTotal,
@@ -85,8 +86,9 @@ export const createCliente = async (req, res) => {
         res.status(201).json({
             success: true,
             data: {
-                id: c.id_cliente,
-                nombre: `${c.nombre} ${c.apellido}`,
+                id_cliente: c.id_cliente,
+                nombre: c.nombre,
+                apellido: c.apellido,
                 telefono: c.telefono,
                 limite_credito: Number(c.limite_credito),
                 saldo: 0,
@@ -98,6 +100,75 @@ export const createCliente = async (req, res) => {
     } catch (error) {
         console.error('Error in createCliente:', error);
         res.status(500).json({ success: false, message: 'Error al crear cliente' });
+    }
+};
+
+export const getClienteById = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const cliente = await prisma.cliente.findUnique({
+            where: { id_cliente: Number(id) },
+            include: {
+                ventas: {
+                    include: {
+                        estado_pago: true,
+                        abonos: true,
+                        detalles: {
+                            include: {
+                                producto: true
+                            }
+                        }
+                    },
+                    orderBy: { fecha_venta: 'desc' }
+                }
+            }
+        });
+
+        if (!cliente) {
+            return res.status(404).json({ success: false, message: 'Cliente no encontrado' });
+        }
+
+        // Calcular saldo
+        let saldoTotal = 0;
+        const ventasMap = cliente.ventas.map(v => {
+            const montoTotal = Number(v.monto_total);
+            const totalAbonado = v.abonos.reduce((sum, ab) => sum + Number(ab.monto_abonado), 0);
+            const saldoRestante = v.estado_pago.nombre_estado.toLowerCase() === 'pendiente' ? Math.max(0, montoTotal - totalAbonado) : 0;
+
+            saldoTotal += saldoRestante;
+
+            return {
+                id_venta: v.id_venta,
+                fecha: new Date(v.fecha_venta).toLocaleDateString(),
+                monto: montoTotal,
+                abonado: totalAbonado,
+                saldo_restante: saldoRestante,
+                estado: v.estado_pago.nombre_estado,
+                detalles: v.detalles.map(d => ({
+                    producto: d.producto?.nombre_repuesto || 'Producto ' + d.id_producto,
+                    cantidad: d.cantidad,
+                    precio: Number(d.precio_unitario_aplicado)
+                }))
+            };
+        });
+
+        const formatted = {
+            id_cliente: cliente.id_cliente,
+            nombre: cliente.nombre,
+            apellido: cliente.apellido,
+            telefono: cliente.telefono,
+            limite_credito: Number(cliente.limite_credito),
+            saldo: saldoTotal,
+            estado: saldoTotal > 0 ? "pendiente" : "aldia",
+            ultimaCompra: cliente.ventas.length > 0 ? new Date(cliente.ventas[0].fecha_venta).toLocaleDateString() : null,
+            ventas: ventasMap
+        };
+
+        res.status(200).json({ success: true, data: formatted });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: 'Error al obtener cliente' });
     }
 };
 

@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getClientes, createCliente, registrarAbono } from '../controllers/client.controller.js';
+import { getClientes, getClienteById, createCliente, registrarAbono } from '../controllers/client.controller.js';
 
 const router = Router();
 
@@ -9,6 +9,7 @@ router.use((req, res, next) => {
 });
 
 router.get('/', getClientes);
+router.get('/:id', getClienteById);
 router.post('/', createCliente);
 router.post('/abono', registrarAbono);
 

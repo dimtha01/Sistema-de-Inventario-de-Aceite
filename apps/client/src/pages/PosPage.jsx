@@ -115,6 +115,7 @@ const CartPanel = ({
   totalItems, subtotal, iva, total,
   loadingVenta, incrementar, decrementar, limpiarCarrito, generarVenta,
   setShowModalCliente,
+  ivaActivado, setIvaActivado,
 }) => (
   <div className="flex flex-col h-full">
 
@@ -275,13 +276,38 @@ const CartPanel = ({
 
     {/* Footer checkout */}
     <div className="p-4 bg-slate-50 border-t border-slate-200 space-y-3 flex-shrink-0">
+      {/* Toggle IVA */}
+      <button
+        type="button"
+        onClick={() => setIvaActivado(!ivaActivado)}
+        className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-bold transition-all ${
+          ivaActivado
+            ? 'bg-[#135bec]/10 border border-[#135bec]/30 text-[#135bec]'
+            : 'bg-white border border-slate-200 text-slate-500'
+        }`}
+      >
+        <span className="flex items-center gap-2">
+          <span className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
+            ivaActivado ? 'border-[#135bec] bg-[#135bec]' : 'border-slate-300'
+          }`}>
+            {ivaActivado && <span className="w-1.5 h-1.5 bg-white rounded-full" />}
+          </span>
+          Aplicar IVA (16%)
+        </span>
+        <span className="text-[10px] uppercase tracking-wider">
+          {ivaActivado ? 'ACTIVADO' : 'DESACTIVADO'}
+        </span>
+      </button>
+
       <div className="space-y-1.5">
         <div className="flex justify-between text-xs text-slate-600 font-semibold px-0.5">
           <span>Subtotal</span><span>${fmt(subtotal)}</span>
         </div>
-        <div className="flex justify-between text-xs text-slate-600 font-semibold px-0.5">
-          <span>IVA (16%)</span><span>${fmt(iva)}</span>
-        </div>
+        {ivaActivado && (
+          <div className="flex justify-between text-xs text-slate-600 font-semibold px-0.5">
+            <span>IVA (16%)</span><span>${fmt(iva)}</span>
+          </div>
+        )}
         <div className="flex justify-between text-xl font-black pt-2.5 border-t border-slate-300">
           <span className="text-slate-900">Total</span>
           <span className="text-[#135bec] tracking-tighter">${fmt(total)}</span>
@@ -327,6 +353,7 @@ export const PosPage = () => {
   const [loadingVenta, setLoadingVenta] = useState(false);
   const [notificacion, setNotificacion] = useState(null);
   const [showModalCliente, setShowModalCliente] = useState(false);
+  const [ivaActivado, setIvaActivado] = useState(false);
   const [carritoAbierto, setCarritoAbierto] = useState(false); // móvil
 
   const notificar = (tipo, mensaje) => setNotificacion({ tipo, mensaje });
@@ -451,7 +478,7 @@ export const PosPage = () => {
 
   const totalItems = carrito.reduce((s, i) => s + i.cantidad, 0);
   const subtotal = carrito.reduce((s, i) => s + i.precioVenta * i.cantidad, 0);
-  const iva = subtotal * IVA;
+  const iva = ivaActivado ? subtotal * IVA : 0;
   const total = subtotal + iva;
 
   const esPendiente = estadosPago
@@ -468,6 +495,7 @@ export const PosPage = () => {
     totalItems, subtotal, iva, total,
     loadingVenta, incrementar, decrementar, limpiarCarrito, generarVenta,
     setShowModalCliente,
+    ivaActivado, setIvaActivado,
   };
 
   return (
