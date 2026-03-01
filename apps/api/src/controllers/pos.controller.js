@@ -21,14 +21,22 @@ export const getPosData = async (req, res) => {
         const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:3000';
 
         const productos = productosRaw.map(p => {
-            const cleanImagePath = p.url_imagen ? p.url_imagen.replace(/\\/g, '/').replace(/^\/+/, '') : '';
-            const imageUrlFormatted = cleanImagePath ? `${BACKEND_URL}/${cleanImagePath}` : '';
+            let imageUrl = '';
+
+            if (p.url_imagen) {
+                const imagePath = p.url_imagen.replace(/\\/g, '/');
+                // Si ya tiene protocolo (http/https), usar tal cual. Si no, agregar BACKEND_URL
+                imageUrl = imagePath.startsWith('http://') || imagePath.startsWith('https://')
+                    ? imagePath
+                    : `${BACKEND_URL}/${imagePath.replace(/^\/+/, '')}`;
+            }
+
             return {
                 id_producto: p.id_producto,
                 nombre: p.nombre_repuesto,
                 stock: p.stock_actual,
                 precioVenta: p.precio?.precio_venta ? Number(p.precio.precio_venta) : 0,
-                imagen: imageUrlFormatted,
+                imagen: imageUrl,
                 categoria: p.categoria?.nombre_categoria || 'General'
             };
         });
@@ -87,10 +95,18 @@ export const createVenta = async (req, res) => {
                     precio_unitario_aplicado: precioUnitario
                 });
 
-                // TIPO MOVIMIENTO SALIDA (Asumimos ID 2 para Salida/Venta por defecto según tu seeder)
-                // Usualmente mejor buscar el ID del tipo, pero lo inferimos rápido:
-                const tipoSalida = await tx.tipoMovimiento.findFirst({ where: { nombre_tipo: { contains: 'salida', mode: 'insensitive' } } });
-                const id_tipo_mov = tipoSalida ? tipoSalida.id_tipo_mov : 2;
+                // TIPO MOVIMIENTO SALIDA - Buscar o crear si no existe
+                let tipoSalida = await tx.tipoMovimiento.findFirst({
+                    where: { nombre_tipo: { contains: 'salida', mode: 'insensitive' } }
+                });
+
+                if (!tipoSalida) {
+                    tipoSalida = await tx.tipoMovimiento.create({
+                        data: { nombre_tipo: 'Salida por Venta' }
+                    });
+                }
+
+                const id_tipo_mov = tipoSalida.id_tipo_mov;
 
                 // Preparar Historial
                 movimientosData.push({
